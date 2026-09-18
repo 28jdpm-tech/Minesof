@@ -4023,3 +4023,46 @@ function renderSplitUI() {
         document.getElementById('balanceDetailModal').classList.add('open');
         if (typeof lucide !== 'undefined') lucide.createIcons();
     };
+
+
+// --- MIGRATION BLOCK ---
+window.addEventListener('DOMContentLoaded', () => {
+    const migrateDataBtn = document.getElementById('migrateDataBtn');
+    if (migrateDataBtn) {
+        migrateDataBtn.addEventListener('click', async () => {
+            if (!confirm('Ests seguro que deseas copiar todos los datos pblicos antiguos a tu cuenta privada actual? Esto puede tardar unos segundos.')) return;
+            
+            try {
+                migrateDataBtn.disabled = true;
+                migrateDataBtn.innerHTML = 'Copiando...';
+                
+                // Migrate Config
+                const oldConfig = await db.collection(STORAGE_KEYS.SETTINGS).doc('global_config').get();
+                if (oldConfig.exists) {
+                    await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set(oldConfig.data(), {merge:true});
+                }
+                
+                // Migrate Orders
+                const oldOrders = await db.collection(STORAGE_KEYS.ORDERS).get();
+                for (let doc of oldOrders.docs) {
+                    await getDbCollection(STORAGE_KEYS.ORDERS).doc(doc.id).set(doc.data(), {merge:true});
+                }
+                
+                // Migrate Expenses
+                const oldExpenses = await db.collection(STORAGE_KEYS.EXPENSES).get();
+                for (let doc of oldExpenses.docs) {
+                    await getDbCollection(STORAGE_KEYS.EXPENSES).doc(doc.id).set(doc.data(), {merge:true});
+                }
+                
+                showNotification('Datos antiguos restaurados con xito. Recarga la pgina.', 'success');
+                setTimeout(() => window.location.reload(), 2000);
+            } catch (err) {
+                console.error(err);
+                showNotification('Error al migrar datos: ' + err.message, 'error');
+            } finally {
+                migrateDataBtn.disabled = false;
+                migrateDataBtn.innerHTML = 'Restaurar Datos Antiguos (Global)';
+            }
+        });
+    }
+});
