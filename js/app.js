@@ -599,19 +599,14 @@ function renderSplitUI() {
         const colors = palette[colorIndex % palette.length];
         colorIndex++;
         
-        let catIcon = '';
         const nameLower = catName.toLowerCase();
-        if (nameLower.includes('bebida')) catIcon = '🍹';
-        else if (nameLower.includes('comida') || nameLower.includes('plato')) catIcon = '🍔';
-        else if (nameLower.includes('postre')) catIcon = '🍰';
-        else catIcon = '📌';
 
         let colHtml = `<div class="category-col-wrapper" style="height: 100%; display: flex; flex-direction: column; flex: 1; min-width: 17ch;"><div class="category-col" style="width: 100%; flex: 0 1 auto; display: flex; flex-direction: column; gap: 12px; max-height: 100%; min-height: 0; 
             background: ${colors.bg}; border: 1px solid ${colors.border}; border-radius: 16px; padding: 10px;
             --active-check: ${colors.main}; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
             
             <div style="background: ${colors.main}; border-radius: 10px; padding: 12px; text-align: center; font-weight: 800; color: white; text-transform: uppercase; font-size: 0.9rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">
-                ${catIcon} ${catName}
+                ${catName}
             </div>
             
             <div style="display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 6px 12px; min-height: 40px; position: relative;">
