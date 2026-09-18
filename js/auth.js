@@ -41,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
             loginOverlay.style.display = 'none';
             if (appContainer) appContainer.style.display = 'flex';
 
+            const emailDisplay = document.getElementById('currentUserEmailDisplay');
+            if (emailDisplay) emailDisplay.textContent = user.email || 'Usuario';
+
             // MULTI-TENANT: Detect user change and clear old data
             window.currentUserTenant = user.uid;
 
