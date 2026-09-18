@@ -386,8 +386,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         name: f.name,
                         price: f.price || 0,
                         category: catId,
-                        icon: 'ðŸ´',
-                        active: true
+                        icon: '•',
+                        active: true,
+                        prodType: f.prodType || 'fixed'
                     });
                 }
             });
@@ -703,10 +704,10 @@ function renderSplitUI() {
                     return `<div class="split-card dynamic-card ${hasQty ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" 
                         style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 8px;">
                            <span style="text-align: center;">${p.name}</span>
-                           <div style="display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 8px; padding: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
-                               <button onclick="window.updateProductQty('${p.id}', -1)" style="width: 28px; height: 28px; border-radius: 6px; border: none; background: #f1f5f9; color: ${colors.main}; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="minus" style="width: 14px; height: 14px;"></i></button>
-                               <span style="color: #334155; font-size: 1rem;">${qty}</span>
-                               <button onclick="window.updateProductQty('${p.id}', 1)" style="width: 28px; height: 28px; border-radius: 6px; border: none; background: ${colors.main}; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="plus" style="width: 14px; height: 14px;"></i></button>
+                           <div style="display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 8px; padding: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); width: 100%;">
+                               <button onclick="window.updateProductQty('${p.id}', -1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: #f1f5f9; color: ${colors.main}; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="minus" style="width: 16px; height: 16px;"></i></button>
+                               <span style="color: #334155; font-size: 1.1rem; font-weight: 700; flex: 1; text-align: center;">${qty}</span>
+                               <button onclick="window.updateProductQty('${p.id}', 1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: ${colors.main}; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
                            </div>
                         </div>`;
                 } else {
