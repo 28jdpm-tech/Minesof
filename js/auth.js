@@ -79,8 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
             const email = loginEmail.value.trim();
-            if (!email) {
-                alert('Por favor, ingresa tu correo electrónico en el campo de arriba para enviarte el enlace de recuperación.');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email || !emailRegex.test(email)) {
+                alert('Por favor, ingresa un correo electrónico válido en el campo de arriba para enviarte el enlace de recuperación (ejemplo: usuario@correo.com).');
                 return;
             }
             window.auth.languageCode = 'es';
@@ -151,6 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = loginPassword.value;
 
         loginError.style.display = 'none';
+        
+        // Validacion estricta de correo (debe tener algo@algo.com)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            loginError.textContent = 'Por favor, ingresa un correo electrónico válido (ejemplo: usuario@correo.com).';
+            loginError.style.display = 'block';
+            return;
+        }
+
         btn.textContent = 'Procesando...';
         btn.disabled = true;
 
