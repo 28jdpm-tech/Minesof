@@ -3457,7 +3457,7 @@ function renderSplitUI() {
         elements.addCategoryBtn.onclick = () => {
             adminEditContext = { type: 'category', id: null };
             elements.adminModalTitle.textContent = 'Nueva Categoría';
-            elements.adminModalBody.innerHTML = '<div class="form-group"><label>Nombre de categoría</label><input type="text" id="editName" placeholder="Ej: Panes Especiales"></div>';
+            elements.adminModalBody.innerHTML = '<div class="form-group"><label>Nombre de categoría</label><input type="text" id="editName" placeholder="Ej: Comida, Bebidas, Combos"></div>';
             elements.adminModal.classList.add('open');
         };
     }
