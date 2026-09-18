@@ -489,16 +489,85 @@ window.switchClient = function(client) {
     }
     renderPosClientTabs();
 
+    window.updateProductQty = function(productId, delta) {
+        const clientId = state.activeClient;
+        if (!clientId) return;
+        const config = StorageManager.getConfig();
+        const products = getActiveProductsList(config);
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        const existingIndex = state.cart.findIndex(item => item.productId === product.id && item.clientName === clientId);
+        
+        if (existingIndex !== -1) {
+            let item = state.cart[existingIndex];
+            item.qty += delta;
+            if (item.qty <= 0) {
+                state.cart.splice(existingIndex, 1);
+            } else {
+                item.subtotal = item.qty * item.unitPrice;
+            }
+        } else if (delta > 0) {
+            state.cart.push({
+                id: 'cart_' + Date.now(),
+                productId: product.id,
+                name: product.name,
+                unitPrice: product.price || 0,
+                qty: 1,
+                subtotal: product.price || 0,
+                clientName: clientId,
+                categoryId: product.category,
+                notes: ''
+            });
+        }
+        renderSplitUI();
+        if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+    };
+
+    let activeOpenPriceProductId = null;
+    window.openPriceForProduct = function(product) {
+        activeOpenPriceProductId = product.id;
+        document.getElementById('openPriceInput').value = '';
+        document.getElementById('openPriceModal').classList.add('open');
+        setTimeout(() => document.getElementById('openPriceInput').focus(), 100);
+    };
+
+    let activeTextProductId = null;
+    window.openTextForProduct = function(product) {
+        activeTextProductId = product.id;
+        document.getElementById('textInputValue').value = '';
+        document.getElementById('textInputModal').classList.add('open');
+        setTimeout(() => document.getElementById('textInputValue').focus(), 100);
+    };
+
     window.triggerToggleProduct = function(productId) {
         const config = StorageManager.getConfig();
         const products = getActiveProductsList(config);
         const product = products.find(p => p.id === productId);
-        if (product) {
+        if (!product) return;
+
+        const prodType = product.prodType || 'fixed';
+        const clientId = state.activeClient;
+
+        // If it's already in the cart, tapping it removes it (toggle off)
+        const existingIndex = state.cart.findIndex(item => item.productId === product.id && item.clientName === clientId);
+        if (existingIndex !== -1) {
+            state.cart.splice(existingIndex, 1);
+            renderSplitUI();
+            if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+            return;
+        }
+
+        if (prodType === 'open_price') {
+            window.openPriceForProduct(product);
+        } else if (prodType === 'text') {
+            window.openTextForProduct(product);
+        } else {
             toggleProduct(product);
         }
     };
     
-            function toggleProduct(product) {
+    function toggleProduct(product) {
         const clientId = state.activeClient;
         if (!clientId) return;
 
@@ -623,14 +692,32 @@ function renderSplitUI() {
             colHtml += `<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 0.85rem;">No hay productos</div>`;
         } else {
             colHtml += items.map(p => {
+                const prodType = p.prodType || 'fixed';
                 const isActive = state.cart.some(item => item.productId === p.id && item.clientName === state.activeClient);
-                return `<div class="split-card dynamic-card ${isActive ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
-                    style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
-                       <span>${p.name}</span>
-                       <div class="check-icon" style="display: ${isActive ? 'flex' : 'none'}; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
-                           <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
-                       </div>
-                    </div>`;
+                
+                if (prodType === 'quantity') {
+                    const currentCartItems = state.cart.filter(item => item.productId === p.id && item.clientName === state.activeClient);
+                    const qty = currentCartItems.reduce((sum, item) => sum + item.qty, 0);
+                    const hasQty = qty > 0;
+                    
+                    return `<div class="split-card dynamic-card ${hasQty ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" 
+                        style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 8px;">
+                           <span style="text-align: center;">${p.name}</span>
+                           <div style="display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 8px; padding: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                               <button onclick="window.updateProductQty('${p.id}', -1)" style="width: 28px; height: 28px; border-radius: 6px; border: none; background: #f1f5f9; color: ${colors.main}; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="minus" style="width: 14px; height: 14px;"></i></button>
+                               <span style="color: #334155; font-size: 1rem;">${qty}</span>
+                               <button onclick="window.updateProductQty('${p.id}', 1)" style="width: 28px; height: 28px; border-radius: 6px; border: none; background: ${colors.main}; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="plus" style="width: 14px; height: 14px;"></i></button>
+                           </div>
+                        </div>`;
+                } else {
+                    return `<div class="split-card dynamic-card ${isActive ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
+                        style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                           <span>${p.name}</span>
+                           <div class="check-icon" style="display: ${isActive ? 'flex' : 'none'}; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                               <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
+                           </div>
+                        </div>`;
+                }
             }).join('');
         }
         
@@ -3136,8 +3223,26 @@ function renderSplitUI() {
         elements.adminModalTitle.textContent = 'Nuevo Producto';
         elements.adminModalBody.innerHTML = `
             <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
-            <div class="form-group"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
+            <div class="form-group">
+                <label>Tipo de Producto</label>
+                <select id="editProdType" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: inherit;">
+                    <option value="fixed">Precio Fijo (Normal)</option>
+                    <option value="open_price">Precio Abierto (Ingresar al cobrar)</option>
+                    <option value="quantity">Selector de Cantidad (+ / -)</option>
+                    <option value="text">Texto Libre (Observación)</option>
+                </select>
+            </div>
+            <div class="form-group" id="editPriceGroup"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
         `;
+        const typeSelect = document.getElementById('editProdType');
+        const priceGroup = document.getElementById('editPriceGroup');
+        typeSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'open_price' || e.target.value === 'text') {
+                priceGroup.style.display = 'none';
+            } else {
+                priceGroup.style.display = 'block';
+            }
+        });
         elements.adminModal.classList.add('open');
     };
 
@@ -3314,9 +3419,19 @@ function renderSplitUI() {
             html = '<div class="form-group"><label>Nombre de categoría</label><input type="text" id="editName" value="' + item.name + '"></div>';;
         } else if (type === 'flavor') {
             const allProds = getActiveProductsList(config);
-            const item = allProds.find(p => p.id === id) || (config.flavors[parentId] && config.flavors[parentId].find(f => f.id === id)) || { name: '', price: 0 };
+            const item = allProds.find(p => p.id === id) || (config.flavors[parentId] && config.flavors[parentId].find(f => f.id === id)) || { name: '', price: 0, prodType: 'fixed' };
+            const pt = item.prodType || 'fixed';
             html = `<div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" value="${item.name}"></div>
-                    <div class="form-group"><label>Precio Unitario ($)</label><input type="number" id="editPrice" value="${item.price || 0}"></div>`;
+                    <div class="form-group">
+                        <label>Tipo de Producto</label>
+                        <select id="editProdType" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: inherit;">
+                            <option value="fixed" ${pt === 'fixed' ? 'selected' : ''}>Precio Fijo (Normal)</option>
+                            <option value="open_price" ${pt === 'open_price' ? 'selected' : ''}>Precio Abierto (Ingresar al cobrar)</option>
+                            <option value="quantity" ${pt === 'quantity' ? 'selected' : ''}>Selector de Cantidad (+ / -)</option>
+                            <option value="text" ${pt === 'text' ? 'selected' : ''}>Texto Libre (Observación)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="editPriceGroup" style="display: ${pt === 'open_price' || pt === 'text' ? 'none' : 'block'};"><label>Precio Unitario ($)</label><input type="number" id="editPrice" value="${item.price || 0}"></div>`;
         } else if (type === 'extra') {
             const item = config.extras[parentId].find(e => e.id === id);
             html = `<div class="form-group"><label>Nombre</label><input type="text" id="editName" value="${item.name}"></div>
@@ -3327,6 +3442,19 @@ function renderSplitUI() {
                     <div class="form-group"><label>Precio Extra si aplica ($)</label><input type="number" id="editPrice" value="${item.price || 0}"></div>`;
         }
         elements.adminModalBody.innerHTML = html;
+        if (type === 'flavor') {
+            const typeSelect = document.getElementById('editProdType');
+            const priceGroup = document.getElementById('editPriceGroup');
+            if (typeSelect && priceGroup) {
+                typeSelect.addEventListener('change', (e) => {
+                    if (e.target.value === 'open_price' || e.target.value === 'text') {
+                        priceGroup.style.display = 'none';
+                    } else {
+                        priceGroup.style.display = 'block';
+                    }
+                });
+            }
+        }
         elements.adminModal.classList.add('open');
     };
 
@@ -3385,7 +3513,9 @@ function renderSplitUI() {
                     config.observations[newId] = [];
                 }
             } else if (type === 'flavor') {
-                const price = +document.getElementById('editPrice').value || 0;
+                const typeEl = document.getElementById('editProdType');
+                const prodType = typeEl ? typeEl.value : 'fixed';
+                const price = (prodType === 'open_price' || prodType === 'text') ? 0 : (+document.getElementById('editPrice').value || 0);
 
                 if (!config.products) config.products = [];
 
@@ -3394,22 +3524,24 @@ function renderSplitUI() {
                     if (prod) {
                         prod.name = name;
                         prod.price = price;
+                        prod.prodType = prodType;
                     }
                     if (config.flavors && config.flavors[parentId]) {
                         const fl = config.flavors[parentId].find(f => f.id === id);
                         if (fl) {
                             fl.name = name;
                             fl.price = price;
+                            fl.prodType = prodType;
                         }
                     }
                 } else {
                     const newId = 'prod_' + Date.now();
-                    const newProd = { id: newId, name, price, category: parentId, active: true };
+                    const newProd = { id: newId, name, price, category: parentId, active: true, prodType };
                     config.products.push(newProd);
 
                     if (!config.flavors) config.flavors = {};
                     if (!config.flavors[parentId]) config.flavors[parentId] = [];
-                    config.flavors[parentId].push({ id: newId, name, price, active: true });
+                    config.flavors[parentId].push({ id: newId, name, price, active: true, prodType });
                 }
             } else if (type === 'extra') {
                 if (!config.extras) config.extras = {};
@@ -3564,6 +3696,73 @@ function renderSplitUI() {
             showNotification('Contraseña actualizada correctamente');
             elements.newAdminPassword.value = '';
             elements.confirmAdminPassword.value = '';
+        });
+    }
+
+    // Modal Handlers for Dynamic Product Types
+    const openPriceConfirmBtn = document.getElementById('openPriceConfirmBtn');
+    if (openPriceConfirmBtn) {
+        openPriceConfirmBtn.addEventListener('click', () => {
+            const price = parseFloat(document.getElementById('openPriceInput').value);
+            if (isNaN(price) || price < 0) {
+                showNotification('Ingresa un valor válido', 'error');
+                return;
+            }
+            if (!activeOpenPriceProductId) return;
+
+            const config = StorageManager.getConfig();
+            const product = getActiveProductsList(config).find(p => p.id === activeOpenPriceProductId);
+            if (product) {
+                const clientId = state.activeClient;
+                state.cart.push({
+                    id: 'cart_' + Date.now(),
+                    productId: product.id,
+                    name: product.name,
+                    unitPrice: price,
+                    qty: 1,
+                    subtotal: price,
+                    clientName: clientId,
+                    categoryId: product.category,
+                    notes: ''
+                });
+                renderSplitUI();
+                if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+            }
+            document.getElementById('openPriceModal').classList.remove('open');
+            activeOpenPriceProductId = null;
+        });
+    }
+
+    const textInputConfirmBtn = document.getElementById('textInputConfirmBtn');
+    if (textInputConfirmBtn) {
+        textInputConfirmBtn.addEventListener('click', () => {
+            const text = document.getElementById('textInputValue').value.trim();
+            if (!text) {
+                showNotification('Ingresa un texto', 'error');
+                return;
+            }
+            if (!activeTextProductId) return;
+
+            const config = StorageManager.getConfig();
+            const product = getActiveProductsList(config).find(p => p.id === activeTextProductId);
+            if (product) {
+                const clientId = state.activeClient;
+                state.cart.push({
+                    id: 'cart_' + Date.now(),
+                    productId: product.id,
+                    name: product.name + ' (' + text + ')',
+                    unitPrice: 0,
+                    qty: 1,
+                    subtotal: 0,
+                    clientName: clientId,
+                    categoryId: product.category,
+                    notes: text
+                });
+                renderSplitUI();
+                if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+            }
+            document.getElementById('textInputModal').classList.remove('open');
+            activeTextProductId = null;
         });
     }
 
