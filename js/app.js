@@ -3140,7 +3140,7 @@ function renderSplitUI() {
         adminEditContext = { type: 'flavor', id: null, parentId: catId };
         elements.adminModalTitle.textContent = 'Nuevo Producto';
         elements.adminModalBody.innerHTML = `
-            <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Croissant de Almendras"></div>
+            <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
             <div class="form-group"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
         `;
         elements.adminModal.classList.add('open');
@@ -3468,7 +3468,7 @@ function renderSplitUI() {
             adminEditContext = { type: 'flavor', id: null, parentId: catId };
             elements.adminModalTitle.textContent = 'Nuevo Producto';
             elements.adminModalBody.innerHTML = `
-                <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Croissant de Almendras"></div>
+                <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
                 <div class="form-group"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
             `;
             elements.adminModal.classList.add('open');
