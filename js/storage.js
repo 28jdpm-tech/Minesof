@@ -206,11 +206,6 @@ const StorageManager = {
             await getDbCollection(STORAGE_KEYS.ORDERS).doc(order.id).set(cleanOrder, { merge: true });
         } catch (e) {
             console.error('Error syncing order:', e);
-            if (typeof showNotification === 'function') {
-                showNotification('Error al sincronizar a la nube: ' + e.message, 'error');
-            } else {
-                alert('Error al sincronizar a la nube: ' + e.message);
-            }
         }
     },
 
@@ -293,11 +288,6 @@ const StorageManager = {
                 
                 snapshot.docChanges().forEach(change => {
                     const order = change.doc.data();
-                    if (change.type === 'added') {
-                        if (typeof showNotification === 'function') {
-                            showNotification(`[DEBUG] added: ${order.orderNumber} - paid:${order.paid} print:${order.checkoutPrinted}`, 'success');
-                        }
-                    }
                     if (change.type === 'added' || change.type === 'modified') {
                         const idx = localOrders.findIndex(o => o.id === order.id);
                         if (idx !== -1) {
@@ -359,11 +349,8 @@ const StorageManager = {
         
         try {
             await this.syncOrderToCloud(order);
-            if (typeof showNotification === 'function') {
-                showNotification('[DEBUG] addOrder sync success', 'success');
-            }
         } catch (e) {
-            alert('DEBUG addOrder ERROR: ' + e.message);
+            console.error(e);
         }
         
         return order;
