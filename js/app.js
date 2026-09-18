@@ -527,18 +527,32 @@ window.switchClient = function(client) {
 
     let activeOpenPriceProductId = null;
     window.openPriceForProduct = function(product) {
+        if (!product) return;
         activeOpenPriceProductId = product.id;
-        document.getElementById('openPriceInput').value = '';
-        document.getElementById('openPriceModal').classList.add('open');
-        setTimeout(() => document.getElementById('openPriceInput').focus(), 100);
+        const input = document.getElementById('openPriceInput');
+        const modal = document.getElementById('openPriceModal');
+        if (!input || !modal) {
+            if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
+            return;
+        }
+        input.value = '';
+        modal.classList.add('open');
+        setTimeout(() => input.focus(), 100);
     };
 
     let activeTextProductId = null;
     window.openTextForProduct = function(product) {
+        if (!product) return;
         activeTextProductId = product.id;
-        document.getElementById('textInputValue').value = '';
-        document.getElementById('textInputModal').classList.add('open');
-        setTimeout(() => document.getElementById('textInputValue').focus(), 100);
+        const input = document.getElementById('textInputValue');
+        const modal = document.getElementById('textInputModal');
+        if (!input || !modal) {
+            if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
+            return;
+        }
+        input.value = '';
+        modal.classList.add('open');
+        setTimeout(() => input.focus(), 100);
     };
 
     window.triggerToggleProduct = function(productId) {
