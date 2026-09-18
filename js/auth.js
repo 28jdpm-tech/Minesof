@@ -53,6 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 StorageManager.clearAll();
                 localStorage.removeItem('galeria_admin_password');
                 localStorage.removeItem('galeria_observations');
+                localStorage.setItem('minesof_last_tenant', user.uid);
+                
+                // Force a reload so memory state (FOODX_DATA) starts perfectly clean for the new user
+                window.location.reload();
+                return;
             }
             localStorage.setItem('minesof_last_tenant', user.uid);
 
@@ -193,7 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             StorageManager.clearAll();
-            window.auth.signOut();
+            localStorage.removeItem('minesof_last_tenant');
+            window.auth.signOut().then(() => {
+                window.location.reload();
+            });
         });
     }
 });
