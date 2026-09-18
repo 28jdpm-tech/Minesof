@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -995,17 +995,19 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=97"></script>
+    <script src="js/data.js?v=204"></script>
     
-    <script src="js/storage.js?v=97"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/app.js?v=110"></script>
+    <script src="js/storage.js?v=204"></script>
+    <script src="js/auth.js?v=204"></script>
+    <script src="js/app.js?v=204"></script>
     <script>
+        // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registered'))
-                    .catch(err => console.log('SW Error:', err));
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                    console.log('Service Worker unregistered.');
+                }
             });
         }
     </script>

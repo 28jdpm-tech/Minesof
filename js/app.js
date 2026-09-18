@@ -842,7 +842,7 @@ function renderSplitUI() {
                     createdBy: 'Cajero 1',
                     needsPrint: true,
                     printed: false,
-                    checkoutPrinted: false,
+                    checkoutPrinted: true, // Modificado a peticion del usuario para que pase directo a Por Cobrar
                     isAppending: false,
                     createdAt: new Date().toISOString()
                 };
@@ -994,9 +994,9 @@ function renderSplitUI() {
         // pending: Not paid AND printed for checkout
         // paid: Paid
         const today = new Date().toDateString();
-        const toPrint = orders.filter(o => !o.paid && !o.checkoutPrinted);
-        const pending = orders.filter(o => !o.paid && o.checkoutPrinted);
-        const paid = orders.filter(o => o.paid && new Date(o.createdAt).toDateString() === today);
+        const toPrint = orders.filter(o => o.paid !== true && o.checkoutPrinted !== true);
+        const pending = orders.filter(o => o.paid !== true && o.checkoutPrinted === true);
+        const paid = orders.filter(o => o.paid === true && new Date(o.createdAt).toDateString() === today);
 
         if (elements.toPrintCount) elements.toPrintCount.textContent = toPrint.length;
         if (elements.pendingPaymentCount) elements.pendingPaymentCount.textContent = pending.length;
@@ -3692,12 +3692,24 @@ function renderSplitUI() {
                 StorageManager.initCloudSync(
                     // Orders & Expenses callback
                     () => {
-                        if (state.currentPage === 'checkout') renderCheckoutPage();
-                        if (state.currentPage === 'history') renderHistoryPage();
-                        if (state.currentPage === 'new-order') {
-                            if(typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
-                        }
-                        if (state.currentPage === 'expenses') renderExpensesPage();
+                        console.log('Cloud sync: Orders or Expenses updated. Updating UI...');
+                        try {
+                            if (state.currentPage === 'checkout') renderCheckoutPage();
+                        } catch (e) { console.error('Error in renderCheckoutPage during sync', e); }
+                        
+                        try {
+                            if (state.currentPage === 'history') renderHistoryPage();
+                        } catch (e) { console.error('Error in renderHistoryPage during sync', e); }
+                        
+                        try {
+                            if (state.currentPage === 'new-order') {
+                                if(typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+                            }
+                        } catch (e) { console.error('Error in new-order render during sync', e); }
+                        
+                        try {
+                            if (state.currentPage === 'expenses') renderExpensesPage();
+                        } catch (e) { console.error('Error in renderExpensesPage during sync', e); }
                     },
                     // Config callback (Admin changes from other devices)
                     () => {

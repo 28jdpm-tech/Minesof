@@ -202,9 +202,15 @@ const StorageManager = {
     async syncOrderToCloud(order) {
         if (typeof db === 'undefined') return;
         try {
-            await getDbCollection(STORAGE_KEYS.ORDERS).doc(order.id).set(order, { merge: true });
+            const cleanOrder = JSON.parse(JSON.stringify(order));
+            await getDbCollection(STORAGE_KEYS.ORDERS).doc(order.id).set(cleanOrder, { merge: true });
         } catch (e) {
             console.error('Error syncing order:', e);
+            if (typeof showNotification === 'function') {
+                showNotification('Error al sincronizar a la nube: ' + e.message, 'error');
+            } else {
+                alert('Error al sincronizar a la nube: ' + e.message);
+            }
         }
     },
 
@@ -220,7 +226,8 @@ const StorageManager = {
     async syncConfigToCloud(config) {
         if (typeof db === 'undefined') return;
         try {
-            await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set(config);
+            const cleanConfig = JSON.parse(JSON.stringify(config));
+            await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set(cleanConfig);
         } catch (e) {
             console.error('Error syncing config:', e);
         }
@@ -229,7 +236,8 @@ const StorageManager = {
     async syncExpenseToCloud(expense) {
         if (typeof db === 'undefined') return;
         try {
-            await getDbCollection(STORAGE_KEYS.EXPENSES).doc(expense.id).set(expense, { merge: true });
+            const cleanExpense = JSON.parse(JSON.stringify(expense));
+            await getDbCollection(STORAGE_KEYS.EXPENSES).doc(expense.id).set(cleanExpense, { merge: true });
         } catch (e) {
             console.error('Error syncing expense:', e);
         }
@@ -276,19 +284,20 @@ const StorageManager = {
         });
 
         // 2. Escuchar Pedidos (Para no descargar todo el historial, escuchamos los recientes)
-        // Usamos una fecha un poco anterior para asegurar el día completo.
-        const today = new Date();
-        today.setDate(today.getDate() - 1);
-        const dateStr = today.toISOString().split('T')[0];
-
         this.unsubOrders = getDbCollection(STORAGE_KEYS.ORDERS)
-            .where('createdAt', '>=', dateStr)
+            .orderBy('createdAt', 'desc')
+            .limit(150)
             .onSnapshot(snapshot => {
                 let localOrders = this.getOrders();
                 let changed = false;
                 
                 snapshot.docChanges().forEach(change => {
                     const order = change.doc.data();
+                    if (change.type === 'added') {
+                        if (typeof showNotification === 'function') {
+                            showNotification(`[DEBUG] added: ${order.orderNumber} - paid:${order.paid} print:${order.checkoutPrinted}`, 'success');
+                        }
+                    }
                     if (change.type === 'added' || change.type === 'modified') {
                         const idx = localOrders.findIndex(o => o.id === order.id);
                         if (idx !== -1) {
@@ -312,7 +321,8 @@ const StorageManager = {
 
         // 3. Escuchar Egresos
         this.unsubExpenses = getDbCollection(STORAGE_KEYS.EXPENSES)
-            .where('createdAt', '>=', dateStr)
+            .orderBy('createdAt', 'desc')
+            .limit(100)
             .onSnapshot(snapshot => {
                 let local = this.getExpenses();
                 let changed = false;
@@ -340,13 +350,22 @@ const StorageManager = {
 
     // --- Original methods with cloud hooks ---
 
-    addOrder(order) {
+    async addOrder(order) {
         order.id = generateId();
         order.createdAt = new Date().toISOString();
         const orders = this.getOrders();
         orders.push(order);
         this.saveOrders(orders);
-        this.syncOrderToCloud(order); // Hook
+        
+        try {
+            await this.syncOrderToCloud(order);
+            if (typeof showNotification === 'function') {
+                showNotification('[DEBUG] addOrder sync success', 'success');
+            }
+        } catch (e) {
+            alert('DEBUG addOrder ERROR: ' + e.message);
+        }
+        
         return order;
     },
 
