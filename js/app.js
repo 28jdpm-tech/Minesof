@@ -842,7 +842,7 @@ function renderSplitUI() {
                     createdBy: 'Cajero 1',
                     needsPrint: true,
                     printed: false,
-                    checkoutPrinted: true, // Modificado a peticion del usuario para que pase directo a Por Cobrar
+                    checkoutPrinted: false,
                     isAppending: false,
                     createdAt: new Date().toISOString()
                 };
