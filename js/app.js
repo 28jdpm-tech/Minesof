@@ -775,7 +775,7 @@ function renderSplitUI() {
                     const isItemActive = !!cartItem;
                     let valueDisplay = '';
                     if (cartItem) {
-                        if (prodType === 'open_price') valueDisplay = `$${cartItem.unitPrice}`;
+                        if (prodType === 'open_price') valueDisplay = `$${cartItem.unitPrice.toLocaleString('es-CO')}`;
                         else if (prodType === 'text') valueDisplay = cartItem.notes;
                         else if (prodType === 'quantity') valueDisplay = `${cartItem.qty} unds`;
                     }
