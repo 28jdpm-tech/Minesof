@@ -525,6 +525,27 @@ window.switchClient = function(client) {
         if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
     };
 
+    let activeQuantityProductId = null;
+    window.openQuantityForProduct = function(product, editIndex = -1) {
+        if (!product) return;
+        activeQuantityProductId = product.id;
+        const input = document.getElementById('quantityInputValue');
+        const modal = document.getElementById('quantityModal');
+        if (!input || !modal) {
+            if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
+            return;
+        }
+        
+        if (editIndex !== -1) {
+            input.value = state.cart[editIndex].qty || 1;
+        } else {
+            input.value = '1';
+        }
+        
+        modal.classList.add('open');
+        setTimeout(() => input.select(), 100);
+    };
+
     let activeOpenPriceProductId = null;
     window.openPriceForProduct = function(product, editIndex = -1) {
         if (!product) return;
@@ -585,6 +606,9 @@ window.switchClient = function(client) {
             } else if (prodType === 'text') {
                 window.openTextForProduct(product, existingIndex);
                 return;
+            } else if (prodType === 'quantity') {
+                window.openQuantityForProduct(product, existingIndex);
+                return;
             }
             // For fixed products, simply remove from cart
             state.cart.splice(existingIndex, 1);
@@ -597,6 +621,8 @@ window.switchClient = function(client) {
             window.openPriceForProduct(product);
         } else if (prodType === 'text') {
             window.openTextForProduct(product);
+        } else if (prodType === 'quantity') {
+            window.openQuantityForProduct(product);
         } else {
             toggleProduct(product);
         }
@@ -641,36 +667,32 @@ window.switchClient = function(client) {
         renderPosCart();
     }
 
-        window.clearCategorySearch = function(catId) {
+    window.clearCategorySearch = function(catId) {
         const inputEl = document.getElementById('search-input-' + catId);
         if (inputEl) {
             inputEl.value = '';
             window.filterCategory(inputEl, catId);
-            inputEl.focus();
         }
     };
 
-    window.filterCategory = function(inputEl, catId) {
-        const term = inputEl.value.toLowerCase();
-        
+    window.filterCategory = function(input, catId) {
+        const term = input.value.toLowerCase().trim();
         const clearBtn = document.getElementById('clear-search-' + catId);
-        if (clearBtn) {
-            clearBtn.style.display = term.length > 0 ? 'flex' : 'none';
-        }
-
-        const content = document.getElementById('col-content-' + catId);
-        if (!content) return;
-    
-    const cards = content.querySelectorAll('.split-card');
-    cards.forEach(card => {
-        const name = card.getAttribute('data-name') || '';
-        if (name.includes(term)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-};
+        if (clearBtn) clearBtn.style.display = term ? 'flex' : 'none';
+        
+        const container = document.getElementById('col-content-' + catId);
+        if (!container) return;
+        
+        const cards = container.querySelectorAll('.split-card');
+        cards.forEach(card => {
+            const name = card.dataset.name || '';
+            if (name.includes(term)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    };
 
 function renderSplitUI() {
     const container = document.getElementById('dynamicCategoriesContainer');
@@ -730,24 +752,15 @@ function renderSplitUI() {
                 const prodType = p.prodType || 'fixed';
                 const isActive = state.cart.some(item => item.productId === p.id && item.clientName === state.activeClient);
                 
-                if (prodType === 'quantity') {
-                    const currentCartItems = state.cart.filter(item => item.productId === p.id && item.clientName === state.activeClient);
-                    const qty = currentCartItems.reduce((sum, item) => sum + item.qty, 0);
-                    const hasQty = qty > 0;
-                    
-                    return `<div class="split-card dynamic-card ${hasQty ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" 
-                        style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
-                           <span style="text-align: center;">${p.name}</span>
-                           <div style="display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 8px; padding: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); width: 100%;">
-                               <button onclick="window.updateProductQty('${p.id}', -1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: #f1f5f9; color: ${colors.main}; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="minus" style="width: 16px; height: 16px;"></i></button>
-                               <span style="color: #334155; font-size: 1.1rem; font-weight: 700; flex: 1; text-align: center;">${qty}</span>
-                               <button onclick="window.updateProductQty('${p.id}', 1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: ${colors.main}; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
-                           </div>
-                        </div>`;
-                } else if (prodType === 'open_price' || prodType === 'text') {
+                if (prodType === 'quantity' || prodType === 'open_price' || prodType === 'text') {
                     const cartItem = state.cart.find(item => item.productId === p.id && item.clientName === state.activeClient);
                     const isItemActive = !!cartItem;
-                    const valueDisplay = cartItem ? (prodType === 'open_price' ? `$${cartItem.unitPrice}` : cartItem.notes) : '';
+                    let valueDisplay = '';
+                    if (cartItem) {
+                        if (prodType === 'open_price') valueDisplay = `$${cartItem.unitPrice}`;
+                        else if (prodType === 'text') valueDisplay = cartItem.notes;
+                        else if (prodType === 'quantity') valueDisplay = `${cartItem.qty} unds`;
+                    }
                     
                     if (isItemActive) {
                         return `<div class="split-card dynamic-card active" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
@@ -3756,6 +3769,75 @@ function renderSplitUI() {
     }
 
     // Modal Handlers for Dynamic Product Types
+    
+    // Quantity Modal Plus/Minus Buttons
+    const qtyModalMinus = document.getElementById('qtyModalMinus');
+    const qtyModalPlus = document.getElementById('qtyModalPlus');
+    const quantityInputValue = document.getElementById('quantityInputValue');
+    if (qtyModalMinus && qtyModalPlus && quantityInputValue) {
+        qtyModalMinus.addEventListener('click', () => {
+            let v = parseInt(quantityInputValue.value) || 0;
+            if (v > 0) quantityInputValue.value = v - 1;
+        });
+        qtyModalPlus.addEventListener('click', () => {
+            let v = parseInt(quantityInputValue.value) || 0;
+            quantityInputValue.value = v + 1;
+        });
+    }
+
+    const quantityConfirmBtn = document.getElementById('quantityConfirmBtn');
+    if (quantityConfirmBtn) {
+        quantityConfirmBtn.addEventListener('click', () => {
+            const qty = parseInt(document.getElementById('quantityInputValue').value);
+            
+            // If 0 or empty, remove item
+            if (isNaN(qty) || qty <= 0) {
+                if (activeQuantityProductId) {
+                    const clientId = state.activeClient;
+                    const existingIndex = state.cart.findIndex(item => item.productId === activeQuantityProductId && item.clientName === clientId);
+                    if (existingIndex !== -1) {
+                        state.cart.splice(existingIndex, 1);
+                        renderSplitUI();
+                        if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+                    }
+                }
+                document.getElementById('quantityModal').classList.remove('open');
+                activeQuantityProductId = null;
+                return;
+            }
+
+            if (!activeQuantityProductId) return;
+
+            const config = StorageManager.getConfig();
+            const product = getActiveProductsList(config).find(p => p.id === activeQuantityProductId);
+            if (product) {
+                const clientId = state.activeClient;
+                const existingIndex = state.cart.findIndex(item => item.productId === activeQuantityProductId && item.clientName === clientId);
+                
+                if (existingIndex !== -1) {
+                    state.cart[existingIndex].qty = qty;
+                    state.cart[existingIndex].subtotal = (product.price || 0) * qty;
+                } else {
+                    state.cart.push({
+                        id: 'cart_' + Date.now(),
+                        productId: product.id,
+                        name: product.name,
+                        unitPrice: product.price || 0,
+                        qty: qty,
+                        subtotal: (product.price || 0) * qty,
+                        clientName: clientId,
+                        categoryId: product.category,
+                        notes: ''
+                    });
+                }
+                renderSplitUI();
+                if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+            }
+            document.getElementById('quantityModal').classList.remove('open');
+            activeQuantityProductId = null;
+        });
+    }
+
     const openPriceConfirmBtn = document.getElementById('openPriceConfirmBtn');
     if (openPriceConfirmBtn) {
         openPriceConfirmBtn.addEventListener('click', () => {

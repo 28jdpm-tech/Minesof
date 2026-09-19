@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 224</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 225</span>
                 </div>
             </div>
         </div>
@@ -960,6 +960,33 @@
         </div>
     </div> <!-- Final de app-container -->
 
+    <!-- Quantity Modal -->
+    <div class="modal" id="quantityModal">
+        <div class="modal-overlay" onclick="document.getElementById('quantityModal').classList.remove('open')"></div>
+        <div class="modal-content" style="max-width: 320px;">
+            <div class="modal-header">
+                <h3 id="quantityModalTitle">Ingresar Cantidad</h3>
+                <button class="close-modal" onclick="document.getElementById('quantityModal').classList.remove('open')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label style="text-align: center; display: block; margin-bottom: 12px;">Cantidad del Producto</label>
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid var(--border-default); border-radius: 8px; padding: 10px;">
+                        <button id="qtyModalMinus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: #e2e8f0; color: #334155; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+                        <input type="number" id="quantityInputValue" value="1" min="0" style="font-size: 1.8rem; text-align: center; border: none; background: transparent; width: 80px; font-weight: bold; outline: none;">
+                        <button id="qtyModalPlus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: var(--accent-primary); color: white; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="document.getElementById('quantityModal').classList.remove('open')">Cancelar</button>
+                <button class="btn-confirm" id="quantityConfirmBtn">Agregar al Pedido</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Open Price Modal -->
     <div class="modal" id="openPriceModal">
         <div class="modal-overlay" onclick="document.getElementById('openPriceModal').classList.remove('open')"></div>
@@ -1044,11 +1071,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=224"></script>
+    <script src="js/data.js?v=225"></script>
     
-    <script src="js/storage.js?v=224"></script>
-    <script src="js/auth.js?v=224"></script>
-    <script src="js/app.js?v=224"></script>
+    <script src="js/storage.js?v=225"></script>
+    <script src="js/auth.js?v=225"></script>
+    <script src="js/app.js?v=225"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
