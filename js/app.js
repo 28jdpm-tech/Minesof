@@ -35,18 +35,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const businessNameInput = document.getElementById('businessNameInput');
     const billingSystemInput = document.getElementById('billingSystemInput');
+    const deviceUserInput = document.getElementById('deviceUserInput');
     const saveBusinessBrandBtn = document.getElementById('saveBusinessBrandBtn');
     
     function updateAppBranding() {
         const config = StorageManager.getConfig();
         const bName = config.businessName || 'Minesof';
         const billingSys = config.billingSystem || 'standard';
+        const dUser = localStorage.getItem('minesof_deviceUser') || '';
         
         const headerNames = document.querySelectorAll('.dynamic-business-name');
         headerNames.forEach(el => el.textContent = bName);
         
         if (businessNameInput) businessNameInput.value = bName;
         if (billingSystemInput) billingSystemInput.value = billingSys;
+        if (deviceUserInput) deviceUserInput.value = dUser;
         
         // Hide/Show tabs based on billing system
         const tabs = document.querySelectorAll('.checkout-tab');
@@ -76,6 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
             config.businessName = businessNameInput.value.trim();
             if (billingSystemInput) config.billingSystem = billingSystemInput.value;
             StorageManager.saveConfig(config);
+            
+            if (deviceUserInput) {
+                localStorage.setItem('minesof_deviceUser', deviceUserInput.value.trim());
+            }
+            
             updateAppBranding();
             showNotification('Ajustes guardados');
         });
@@ -1033,7 +1041,7 @@ function renderSplitUI() {
                     items: items,
                     status: 'pending',
                     totalPrice: items.reduce((sum, item) => sum + item.price, 0),
-                    createdBy: 'Cajero 1',
+                    createdBy: localStorage.getItem('minesof_deviceUser') || 'Cajero 1',
                     needsPrint: true,
                     printed: false,
                     checkoutPrinted: config.billingSystem === 'direct' ? true : false,
@@ -2634,6 +2642,9 @@ function renderSplitUI() {
         t += center('PEDIDO #' + (order.sequenceNumber || order.orderNumber || '---')) + '\n';
         t += line + '\n';
         t += justify(dateStr, timeStr) + '\n';
+        if (order.createdBy) {
+            t += justify('CAJERO/A:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
+        }
 
         if (order.customerInfo) {
             t += justify('MESA/CLIENTE:', '') + '\n';
@@ -2744,6 +2755,9 @@ function renderSplitUI() {
         t += line + '\n';
         t += justify('FECHA PAGO:', dateStr) + '\n';
         t += justify('HORA PAGO:', timeStr) + '\n';
+        if (order.createdBy) {
+            t += justify('CAJERO/A:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
+        }
 
         if (order.customerInfo) {
             t += justify('MESA/CLIENTE:', '') + '\n';
@@ -3149,7 +3163,8 @@ function renderSplitUI() {
                 description: description || cat.label,
                 qty: qty,
                 amount: amount,
-                date: date + 'T12:00:00'
+                date: date + 'T12:00:00',
+                createdBy: localStorage.getItem('minesof_deviceUser') || 'Cajero 1'
             });
 
             showNotification(`Gasto registrado: ${formatPrice(amount)}`);
