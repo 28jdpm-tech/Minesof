@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    FoodX POS PRO - Inline Selection Interface
    ============================================ */
 
@@ -1100,15 +1100,15 @@ body {
 /* ============================================
    Modal (Simplified)
    ============================================ */
-
 .modal {
     position: fixed;
     inset: 0;
     z-index: 300;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     padding: var(--space-lg);
+    padding-top: 12vh;
     visibility: hidden;
     opacity: 0;
     transition: all var(--transition-normal);
