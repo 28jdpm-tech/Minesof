@@ -1036,7 +1036,7 @@ function renderSplitUI() {
                     createdBy: 'Cajero 1',
                     needsPrint: true,
                     printed: false,
-                    checkoutPrinted: false,
+                    checkoutPrinted: config.billingSystem === 'direct' ? true : false,
                     isAppending: false,
                     createdAt: new Date().toISOString()
                 };
@@ -1480,36 +1480,37 @@ function renderSplitUI() {
         });
     });
 
-    if (elements.cancelPayment) {
-        elements.cancelPayment.addEventListener('click', () => {
-            if (selectedPaymentOrder && !selectedPaymentOrder.paid) {
-                const config = StorageManager.getConfig();
-                if (config.billingSystem === 'direct') {
-                    // In direct mode, unpaid orders are discarded if payment is cancelled
-                    StorageManager.deleteOrder(selectedPaymentOrder.id);
-                    showNotification('Pago cancelado. El pedido fue descartado.');
-                    renderCheckoutPage();
-                }
+    function handleDirectCancel() {
+        if (selectedPaymentOrder && !selectedPaymentOrder.paid) {
+            const config = StorageManager.getConfig();
+            if (config.billingSystem === 'direct') {
+                // In direct mode, unpaid orders are discarded if payment is cancelled, but items are returned to cart
+                state.cart = JSON.parse(JSON.stringify(selectedPaymentOrder.items));
+                const uniqueClients = [...new Set(state.cart.map(i => i.clientName))];
+                state.clients = uniqueClients.length > 0 ? uniqueClients : ['P1'];
+                state.activeClient = state.clients[0];
+                
+                StorageManager.deleteOrder(selectedPaymentOrder.id);
+                showNotification('Pedido devuelto para corrección.');
+                
+                // Return to new-order
+                const newOrderDrawerItem = document.querySelector('.drawer-item[data-page="new-order"]');
+                if (newOrderDrawerItem) newOrderDrawerItem.click();
+                
+                if(typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+                renderPosClientTabs();
             }
-            elements.paymentModal.classList.add('hidden');
-            selectedPaymentOrder = null;
-        });
+        }
+        elements.paymentModal.classList.add('hidden');
+        selectedPaymentOrder = null;
+    }
+
+    if (elements.cancelPayment) {
+        elements.cancelPayment.addEventListener('click', handleDirectCancel);
     }
 
     if (elements.paymentModalOverlay) {
-        elements.paymentModalOverlay.addEventListener('click', () => {
-            if (selectedPaymentOrder && !selectedPaymentOrder.paid) {
-                const config = StorageManager.getConfig();
-                if (config.billingSystem === 'direct') {
-                    // In direct mode, unpaid orders are discarded if payment is cancelled
-                    StorageManager.deleteOrder(selectedPaymentOrder.id);
-                    showNotification('Pago cancelado. El pedido fue descartado.');
-                    renderCheckoutPage();
-                }
-            }
-            elements.paymentModal.classList.add('hidden');
-            selectedPaymentOrder = null;
-        });
+        elements.paymentModalOverlay.addEventListener('click', handleDirectCancel);
     }
 
     // Floating Dropdown Logic (Mimics native select)
