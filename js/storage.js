@@ -89,6 +89,7 @@ const StorageManager = {
         const config = {
             businessName: localStorage.getItem(PREFIX + 'businessName') || FOODX_DATA.businessName,
             businessLogo: localStorage.getItem(PREFIX + 'businessLogo') || FOODX_DATA.businessLogo,
+            billingSystem: localStorage.getItem(PREFIX + 'billingSystem') || 'standard',
             categories: parsedCategories,
             products: parsedProducts,
             flavors: flavors ? JSON.parse(flavors) : FOODX_DATA.flavors,
@@ -149,6 +150,7 @@ const StorageManager = {
         if (config.observations) localStorage.setItem('galeria_observations', JSON.stringify(config.observations));
         if (config.businessName !== undefined) localStorage.setItem(PREFIX + 'businessName', config.businessName);
         if (config.businessLogo !== undefined) localStorage.setItem(PREFIX + 'businessLogo', config.businessLogo);
+        if (config.billingSystem !== undefined) localStorage.setItem(PREFIX + 'billingSystem', config.billingSystem);
         if (config.prices) localStorage.setItem(STORAGE_KEYS.PRICES, JSON.stringify(config.prices));
         if (config.adminPassword) localStorage.setItem('galeria_admin_password', config.adminPassword);
 
