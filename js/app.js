@@ -752,11 +752,8 @@ function renderSplitUI() {
                     if (isItemActive) {
                         return `<div class="split-card dynamic-card active" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
                             style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 6px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span>${p.name}</span>
-                                    <div class="check-icon" style="display: flex; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3); flex-shrink: 0;">
-                                        <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
-                                    </div>
+                                <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                                    <span style="text-align: center;">${p.name}</span>
                                 </div>
                                 <div style="background: white; border-radius: 6px; padding: 4px 8px; font-size: 0.85rem; color: #334155; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
                                     ${valueDisplay}
@@ -764,11 +761,8 @@ function renderSplitUI() {
                             </div>`;
                     } else {
                         return `<div class="split-card dynamic-card" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
-                            style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
-                               <span>${p.name}</span>
-                               <div class="check-icon" style="display: none; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
-                                   <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
-                               </div>
+                            style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: center; align-items: center;">
+                               <span style="text-align: center;">${p.name}</span>
                             </div>`;
                     }
                 } else {
