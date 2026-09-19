@@ -539,7 +539,7 @@ window.switchClient = function(client) {
         }
 
         if (label) {
-            label.textContent = product.name.toUpperCase();
+            label.textContent = "CANTIDAD: " + product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {
@@ -566,7 +566,7 @@ window.switchClient = function(client) {
         }
 
         if (label) {
-            label.textContent = product.name.toUpperCase();
+            label.textContent = "PRECIO: " + product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {
@@ -593,7 +593,7 @@ window.switchClient = function(client) {
         }
 
         if (label) {
-            label.textContent = product.name.toUpperCase();
+            label.textContent = "DETALLE: " + product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {
