@@ -526,7 +526,7 @@ window.switchClient = function(client) {
     };
 
     let activeOpenPriceProductId = null;
-    window.openPriceForProduct = function(product) {
+    window.openPriceForProduct = function(product, editIndex = -1) {
         if (!product) return;
         activeOpenPriceProductId = product.id;
         const input = document.getElementById('openPriceInput');
@@ -535,13 +535,19 @@ window.switchClient = function(client) {
             if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
             return;
         }
-        input.value = '';
+        
+        if (editIndex !== -1) {
+            input.value = state.cart[editIndex].unitPrice;
+        } else {
+            input.value = '';
+        }
+        
         modal.classList.add('open');
         setTimeout(() => input.focus(), 100);
     };
 
     let activeTextProductId = null;
-    window.openTextForProduct = function(product) {
+    window.openTextForProduct = function(product, editIndex = -1) {
         if (!product) return;
         activeTextProductId = product.id;
         const input = document.getElementById('textInputValue');
@@ -550,7 +556,13 @@ window.switchClient = function(client) {
             if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
             return;
         }
-        input.value = '';
+        
+        if (editIndex !== -1) {
+            input.value = state.cart[editIndex].notes || '';
+        } else {
+            input.value = '';
+        }
+        
         modal.classList.add('open');
         setTimeout(() => input.focus(), 100);
     };
@@ -564,9 +576,17 @@ window.switchClient = function(client) {
         const prodType = product.prodType || 'fixed';
         const clientId = state.activeClient;
 
-        // If it's already in the cart, tapping it removes it (toggle off)
+        // If it's already in the cart, edit it or toggle it off
         const existingIndex = state.cart.findIndex(item => item.productId === product.id && item.clientName === clientId);
         if (existingIndex !== -1) {
+            if (prodType === 'open_price') {
+                window.openPriceForProduct(product, existingIndex);
+                return;
+            } else if (prodType === 'text') {
+                window.openTextForProduct(product, existingIndex);
+                return;
+            }
+            // For fixed products, simply remove from cart
             state.cart.splice(existingIndex, 1);
             renderSplitUI();
             if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
@@ -3745,7 +3765,25 @@ function renderSplitUI() {
     const openPriceConfirmBtn = document.getElementById('openPriceConfirmBtn');
     if (openPriceConfirmBtn) {
         openPriceConfirmBtn.addEventListener('click', () => {
-            const price = parseFloat(document.getElementById('openPriceInput').value);
+            const inputVal = document.getElementById('openPriceInput').value;
+            const price = parseFloat(inputVal);
+            
+            // If empty or 0, remove the item
+            if (inputVal === '' || price === 0) {
+                if (activeOpenPriceProductId) {
+                    const clientId = state.activeClient;
+                    const existingIndex = state.cart.findIndex(item => item.productId === activeOpenPriceProductId && item.clientName === clientId);
+                    if (existingIndex !== -1) {
+                        state.cart.splice(existingIndex, 1);
+                        renderSplitUI();
+                        if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+                    }
+                }
+                document.getElementById('openPriceModal').classList.remove('open');
+                activeOpenPriceProductId = null;
+                return;
+            }
+
             if (isNaN(price) || price < 0) {
                 showNotification('Ingresa un valor válido', 'error');
                 return;
@@ -3756,17 +3794,26 @@ function renderSplitUI() {
             const product = getActiveProductsList(config).find(p => p.id === activeOpenPriceProductId);
             if (product) {
                 const clientId = state.activeClient;
-                state.cart.push({
-                    id: 'cart_' + Date.now(),
-                    productId: product.id,
-                    name: product.name,
-                    unitPrice: price,
-                    qty: 1,
-                    subtotal: price,
-                    clientName: clientId,
-                    categoryId: product.category,
-                    notes: ''
-                });
+                const existingIndex = state.cart.findIndex(item => item.productId === activeOpenPriceProductId && item.clientName === clientId);
+                
+                if (existingIndex !== -1) {
+                    // Update existing
+                    state.cart[existingIndex].unitPrice = price;
+                    state.cart[existingIndex].subtotal = price;
+                } else {
+                    // Add new
+                    state.cart.push({
+                        id: 'cart_' + Date.now(),
+                        productId: product.id,
+                        name: product.name,
+                        unitPrice: price,
+                        qty: 1,
+                        subtotal: price,
+                        clientName: clientId,
+                        categoryId: product.category,
+                        notes: ''
+                    });
+                }
                 renderSplitUI();
                 if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
             }
@@ -3779,27 +3826,49 @@ function renderSplitUI() {
     if (textInputConfirmBtn) {
         textInputConfirmBtn.addEventListener('click', () => {
             const text = document.getElementById('textInputValue').value.trim();
+            
+            // If empty text, remove the item
             if (!text) {
-                showNotification('Ingresa un texto', 'error');
+                if (activeTextProductId) {
+                    const clientId = state.activeClient;
+                    const existingIndex = state.cart.findIndex(item => item.productId === activeTextProductId && item.clientName === clientId);
+                    if (existingIndex !== -1) {
+                        state.cart.splice(existingIndex, 1);
+                        renderSplitUI();
+                        if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
+                    }
+                }
+                document.getElementById('textInputModal').classList.remove('open');
+                activeTextProductId = null;
                 return;
             }
+
             if (!activeTextProductId) return;
 
             const config = StorageManager.getConfig();
             const product = getActiveProductsList(config).find(p => p.id === activeTextProductId);
             if (product) {
                 const clientId = state.activeClient;
-                state.cart.push({
-                    id: 'cart_' + Date.now(),
-                    productId: product.id,
-                    name: product.name + ' (' + text + ')',
-                    unitPrice: 0,
-                    qty: 1,
-                    subtotal: 0,
-                    clientName: clientId,
-                    categoryId: product.category,
-                    notes: text
-                });
+                const existingIndex = state.cart.findIndex(item => item.productId === activeTextProductId && item.clientName === clientId);
+                
+                if (existingIndex !== -1) {
+                    // Update existing
+                    state.cart[existingIndex].notes = text;
+                    state.cart[existingIndex].name = product.name + ' (' + text + ')';
+                } else {
+                    // Add new
+                    state.cart.push({
+                        id: 'cart_' + Date.now(),
+                        productId: product.id,
+                        name: product.name + ' (' + text + ')',
+                        unitPrice: 0,
+                        qty: 1,
+                        subtotal: 0,
+                        clientName: clientId,
+                        categoryId: product.category,
+                        notes: text
+                    });
+                }
                 renderSplitUI();
                 if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
             }
