@@ -736,7 +736,7 @@ function renderSplitUI() {
                     const hasQty = qty > 0;
                     
                     return `<div class="split-card dynamic-card ${hasQty ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" 
-                        style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 8px;">
+                        style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
                            <span style="text-align: center;">${p.name}</span>
                            <div style="display: flex; justify-content: space-between; align-items: center; background: white; border-radius: 8px; padding: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); width: 100%;">
                                <button onclick="window.updateProductQty('${p.id}', -1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: #f1f5f9; color: ${colors.main}; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="minus" style="width: 16px; height: 16px;"></i></button>
@@ -751,7 +751,7 @@ function renderSplitUI() {
                     
                     if (isItemActive) {
                         return `<div class="split-card dynamic-card active" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
-                            style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 6px;">
+                            style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">
                                 <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
                                     <span style="text-align: center;">${p.name}</span>
                                 </div>
@@ -761,13 +761,13 @@ function renderSplitUI() {
                             </div>`;
                     } else {
                         return `<div class="split-card dynamic-card" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
-                            style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: center; align-items: center;">
+                            style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
                                <span style="text-align: center;">${p.name}</span>
                             </div>`;
                     }
                 } else {
                     return `<div class="split-card dynamic-card ${isActive ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
-                        style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                        style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
                            <span>${p.name}</span>
                            <div class="check-icon" style="display: ${isActive ? 'flex' : 'none'}; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
                                <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
