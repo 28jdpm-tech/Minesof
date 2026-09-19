@@ -570,7 +570,7 @@ window.switchClient = function(client) {
         }
         
         if (editIndex !== -1) {
-            input.value = state.cart[editIndex].unitPrice;
+            input.value = state.cart[editIndex].unitPrice.toLocaleString('es-CO');
         } else {
             input.value = '';
         }
@@ -3856,11 +3856,23 @@ function renderSplitUI() {
         });
     }
 
+    const openPriceInputEl = document.getElementById('openPriceInput');
+    if (openPriceInputEl) {
+        openPriceInputEl.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value !== '') {
+                value = parseInt(value, 10).toLocaleString('es-CO');
+            }
+            e.target.value = value;
+        });
+    }
+
     const openPriceConfirmBtn = document.getElementById('openPriceConfirmBtn');
     if (openPriceConfirmBtn) {
         openPriceConfirmBtn.addEventListener('click', () => {
             const inputVal = document.getElementById('openPriceInput').value;
-            const price = parseFloat(inputVal);
+            const cleanVal = inputVal.replace(/\D/g, '');
+            const price = parseFloat(cleanVal);
             
             // If empty or 0, remove the item
             if (inputVal === '' || price === 0) {
