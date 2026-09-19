@@ -2678,24 +2678,25 @@ function renderSplitUI() {
 
         let t = '';
         t += doubleLine + '\n';
-        t += center((FOODX_DATA.businessName || 'Minesof').toUpperCase()) + '\n';
-        t += center('CAFE & RESTAURANTE') + '\n';
+        t += center('MINESOF') + '\n';
+        if (FOODX_DATA.businessName) {
+            t += center(FOODX_DATA.businessName.toUpperCase()) + '\n';
+        }
         t += doubleLine + '\n';
 
         if (order.isAppending) {
             t += center('*** ADICION ***') + '\n';
         }
 
-        t += center('PEDIDO #' + (order.sequenceNumber || order.orderNumber || '---')) + '\n';
+        t += center('PEDIDO ' + (order.sequenceNumber || order.orderNumber || '---')) + '\n';
         t += line + '\n';
         t += justify(dateStr, timeStr) + '\n';
         if (order.createdBy) {
-            t += justify('CAJERO/A:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
+            t += justify('USUARIO:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
         }
 
         if (order.customerInfo) {
-            t += justify('MESA/CLIENTE:', '') + '\n';
-            t += center(order.customerInfo) + '\n';
+            t += justify('CLIENTE:', order.customerInfo.toUpperCase().substring(0, 23)) + '\n';
         }
         t += line + '\n';
 
@@ -2794,21 +2795,22 @@ function renderSplitUI() {
         let t = '';
         t += doubleLine + '\n';
         t += center('FACTURA DE VENTA') + '\n';
-        t += center((FOODX_DATA.businessName || 'Minesof').toUpperCase()) + '\n';
-        t += center('CAFE & RESTAURANTE') + '\n';
+        t += center('MINESOF') + '\n';
+        if (FOODX_DATA.businessName) {
+            t += center(FOODX_DATA.businessName.toUpperCase()) + '\n';
+        }
         t += doubleLine + '\n';
 
-        t += center('PEDIDO #' + (order.sequenceNumber || order.orderNumber || '---')) + '\n';
+        t += center('PEDIDO ' + (order.sequenceNumber || order.orderNumber || '---')) + '\n';
         t += line + '\n';
         t += justify('FECHA PAGO:', dateStr) + '\n';
         t += justify('HORA PAGO:', timeStr) + '\n';
         if (order.createdBy) {
-            t += justify('CAJERO/A:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
+            t += justify('USUARIO:', order.createdBy.toUpperCase().substring(0, 20)) + '\n';
         }
 
         if (order.customerInfo) {
-            t += justify('MESA/CLIENTE:', '') + '\n';
-            t += center(order.customerInfo) + '\n';
+            t += justify('CLIENTE:', order.customerInfo.toUpperCase().substring(0, 23)) + '\n';
         }
         t += line + '\n';
 
