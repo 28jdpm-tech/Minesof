@@ -1326,10 +1326,13 @@ function renderSplitUI() {
 
     function createCheckoutCard(order) {
         const labels = { pending: 'Pendiente', preparing: 'Preparando', ready: 'Listo', delivered: 'Entregado' };
+        const titleName = order.createdBy ? order.createdBy.toUpperCase() : 'CAJA';
+        const titleSeq = order.sequenceNumber ? `(${order.sequenceNumber})` : `(${order.orderNumber})`;
+        
         return `
             <div class="order-list-card ${order.paid ? 'paid' : ''}" data-order-id="${order.id}">
                 <div class="order-card-header">
-                    <span class="order-number">${order.orderNumber} ${order.sequenceNumber && order.sequenceNumber !== order.orderNumber ? `(${order.sequenceNumber})` : ''}</span>
+                    <span class="order-number">${titleName} ${titleSeq}</span>
                     <span class="order-status-badge">${order.paid ? 'Pagado' : labels[order.status]}</span>
                 </div>
                 <div class="order-customer-info">
@@ -1820,10 +1823,12 @@ function renderSplitUI() {
 
     function createOrderListCard(order) {
         const labels = { pending: 'Pendiente', preparing: 'Preparando', ready: 'Listo', delivered: 'Entregado' };
+        const titleName = order.createdBy ? order.createdBy.toUpperCase() : 'CAJA';
+        const titleSeq = order.sequenceNumber ? `(${order.sequenceNumber})` : `(${order.orderNumber})`;
         return `
             <div class="order-list-card">
                 <div class="order-card-header">
-                    <span class="order-number">${order.orderNumber}</span>
+                    <span class="order-number">${titleName} ${titleSeq}</span>
                     <span class="order-status-badge">${labels[order.status]}</span>
                 </div>
                 <div class="order-customer-info"><span>${order.customerInfo}</span></div>
@@ -2567,10 +2572,13 @@ function renderSplitUI() {
             return;
         }
 
-        container.innerHTML = orders.map(order => `
+        container.innerHTML = orders.map(order => {
+            const titleName = order.createdBy ? order.createdBy.toUpperCase() : 'CAJA';
+            const titleSeq = order.sequenceNumber ? `(${order.sequenceNumber})` : `(${order.orderNumber})`;
+            return `
             <div class="order-list-card history-order-card" data-order-id="${order.id}">
                 <div class="order-card-header">
-                    <span class="order-number">${order.orderNumber}</span>
+                    <span class="order-number">${titleName} ${titleSeq}</span>
                     <span class="order-status-badge">${order.paid ? 'Pagado' : labels[order.status]}</span>
                 </div>
                 <div class="order-customer-info">
@@ -2596,7 +2604,8 @@ function renderSplitUI() {
                     ${order.paid ? '<span class="status-indicator paid-chip">PAGADO</span>' : ''}
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         // Re-attach click listeners for history detail
         document.querySelectorAll('.history-order-card').forEach(card => {
