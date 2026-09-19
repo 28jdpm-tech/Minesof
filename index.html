@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 226</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 227</span>
                 </div>
             </div>
         </div>
@@ -999,8 +999,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Precio del Producto ($)</label>
-                    <input type="number" id="openPriceInput" placeholder="0" style="font-size: 1.2rem; text-align: center;">
+                    <label id="openPriceModalProductLabel" style="text-transform: uppercase; font-weight: 800; font-size: 0.9rem; color: #334155; display: block; margin-bottom: 8px;">PRECIO DEL PRODUCTO ($)</label>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="openPriceInput" placeholder="0" style="font-size: 1.2rem; text-align: center;">
                 </div>
             </div>
             <div class="modal-footer">
@@ -1022,7 +1022,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Descripción / Observación</label>
+                    <label id="textInputModalProductLabel" style="text-transform: uppercase; font-weight: 800; font-size: 0.9rem; color: #334155; display: block; margin-bottom: 8px;">DESCRIPCIÓN / OBSERVACIÓN</label>
                     <input type="text" id="textInputValue" placeholder="Ej. Llevar en bolsa separada..." autocomplete="off">
                 </div>
             </div>
@@ -1071,11 +1071,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=226"></script>
+    <script src="js/data.js?v=227"></script>
     
-    <script src="js/storage.js?v=226"></script>
-    <script src="js/auth.js?v=226"></script>
-    <script src="js/app.js?v=226"></script>
+    <script src="js/storage.js?v=227"></script>
+    <script src="js/auth.js?v=227"></script>
+    <script src="js/app.js?v=227"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {

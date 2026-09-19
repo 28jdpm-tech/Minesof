@@ -558,9 +558,15 @@ window.switchClient = function(client) {
         activeOpenPriceProductId = product.id;
         const input = document.getElementById('openPriceInput');
         const modal = document.getElementById('openPriceModal');
+        const label = document.getElementById('openPriceModalProductLabel');
+        
         if (!input || !modal) {
             if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
             return;
+        }
+
+        if (label) {
+            label.textContent = product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {
@@ -579,9 +585,15 @@ window.switchClient = function(client) {
         activeTextProductId = product.id;
         const input = document.getElementById('textInputValue');
         const modal = document.getElementById('textInputModal');
+        const label = document.getElementById('textInputModalProductLabel');
+
         if (!input || !modal) {
             if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
             return;
+        }
+
+        if (label) {
+            label.textContent = product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {
