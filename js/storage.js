@@ -272,6 +272,7 @@ const StorageManager = {
                 if (data.observations) localStorage.setItem('galeria_observations', JSON.stringify(data.observations));
                 if (data.businessName !== undefined) localStorage.setItem(PREFIX + 'businessName', data.businessName);
                 if (data.businessLogo !== undefined) localStorage.setItem(PREFIX + 'businessLogo', data.businessLogo);
+                if (data.billingSystem !== undefined) localStorage.setItem(PREFIX + 'billingSystem', data.billingSystem);
                 if (data.prices) localStorage.setItem(STORAGE_KEYS.PRICES, JSON.stringify(data.prices));
                 if (data.adminPassword) localStorage.setItem('galeria_admin_password', data.adminPassword);
 
@@ -306,7 +307,7 @@ const StorageManager = {
                 });
 
                 if (changed) {
-                    localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(localOrders));
+                    this.saveOrders(localOrders);
                     if (typeof callback === 'function') callback();
                 }
             });
@@ -334,7 +335,7 @@ const StorageManager = {
                     }
                 });
                 if (changed) {
-                    localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(local));
+                    this.saveExpenses(local);
                     if (typeof callback === 'function') callback();
                 }
             });
@@ -456,6 +457,7 @@ const StorageManager = {
         Object.values(STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
         localStorage.removeItem(PREFIX + 'businessName');
         localStorage.removeItem(PREFIX + 'businessLogo');
+        localStorage.removeItem(PREFIX + 'billingSystem');
         localStorage.removeItem('galeria_admin_password');
         localStorage.removeItem('galeria_observations');
     }
