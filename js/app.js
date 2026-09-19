@@ -2365,7 +2365,32 @@ function renderSplitUI() {
             : StorageManager.getOrdersByDate(elements.historyDatePicker.value).reverse();
 
         // Filter out partial orders from history and show only PAID
-        let orders = ordersRaw.filter(o => !o.isPartial && o.paid);
+        let baseOrders = ordersRaw.filter(o => !o.isPartial && o.paid);
+        
+        // Populate user dropdown
+        const historyUserFilterSelect = document.getElementById('historyUserFilter');
+        if (historyUserFilterSelect) {
+            const currentVal = historyUserFilterSelect.value || 'all';
+            const users = new Set();
+            baseOrders.forEach(o => { if (o.createdBy) users.add(o.createdBy); });
+            const sortedUsers = Array.from(users).sort();
+            
+            // Only update DOM if the list changed, to prevent loss of focus/selection state
+            const currentOptions = Array.from(historyUserFilterSelect.options).map(o => o.value).filter(v => v !== 'all');
+            if (JSON.stringify(currentOptions) !== JSON.stringify(sortedUsers)) {
+                let html = '<option value="all">Todos los Usuarios</option>';
+                sortedUsers.forEach(u => html += `<option value="${u}">${u}</option>`);
+                historyUserFilterSelect.innerHTML = html;
+                historyUserFilterSelect.value = sortedUsers.includes(currentVal) ? currentVal : 'all';
+            }
+        }
+        
+        let orders = baseOrders;
+
+        // Apply User Filter
+        if (historyUserFilterSelect && historyUserFilterSelect.value !== 'all') {
+            orders = orders.filter(o => o.createdBy === historyUserFilterSelect.value);
+        }
 
         // Apply Payment Method or Category Filter
         if (historyFilter !== 'all') {
@@ -2380,7 +2405,13 @@ function renderSplitUI() {
         }
 
         renderHistoryOrdersList(orders);
-        calculateHistorySummary(ordersRaw.filter(o => !o.isPartial && o.paid)); // Total summary always shows all
+        
+        // Calculate total summary taking into account the USER filter, but NOT the payment method filter
+        const summaryOrders = historyUserFilterSelect && historyUserFilterSelect.value !== 'all' 
+            ? baseOrders.filter(o => o.createdBy === historyUserFilterSelect.value) 
+            : baseOrders;
+            
+        calculateHistorySummary(summaryOrders); // Total summary shows all payment methods for the selected user
 
         // Ensure modal is hidden
         if (elements.historyOrderModal) {
@@ -2422,6 +2453,13 @@ function renderSplitUI() {
                 showNotification('Selecciona una fecha');
                 return;
             }
+            renderHistoryPage();
+        });
+    }
+
+    const historyUserFilterSelect = document.getElementById('historyUserFilter');
+    if (historyUserFilterSelect) {
+        historyUserFilterSelect.addEventListener('change', () => {
             renderHistoryPage();
         });
     }
