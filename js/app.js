@@ -34,25 +34,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     const businessNameInput = document.getElementById('businessNameInput');
+    const billingSystemInput = document.getElementById('billingSystemInput');
     const saveBusinessBrandBtn = document.getElementById('saveBusinessBrandBtn');
     
     function updateAppBranding() {
         const config = StorageManager.getConfig();
         const bName = config.businessName || 'Minesof';
+        const billingSys = config.billingSystem || 'standard';
         
         const headerNames = document.querySelectorAll('.dynamic-business-name');
         headerNames.forEach(el => el.textContent = bName);
         
         if (businessNameInput) businessNameInput.value = bName;
+        if (billingSystemInput) billingSystemInput.value = billingSys;
+        
+        // Hide/Show tabs based on billing system
+        const tabs = document.querySelectorAll('.checkout-tab');
+        let needsTabSwitch = false;
+        tabs.forEach(tab => {
+            if (billingSys === 'direct') {
+                if (tab.dataset.tab === 'to-print' || tab.dataset.tab === 'pending') {
+                    tab.style.display = 'none';
+                    if (tab.classList.contains('active')) needsTabSwitch = true;
+                } else {
+                    tab.style.display = 'flex';
+                }
+            } else {
+                tab.style.display = 'flex';
+            }
+        });
+        
+        if (needsTabSwitch) {
+            const paidTab = document.querySelector('.checkout-tab[data-tab="paid"]');
+            if (paidTab) paidTab.click();
+        }
     }
     
     if (saveBusinessBrandBtn) {
         saveBusinessBrandBtn.addEventListener('click', () => {
             const config = StorageManager.getConfig();
             config.businessName = businessNameInput.value.trim();
+            if (billingSystemInput) config.billingSystem = billingSystemInput.value;
             StorageManager.saveConfig(config);
             updateAppBranding();
-            showNotification('Identidad guardada');
+            showNotification('Ajustes guardados');
         });
     }
 
@@ -1017,8 +1042,22 @@ function renderSplitUI() {
                 };
 
                 StorageManager.addOrder(newOrder);
-                showNotification('Pedido ' + newOrder.orderNumber + ' generado');
                 
+                if (config.billingSystem === 'direct') {
+                    showNotification('Pedido ' + newOrder.orderNumber + ' listo para cobro');
+                    
+                    // Delay switching to checkout page and opening modal slightly
+                    setTimeout(() => {
+                        const checkoutDrawerItem = document.querySelector('.drawer-item[data-page="checkout"]');
+                        if (checkoutDrawerItem) checkoutDrawerItem.click();
+                        
+                        setTimeout(() => {
+                            window.openPaymentModal(newOrder.id);
+                        }, 150);
+                    }, 50);
+                } else {
+                    showNotification('Pedido ' + newOrder.orderNumber + ' generado');
+                }
             }
 
             clearPosCart(false);
@@ -1194,7 +1233,7 @@ function renderSplitUI() {
 
         document.querySelectorAll('.order-list-card[data-order-id]').forEach(card => {
             card.addEventListener('click', () => {
-                openPaymentModal(card.dataset.orderId);
+                window.openPaymentModal(card.dataset.orderId);
             });
         });
 
@@ -1362,7 +1401,7 @@ function renderSplitUI() {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     };
 
-    function openPaymentModal(orderId) {
+    window.openPaymentModal = function(orderId) {
         const order = StorageManager.getOrders().find(o => o.id == orderId);
         if (!order || !elements.paymentModal) return;
 
@@ -1443,6 +1482,15 @@ function renderSplitUI() {
 
     if (elements.cancelPayment) {
         elements.cancelPayment.addEventListener('click', () => {
+            if (selectedPaymentOrder && !selectedPaymentOrder.paid) {
+                const config = StorageManager.getConfig();
+                if (config.billingSystem === 'direct') {
+                    // In direct mode, unpaid orders are discarded if payment is cancelled
+                    StorageManager.deleteOrder(selectedPaymentOrder.id);
+                    showNotification('Pago cancelado. El pedido fue descartado.');
+                    renderCheckoutPage();
+                }
+            }
             elements.paymentModal.classList.add('hidden');
             selectedPaymentOrder = null;
         });
@@ -1450,6 +1498,15 @@ function renderSplitUI() {
 
     if (elements.paymentModalOverlay) {
         elements.paymentModalOverlay.addEventListener('click', () => {
+            if (selectedPaymentOrder && !selectedPaymentOrder.paid) {
+                const config = StorageManager.getConfig();
+                if (config.billingSystem === 'direct') {
+                    // In direct mode, unpaid orders are discarded if payment is cancelled
+                    StorageManager.deleteOrder(selectedPaymentOrder.id);
+                    showNotification('Pago cancelado. El pedido fue descartado.');
+                    renderCheckoutPage();
+                }
+            }
             elements.paymentModal.classList.add('hidden');
             selectedPaymentOrder = null;
         });
