@@ -724,6 +724,33 @@ function renderSplitUI() {
                                <button onclick="window.updateProductQty('${p.id}', 1)" style="width: 36px; height: 32px; border-radius: 6px; border: none; background: ${colors.main}; color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
                            </div>
                         </div>`;
+                } else if (prodType === 'open_price' || prodType === 'text') {
+                    const cartItem = state.cart.find(item => item.productId === p.id && item.clientName === state.activeClient);
+                    const isItemActive = !!cartItem;
+                    const valueDisplay = cartItem ? (prodType === 'open_price' ? `$${cartItem.unitPrice}` : cartItem.notes) : '';
+                    
+                    if (isItemActive) {
+                        return `<div class="split-card dynamic-card active" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
+                            style="border: none; border-radius: 10px; padding: 8px 12px; font-size: 0.95rem; font-weight: 600; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span>${p.name}</span>
+                                    <div class="check-icon" style="display: flex; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3); flex-shrink: 0;">
+                                        <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
+                                    </div>
+                                </div>
+                                <div style="background: white; border-radius: 6px; padding: 4px 8px; font-size: 0.85rem; color: #334155; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                                    ${valueDisplay}
+                                </div>
+                            </div>`;
+                    } else {
+                        return `<div class="split-card dynamic-card" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
+                            style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                               <span>${p.name}</span>
+                               <div class="check-icon" style="display: none; width: 22px; height: 22px; border-radius: 50%; background: white; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                                   <i data-lucide="check" style="width: 16px; height: 16px; color: ${colors.main};"></i>
+                               </div>
+                            </div>`;
+                    }
                 } else {
                     return `<div class="split-card dynamic-card ${isActive ? 'active' : ''}" data-id="${p.id}" data-name="${p.name.toLowerCase()}" onclick="window.triggerToggleProduct('${p.id}')"
                         style="border: none; border-radius: 10px; padding: 12px; font-size: 0.95rem; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
