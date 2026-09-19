@@ -531,9 +531,15 @@ window.switchClient = function(client) {
         activeQuantityProductId = product.id;
         const input = document.getElementById('quantityInputValue');
         const modal = document.getElementById('quantityModal');
+        const label = document.getElementById('quantityModalProductLabel');
+        
         if (!input || !modal) {
             if(typeof showNotification === 'function') showNotification('Por favor, cierra sesión y recarga la página para actualizar', 'error');
             return;
+        }
+
+        if (label) {
+            label.textContent = product.name.toUpperCase();
         }
         
         if (editIndex !== -1) {

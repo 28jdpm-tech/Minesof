@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 225</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 226</span>
                 </div>
             </div>
         </div>
@@ -972,10 +972,10 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label style="text-align: center; display: block; margin-bottom: 12px;">Cantidad del Producto</label>
+                    <label id="quantityModalProductLabel" style="text-align: center; display: block; margin-bottom: 12px; font-weight: 800; font-size: 0.9rem; color: #334155;">CANTIDAD DEL PRODUCTO</label>
                     <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid var(--border-default); border-radius: 8px; padding: 10px;">
                         <button id="qtyModalMinus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: #e2e8f0; color: #334155; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-                        <input type="number" id="quantityInputValue" value="1" min="0" style="font-size: 1.8rem; text-align: center; border: none; background: transparent; width: 80px; font-weight: bold; outline: none;">
+                        <input type="text" inputmode="numeric" pattern="[0-9]*" id="quantityInputValue" value="1" style="font-size: 1.8rem; text-align: center; border: none; background: transparent; width: 80px; font-weight: bold; outline: none;">
                         <button id="qtyModalPlus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: var(--accent-primary); color: white; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
                     </div>
                 </div>
@@ -1071,11 +1071,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=225"></script>
+    <script src="js/data.js?v=226"></script>
     
-    <script src="js/storage.js?v=225"></script>
-    <script src="js/auth.js?v=225"></script>
-    <script src="js/app.js?v=225"></script>
+    <script src="js/storage.js?v=226"></script>
+    <script src="js/auth.js?v=226"></script>
+    <script src="js/app.js?v=226"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
