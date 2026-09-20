@@ -505,7 +505,7 @@ window.removeClient = function(e, client) {
     e.stopPropagation();
     if (state.clients.length <= 1) return;
     
-    if (confirm(`¿Eliminar al cliente ${client} y todos sus productos seleccionados?`)) {
+    if (confirm(`MINESOF\n\n¿Eliminar al cliente ${client} y todos sus productos seleccionados?`)) {
         state.clients = state.clients.filter(c => c !== client);
         state.cart = state.cart.filter(item => item.clientName !== client);
         
@@ -882,7 +882,7 @@ function renderSplitUI() {
     // Expose Cart methods
     // Expose Cart methods to window for inline onclick handlers
         function clearPosCart(confirmClear = false) {
-        if (confirmClear && !confirm('¿Estás seguro de vaciar todo el pedido actual?')) return;
+        if (confirmClear && !confirm('MINESOF\n\n¿Estás seguro de vaciar todo el pedido actual?')) return;
         state.cart = [];
         state.orderTotal = 0;
         renderSplitUI();
@@ -1802,7 +1802,7 @@ function renderSplitUI() {
             if (!selectedPaymentOrder) return;
 
             const performDelete = async () => {
-                if (confirm(`¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`)) {
+                if (confirm(`MINESOF\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`)) {
                     await StorageManager.deleteOrder(selectedPaymentOrder.id);
                     showNotification(`Pedido ${selectedPaymentOrder.orderNumber} eliminado`);
                     elements.paymentModal.classList.add('hidden');
@@ -2559,7 +2559,7 @@ function renderSplitUI() {
             if (!selectedHistoryOrder) return;
 
             const performDelete = async () => {
-                if (confirm(`¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`)) {
+                if (confirm(`MINESOF\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`)) {
                     await StorageManager.deleteOrder(selectedHistoryOrder.id);
                     showNotification(`Pedido ${selectedHistoryOrder.orderNumber} eliminado`);
                     elements.historyOrderModal.classList.add('hidden');
@@ -3293,7 +3293,7 @@ function renderSplitUI() {
     // Delete expense (global handler)
     window.deleteExpense = function (expenseId) {
         const performDelete = async () => {
-            if (confirm('¿Eliminar este Gasto?')) {
+            if (confirm('MINESOF\n\n¿Eliminar este Gasto?')) {
                 await StorageManager.deleteExpense(expenseId);
                 showNotification('Gasto eliminado');
                 renderExpensesPage();
@@ -3690,7 +3690,7 @@ function renderSplitUI() {
     };
 
     window.deleteAdminItem = function (type, id, pId) {
-        if (!confirm('¿Seguro que deseas eliminar este elemento?')) return;
+        if (!confirm('MINESOF\n\n¿Seguro que quieres eliminar este elemento?')) return;
         const config = StorageManager.getConfig();
         if (type === 'category') {
             config.categories = config.categories.filter(c => c.id !== id);
@@ -4167,7 +4167,7 @@ function renderSplitUI() {
 
     if (resetOrderCounterBtn) {
         resetOrderCounterBtn.addEventListener('click', async () => {
-            if (confirm('¿Estás seguro que deseas reiniciar el contador de pedidos a #001?')) {
+            if (confirm('MINESOF\n\n¿Estás seguro que deseas reiniciar el contador de pedidos a #001?')) {
                 await resetOrderCounter();
             }
         });
@@ -4375,7 +4375,7 @@ function renderSplitUI() {
     // System Data Management
     // ============================================
     window.clearSystemData = async function() {
-        const msg1 = "ADVERTENCIA CRITICA \n\nEstas seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta accion es irreversible.\n- Tu catalogo (productos, categorias) NO se borrara.\n- Tu contador de pedidos volvera a cero.";
+        const msg1 = "MINESOF\n\nADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
         if (!confirm(msg1)) return;
         
         const confirmWord = prompt("Escribe BORRAR en mayusculas para confirmar la eliminacion:");
