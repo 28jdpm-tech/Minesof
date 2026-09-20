@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 253</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 254</span>
                 </div>
             </div>
         </div>
@@ -392,11 +392,16 @@
                 </div>
 
                 <!-- User Filter -->
-                <div style="padding: 10px 15px; display: flex; gap: 10px; align-items: center;">
-                    <label style="font-weight: 600; font-size: 0.9rem; color: var(--text-muted);"><i data-lucide="user" style="width: 14px; margin-right: 4px;"></i>Usuario/Caja:</label>
-                    <select id="historyUserFilter" style="flex: 1; padding: 8px; border: 1px solid var(--border-default); border-radius: var(--radius-sm); background: var(--bg-card); color: var(--text-main);">
-                        <option value="all">Todos los Usuarios</option>
-                    </select>
+                <div style="padding: 8px 15px; display: flex; gap: 12px; align-items: center;">
+                    <label style="display: flex; align-items: center; font-weight: 700; font-size: 0.95rem; color: var(--text-secondary);">
+                        <i data-lucide="user" style="width: 16px; height: 16px; margin-right: 6px; color: var(--accent-primary);"></i>Usuario
+                    </label>
+                    <div style="position: relative; flex: 1;">
+                        <select id="historyUserFilter" style="width: 100%; padding: 10px 35px 10px 15px; border: 1px solid #cbd5e1; border-radius: 10px; background-color: white; color: #1e293b; font-size: 0.95rem; font-weight: 600; outline: none; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.02); appearance: none; -webkit-appearance: none; font-family: inherit;">
+                            <option value="all">Todos los Usuarios</option>
+                        </select>
+                        <i data-lucide="chevron-down" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #64748b; pointer-events: none;"></i>
+                    </div>
                 </div>
 
                 <!-- History Summary -->
@@ -1108,11 +1113,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=253"></script>
+    <script src="js/data.js?v=254"></script>
     
-    <script src="js/storage.js?v=253"></script>
-    <script src="js/auth.js?v=253"></script>
-    <script src="js/app.js?v=253"></script>
+    <script src="js/storage.js?v=254"></script>
+    <script src="js/auth.js?v=254"></script>
+    <script src="js/app.js?v=254"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
