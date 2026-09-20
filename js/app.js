@@ -45,14 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = StorageManager.getConfig();
         const bName = config.businessName || 'Minesof';
         const billingSys = config.billingSystem || 'standard';
-        const dUser = localStorage.getItem('minesof_deviceUser') || '';
+        const dUser = localStorage.getItem('minesof_deviceUser') || 'Caja';
         
         const headerNames = document.querySelectorAll('.dynamic-business-name');
         headerNames.forEach(el => el.textContent = bName);
+
+        const deviceUserNames = document.querySelectorAll('.dynamic-device-user');
+        deviceUserNames.forEach(el => el.textContent = dUser);
         
         if (businessNameInput) businessNameInput.value = bName;
         if (billingSystemInput) billingSystemInput.value = billingSys;
-        if (deviceUserInput) deviceUserInput.value = dUser;
+        if (deviceUserInput) deviceUserInput.value = dUser === 'Caja' ? '' : dUser;
         
         // Hide/Show tabs based on billing system
         const tabs = document.querySelectorAll('.checkout-tab');
