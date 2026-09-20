@@ -133,10 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
         msgEl.textContent = message.replace('MINESOF\n\n', '').replace('MINESOF\n', '');
 
         // Show modal
-        modal.classList.remove('hidden');
+        modal.classList.add('open');
 
         // Handlers
-        const close = () => modal.classList.add('hidden');
+        const close = () => modal.classList.remove('open');
 
         newCancelBtn.addEventListener('click', close);
         overlay.addEventListener('click', close);
