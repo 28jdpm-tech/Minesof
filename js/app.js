@@ -4375,34 +4375,58 @@ function renderSplitUI() {
             return;
         }
 
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0'; overlay.style.left = '0'; overlay.style.width = '100vw'; overlay.style.height = '100vh';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
+        overlay.style.color = 'white';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '999999';
+        overlay.style.fontFamily = 'system-ui, sans-serif';
+        overlay.innerHTML = `
+            <div style="border: 4px solid rgba(255,255,255,0.2); border-top: 4px solid white; border-radius: 50%; width: 50px; height: 50px; animation: spinLoader 1s linear infinite; margin-bottom: 20px;"></div>
+            <h2 id="wipeProgressText" style="margin: 0; padding: 0;">Limpiando la nube...</h2>
+            <p style="margin-top: 10px; color: #ccc;">No cierres la aplicación</p>
+            <style>@keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+        `;
+        document.body.appendChild(overlay);
+
         try {
             if (typeof db !== 'undefined') {
-                showNotification("Borrando datos en la nube. Por favor espere...", "info");
-                
-                // Retrieve ALL orders and expenses from cloud, not just local limit
-                const deletePromises = [];
+                const batchDelete = async (snapshot, name) => {
+                    if (snapshot.empty) return;
+                    document.getElementById('wipeProgressText').textContent = `Borrando ${name}...`;
+                    const chunks = [];
+                    for (let i = 0; i < snapshot.docs.length; i += 450) {
+                        chunks.push(snapshot.docs.slice(i, i + 450));
+                    }
+                    for (let chunk of chunks) {
+                        const batch = db.batch();
+                        chunk.forEach(doc => batch.delete(doc.ref));
+                        await batch.commit();
+                    }
+                };
                 
                 try {
+                    document.getElementById('wipeProgressText').textContent = 'Buscando pedidos...';
                     const ordersSnapshot = await getDbCollection(STORAGE_KEYS.ORDERS).get();
-                    ordersSnapshot.docs.forEach(doc => deletePromises.push(doc.ref.delete()));
-                } catch(e) { console.error('Error fetching orders to delete', e); }
+                    await batchDelete(ordersSnapshot, 'pedidos');
+                } catch(e) { console.error('Error deleting orders', e); }
                 
                 try {
+                    document.getElementById('wipeProgressText').textContent = 'Buscando gastos...';
                     const expensesSnapshot = await getDbCollection(STORAGE_KEYS.EXPENSES).get();
-                    expensesSnapshot.docs.forEach(doc => deletePromises.push(doc.ref.delete()));
-                } catch(e) { console.error('Error fetching expenses to delete', e); }
-                
-                // Wait for all deletions to finish
-                if (deletePromises.length > 0) {
-                    await Promise.all(deletePromises);
-                }
+                    await batchDelete(expensesSnapshot, 'gastos');
+                } catch(e) { console.error('Error deleting expenses', e); }
             }
 
             localStorage.removeItem(STORAGE_KEYS.ORDERS);
             localStorage.removeItem(STORAGE_KEYS.EXPENSES);
             localStorage.setItem('galeria_order_counter', '0');
             
-            // Also update counter in cloud if possible
             if (typeof db !== 'undefined') {
                 try {
                     await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set({
@@ -4411,12 +4435,14 @@ function renderSplitUI() {
                 } catch(e) {}
             }
 
+            document.getElementById('wipeProgressText').textContent = '¡Listo!';
             showNotification("Todo el historial ha sido borrado.");
             setTimeout(() => {
                 window.location.reload();
-            }, 1500);
+            }, 1000);
         } catch(error) {
             console.error(error);
+            overlay.remove();
             showNotification("Error al limpiar historial", "error");
         }
     };
