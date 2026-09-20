@@ -2215,7 +2215,7 @@ function renderSplitUI() {
                     <thead>
                         <tr style="background: var(--bg-tertiary);">
                             <th style="padding: 8px 12px; text-align: left; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; position: sticky; top: 0; background: var(--bg-tertiary); z-index: 10;">Fecha</th>
-                            <th style="padding: 8px 12px; text-align: right; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; position: sticky; top: 0; background: var(--bg-tertiary); z-index: 10;">Precio/Costo</th>
+                            <th style="padding: 8px 12px; text-align: right; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.65rem; position: sticky; top: 0; background: var(--bg-tertiary); z-index: 10;">Monto</th>
                         </tr>
                     </thead>
                     <tbody>
