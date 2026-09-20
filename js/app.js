@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 paidTab.classList.add('active');
             }
             checkoutMode = 'paid';
-            if (typeof renderCheckoutPage === 'function') renderCheckoutPage();
         }
     }
     
