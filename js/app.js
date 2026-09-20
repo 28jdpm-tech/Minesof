@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -837,7 +837,7 @@ function renderSplitUI() {
             
             <div style="display: flex; align-items: center; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 6px 12px; min-height: 40px; position: relative;">
                 <i data-lucide="search" style="width: 16px; height: 16px; color: #94a3b8;"></i>
-                <input type="text" id="search-input-${catId}" placeholder="Buscar..." oninput="window.filterCategory(this, '${catId}')" style="border: none; outline: none; width: 100%; padding: 4px; font-size: 0.85rem; margin-left: 8px; padding-right: 24px; background: transparent; color: var(--text-primary);">
+                <input type="text" autocomplete="off" id="search-input-${catId}" placeholder="Buscar..." oninput="window.filterCategory(this, '${catId}')" style="border: none; outline: none; width: 100%; padding: 4px; font-size: 0.85rem; margin-left: 8px; padding-right: 24px; background: transparent; color: var(--text-primary);">
                 <div id="clear-search-${catId}" onclick="window.clearCategorySearch('${catId}')" style="display: none; position: absolute; right: 8px; cursor: pointer; padding: 4px; border-radius: 50%; background: rgba(0,0,0,0.1); align-items: center; justify-content: center;">
                     <i data-lucide="x" style="width: 14px; height: 14px; color: var(--text-primary);"></i>
                 </div>
@@ -3175,7 +3175,7 @@ function renderSplitUI() {
         // Add new category form
         html += `
             <div style="display: flex; gap: var(--space-xs); align-items: center;">
-                <input type="text" id="newExpenseCatLabel" placeholder="Nombre de categoría"
+                <input type="text" autocomplete="off" id="newExpenseCatLabel" placeholder="Nombre de categoría"
                     style="flex: 1; padding: 8px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box;">
                 <button onclick="window.addExpenseCategory()"
                     style="padding: 8px 14px; background: var(--accent-primary); color: var(--bg-primary); border: none; border-radius: var(--radius-md); font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap;">
@@ -3493,7 +3493,7 @@ function renderSplitUI() {
         adminEditContext = { type: 'flavor', id: null, parentId: catId };
         elements.adminModalTitle.textContent = 'Nuevo Producto';
         elements.adminModalBody.innerHTML = `
-            <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
+            <div class="form-group"><label>Nombre del Producto</label><input type="text" autocomplete="off" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
             <div class="form-group">
                 <label>Tipo de Producto</label>
                 <select id="editProdType" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: inherit;">
@@ -3503,7 +3503,7 @@ function renderSplitUI() {
                     <option value="text">Texto Libre (Observación)</option>
                 </select>
             </div>
-            <div class="form-group" id="editPriceGroup"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
+            <div class="form-group" id="editPriceGroup"><label>Precio Unitario ($)</label><input type="number" autocomplete="off" id="editPrice" placeholder="4500" value="0"></div>
         `;
         const typeSelect = document.getElementById('editProdType');
         const priceGroup = document.getElementById('editPriceGroup');
@@ -3687,12 +3687,12 @@ function renderSplitUI() {
         if (type === 'category') {
             const item = config.categories.find(c => c.id === id);
             const itemType = (item && item.type) ? item.type : 'comida';
-            html = '<div class="form-group"><label>Nombre de categoría</label><input type="text" id="editName" value="' + item.name + '"></div>';;
+            html = '<div class="form-group"><label>Nombre de categoría</label><input type="text" autocomplete="off" id="editName" value="' + item.name + '"></div>';;
         } else if (type === 'flavor') {
             const allProds = getActiveProductsList(config);
             const item = allProds.find(p => p.id === id) || (config.flavors[parentId] && config.flavors[parentId].find(f => f.id === id)) || { name: '', price: 0, prodType: 'fixed' };
             const pt = item.prodType || 'fixed';
-            html = `<div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" value="${item.name}"></div>
+            html = `<div class="form-group"><label>Nombre del Producto</label><input type="text" autocomplete="off" id="editName" value="${item.name}"></div>
                     <div class="form-group">
                         <label>Tipo de Producto</label>
                         <select id="editProdType" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: inherit;">
@@ -3702,15 +3702,15 @@ function renderSplitUI() {
                             <option value="text" ${pt === 'text' ? 'selected' : ''}>Texto Libre (Observación)</option>
                         </select>
                     </div>
-                    <div class="form-group" id="editPriceGroup" style="display: ${pt === 'open_price' || pt === 'text' ? 'none' : 'block'};"><label>Precio Unitario ($)</label><input type="number" id="editPrice" value="${item.price || 0}"></div>`;
+                    <div class="form-group" id="editPriceGroup" style="display: ${pt === 'open_price' || pt === 'text' ? 'none' : 'block'};"><label>Precio Unitario ($)</label><input type="number" autocomplete="off" id="editPrice" value="${item.price || 0}"></div>`;
         } else if (type === 'extra') {
             const item = config.extras[parentId].find(e => e.id === id);
-            html = `<div class="form-group"><label>Nombre</label><input type="text" id="editName" value="${item.name}"></div>
-                    <div class="form-group"><label>Precio ($)</label><input type="number" id="editPrice" value="${item.price}"></div>`;
+            html = `<div class="form-group"><label>Nombre</label><input type="text" autocomplete="off" id="editName" value="${item.name}"></div>
+                    <div class="form-group"><label>Precio ($)</label><input type="number" autocomplete="off" id="editPrice" value="${item.price}"></div>`;
         } else if (type === 'observation') {
             const item = config.observations[parentId].find(o => o.id === id);
-            html = `<div class="form-group"><label>Descripción / Nota</label><input type="text" id="editName" value="${item.name}"></div>
-                    <div class="form-group"><label>Precio Extra si aplica ($)</label><input type="number" id="editPrice" value="${item.price || 0}"></div>`;
+            html = `<div class="form-group"><label>Descripción / Nota</label><input type="text" autocomplete="off" id="editName" value="${item.name}"></div>
+                    <div class="form-group"><label>Precio Extra si aplica ($)</label><input type="number" autocomplete="off" id="editPrice" value="${item.price || 0}"></div>`;
         }
         elements.adminModalBody.innerHTML = html;
         if (type === 'flavor') {
@@ -3856,7 +3856,7 @@ function renderSplitUI() {
         elements.addCategoryBtn.onclick = () => {
             adminEditContext = { type: 'category', id: null };
             elements.adminModalTitle.textContent = 'Nueva Categoría';
-            elements.adminModalBody.innerHTML = '<div class="form-group"><label>Nombre de categoría</label><input type="text" id="editName" placeholder="Ej: Comida, Bebidas, Combos"></div>';
+            elements.adminModalBody.innerHTML = '<div class="form-group"><label>Nombre de categoría</label><input type="text" autocomplete="off" id="editName" placeholder="Ej: Comida, Bebidas, Combos"></div>';
             elements.adminModal.classList.add('open');
         };
     }
@@ -3867,8 +3867,8 @@ function renderSplitUI() {
             adminEditContext = { type: 'flavor', id: null, parentId: catId };
             elements.adminModalTitle.textContent = 'Nuevo Producto';
             elements.adminModalBody.innerHTML = `
-                <div class="form-group"><label>Nombre del Producto</label><input type="text" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
-                <div class="form-group"><label>Precio Unitario ($)</label><input type="number" id="editPrice" placeholder="4500" value="0"></div>
+                <div class="form-group"><label>Nombre del Producto</label><input type="text" autocomplete="off" id="editName" placeholder="Ej: Hamburguesa, Gaseosa, Promo"></div>
+                <div class="form-group"><label>Precio Unitario ($)</label><input type="number" autocomplete="off" id="editPrice" placeholder="4500" value="0"></div>
             `;
             elements.adminModal.classList.add('open');
         };
@@ -3879,8 +3879,8 @@ function renderSplitUI() {
             const catId = elements.adminCategorySelectExtras.value;
             adminEditContext = { type: 'extra', id: null, parentId: catId };
             elements.adminModalTitle.textContent = 'Nuevo Adicional';
-            elements.adminModalBody.innerHTML = `<div class="form-group"><label>Nombre</label><input type="text" id="editName"></div>
-                <div class="form-group"><label>Precio</label><input type="number" id="editPrice" value="0"></div>`;
+            elements.adminModalBody.innerHTML = `<div class="form-group"><label>Nombre</label><input type="text" autocomplete="off" id="editName"></div>
+                <div class="form-group"><label>Precio</label><input type="number" autocomplete="off" id="editPrice" value="0"></div>`;
             elements.adminModal.classList.add('open');
         };
     }
@@ -3891,8 +3891,8 @@ function renderSplitUI() {
             adminEditContext = { type: 'observation', id: null, parentId: catId };
             elements.adminModalTitle.textContent = 'Nueva Observación';
             elements.adminModalBody.innerHTML = `
-                <div class="form-group"><label>Nombre</label><input type="text" id="editName"></div>
-                <div class="form-group"><label>Precio</label><input type="number" id="editPrice" value="0"></div>
+                <div class="form-group"><label>Nombre</label><input type="text" autocomplete="off" id="editName"></div>
+                <div class="form-group"><label>Precio</label><input type="number" autocomplete="off" id="editPrice" value="0"></div>
             `;
             elements.adminModal.classList.add('open');
         };

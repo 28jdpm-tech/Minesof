@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label>Contrase&ntilde;a</label>
                     <div style="position: relative; width: 100%;">
-                          <input type="password" id="loginPassword" placeholder="******" required style="width: 100%; padding-right: 40px; box-sizing: border-box;">
+                          <input type="password" autocomplete="new-password" id="loginPassword" placeholder="******" required style="width: 100%; padding-right: 40px; box-sizing: border-box;">
                           <button type="button" class="toggle-password" data-target="loginPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #000000; font-weight: 600; padding: 0; display: flex; align-items: center;">
                               <i data-lucide="eye" style="width: 20px; height: 20px;"></i>
                           </button>
@@ -54,7 +54,7 @@
                                   <div class="form-group" id="confirmPasswordGroup" style="display: none;">
                       <label>Confirmar Contrase&ntilde;a</label>
                       <div style="position: relative; width: 100%;">
-                        <input type="password" id="loginConfirmPassword" placeholder="******" style="width: 100%; padding-right: 40px; box-sizing: border-box;">
+                        <input type="password" autocomplete="new-password" id="loginConfirmPassword" placeholder="******" style="width: 100%; padding-right: 40px; box-sizing: border-box;">
                         <button type="button" class="toggle-password" data-target="loginConfirmPassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #000000; font-weight: 600; padding: 0; display: flex; align-items: center;">
                             <i data-lucide="eye" style="width: 20px; height: 20px;"></i>
                         </button>
@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 252</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 253</span>
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@
                     <div style="padding: 15px 10px 0 10px; display: flex; flex-direction: column; gap: 12px; background: transparent;">
                         
                         <!-- Caja 1: Mesa / Nombre -->
-                        <input type="text" id="posLocationInput" placeholder="Mesa o Nombre del Cliente..." style="padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 25px; font-weight: bold; width: 100%; box-sizing: border-box; color: #1e293b; background: white; outline: none; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                        <input type="text" autocomplete="off" id="posLocationInput" placeholder="Mesa o Nombre del Cliente..." style="padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 25px; font-weight: bold; width: 100%; box-sizing: border-box; color: #1e293b; background: white; outline: none; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
                         
                         <!-- Caja 2: Pestañas de Personas -->
                         <div class="pos-people-tabs-container" style="display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; background: white; border: 1px solid #cbd5e1; border-radius: 25px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
@@ -312,19 +312,19 @@
                                     <div style="flex: 1;">
                                         <label
                                             style="display: block; font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">Efectivo</label>
-                                        <input type="number" id="combinedEfectivo" placeholder="0"
+                                        <input type="number" autocomplete="off" id="combinedEfectivo" placeholder="0"
                                             style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; text-align: center;">
                                     </div>
                                     <div style="flex: 1;">
                                         <label
                                             style="display: block; font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">Nequi</label>
-                                        <input type="number" id="combinedNequi" placeholder="0"
+                                        <input type="number" autocomplete="off" id="combinedNequi" placeholder="0"
                                             style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; text-align: center;">
                                     </div>
                                     <div style="flex: 1;">
                                         <label
                                             style="display: block; font-size: 0.75rem; color: #6b7280; margin-bottom: 4px;">Daviplata</label>
-                                        <input type="number" id="combinedDaviplata" placeholder="0"
+                                        <input type="number" autocomplete="off" id="combinedDaviplata" placeholder="0"
                                             style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; text-align: center;">
                                     </div>
                                 </div>
@@ -679,7 +679,7 @@
                             <div style="grid-column: 1 / -1;">
                                 <label
                                     style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Descripción</label>
-                                <input type="text" id="expenseDescription"
+                                <input type="text" autocomplete="off" id="expenseDescription"
                                     placeholder="Ej: Compra de pan, pago de luz..."
                                     style="width: 100%; padding: 10px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
                             </div>
@@ -687,7 +687,7 @@
                                 <div style="display: flex; flex-direction: column; gap: 4px;">
                                     <label
                                         style="font-size: 0.75rem; color: var(--text-muted); display: block;">Cantidad</label>
-                                    <input type="number" id="expenseQty" placeholder="1"
+                                    <input type="number" autocomplete="off" id="expenseQty" placeholder="1"
                                         style="width: 100%; padding: 10px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.9rem; box-sizing: border-box;">
                                 </div>
                             </div>
@@ -698,7 +698,7 @@
                                     <span id="expenseAmountPreview"
                                         style="font-size: 0.9rem; font-weight: 800; color: var(--accent-primary);">$0</span>
                                 </div>
-                                <input type="number" id="expenseAmount" placeholder="0"
+                                <input type="number" autocomplete="off" id="expenseAmount" placeholder="0"
                                     style="width: 100%; padding: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1.1rem; font-weight: 700; box-sizing: border-box;">
                             </div>
                         </div>
@@ -754,7 +754,7 @@
 
                     <!-- Description Search -->
                     <div style="margin-bottom: var(--space-sm); position: relative;">
-                        <input type="text" id="expenseSearchInput" placeholder="Buscar descripción..."
+                        <input type="text" autocomplete="off" id="expenseSearchInput" placeholder="Buscar descripción..."
                             style="width: 100%; padding: 8px 12px 8px 32px; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box;">
                         <i data-lucide="search"
                             style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);"></i>
@@ -807,12 +807,12 @@
                             <h4><i data-lucide="settings"></i> Ajustes Generales</h4>
                             <div class="form-group">
                                 <label>Nombre del Negocio</label>
-                                <input type="text" id="businessNameInput" class="config-input" placeholder="Ej: Pizzer&iacute;a Juan" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                <input type="text" autocomplete="off" id="businessNameInput" class="config-input" placeholder="Ej: Pizzer&iacute;a Juan" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                             </div>
                             
                             <div class="form-group" style="margin-top: 12px;">
                                 <label>Usuario / Caja <small style="font-weight:normal; color:#666;">(Solo este dispositivo)</small></label>
-                                <input type="text" id="deviceUserInput" class="config-input" placeholder="Ej: Caja Principal, Pedro, Celular..." style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                <input type="text" autocomplete="off" id="deviceUserInput" class="config-input" placeholder="Ej: Caja Principal, Pedro, Celular..." style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                             </div>
                             
                             <div class="form-group" style="margin-top: 12px;">
@@ -829,11 +829,11 @@
                             <h4><i data-lucide="shield-check"></i> Cambiar Contrase&ntilde;a de Administrador</h4>
                             <div class="form-group">
                                 <label>Nueva Contrase&ntilde;a</label>
-                                <input type="password" id="newAdminPassword" placeholder="M&iacute;nimo 4 caracteres">
+                                <input type="password" autocomplete="new-password" id="newAdminPassword" placeholder="M&iacute;nimo 4 caracteres">
                             </div>
                             <div class="form-group">
                                 <label>Confirmar Contrase&ntilde;a</label>
-                                <input type="password" id="confirmAdminPassword" placeholder="Repite la Contrase&ntilde;a">
+                                <input type="password" autocomplete="new-password" id="confirmAdminPassword" placeholder="Repite la Contrase&ntilde;a">
                             </div>
                             <button class="btn-pay" id="saveAdminPasswordBtn"
                                 style="width: 100%; margin-top: var(--space-md);">
@@ -943,7 +943,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="clientInput" placeholder="Número de mesa o nombre" class="modal-input"
+                    <input type="text" autocomplete="off" id="clientInput" placeholder="Número de mesa o nombre" class="modal-input"
                         autofocus>
                 </div>
                 <div class="modal-footer">
@@ -996,7 +996,7 @@
                     <label id="quantityModalProductLabel" style="text-align: center; display: block; margin-bottom: 12px; font-weight: 800; font-size: 0.9rem; color: #334155;">CANTIDAD DEL PRODUCTO</label>
                     <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid var(--border-default); border-radius: 8px; padding: 10px;">
                         <button id="qtyModalMinus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: #e2e8f0; color: #334155; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-                        <input type="text" inputmode="numeric" pattern="[0-9]*" id="quantityInputValue" value="1" style="font-size: 1.8rem; text-align: center; border: none; background: transparent; width: 80px; font-weight: bold; outline: none;">
+                        <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" id="quantityInputValue" value="1" style="font-size: 1.8rem; text-align: center; border: none; background: transparent; width: 80px; font-weight: bold; outline: none;">
                         <button id="qtyModalPlus" style="width: 48px; height: 48px; border-radius: 8px; border: none; background: var(--accent-primary); color: white; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
                     </div>
                 </div>
@@ -1021,7 +1021,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label id="openPriceModalProductLabel" style="text-transform: uppercase; font-weight: 800; font-size: 0.9rem; color: #334155; display: block; margin-bottom: 8px;">PRECIO DEL PRODUCTO ($)</label>
-                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="openPriceInput" placeholder="0" style="font-size: 1.2rem; text-align: center;">
+                    <input type="text" autocomplete="off" inputmode="numeric" pattern="[0-9]*" id="openPriceInput" placeholder="0" style="font-size: 1.2rem; text-align: center;">
                 </div>
             </div>
             <div class="modal-footer">
@@ -1044,7 +1044,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label id="textInputModalProductLabel" style="text-transform: uppercase; font-weight: 800; font-size: 0.9rem; color: #334155; display: block; margin-bottom: 8px;">DESCRIPCIÓN / OBSERVACIÓN</label>
-                    <input type="text" id="textInputValue" placeholder="Ej. Llevar en bolsa separada..." autocomplete="off">
+                    <input type="text" autocomplete="off" id="textInputValue" placeholder="Ej. Llevar en bolsa separada..." autocomplete="off">
                 </div>
             </div>
             <div class="modal-footer">
@@ -1072,7 +1072,7 @@
                     </p>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="adminPasswordInput" placeholder="Contrase&ntilde;a"
+                    <input type="password" autocomplete="new-password" id="adminPasswordInput" placeholder="Contrase&ntilde;a"
                         style="text-align: center; font-size: 1.2rem; letter-spacing: 4px;" autofocus>
                 </div>
                 <button class="btn-confirm" id="confirmAdminLogin"  style="width: 100%; height: 48px; font-size: 1rem;">
@@ -1108,11 +1108,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=252"></script>
+    <script src="js/data.js?v=253"></script>
     
-    <script src="js/storage.js?v=252"></script>
-    <script src="js/auth.js?v=252"></script>
-    <script src="js/app.js?v=252"></script>
+    <script src="js/storage.js?v=253"></script>
+    <script src="js/auth.js?v=253"></script>
+    <script src="js/app.js?v=253"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
