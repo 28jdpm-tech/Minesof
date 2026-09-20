@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
+    let checkoutMode = 'to-print';
+    
     const businessNameInput = document.getElementById('businessNameInput');
     const billingSystemInput = document.getElementById('billingSystemInput');
     const deviceUserInput = document.getElementById('deviceUserInput');
@@ -75,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (paidTab) {
                 paidTab.classList.add('active');
             }
+            checkoutMode = 'paid';
+            if (typeof renderCheckoutPage === 'function') renderCheckoutPage();
         }
     }
     
@@ -1218,7 +1222,6 @@ function renderSplitUI() {
     // Checkout / Payment
     // ============================================
 
-    let checkoutMode = StorageManager.getConfig().billingSystem === 'direct' ? 'paid' : 'to-print';
     let selectedPaymentOrder = null;
 
     function renderCheckoutPage() {
@@ -1375,7 +1378,7 @@ function renderSplitUI() {
                         ${!order.paid ? `
                             <button class="btn-append-items" onclick="event.stopPropagation(); window.appendToOrder('${order.id}')" 
                                 style="background: var(--accent-primary); color: white; border: none; padding: 4px 12px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <i data-lucide="plus" style="width: 14px; height: 14px;"></i> AÃ‘ADIR
+                                <i data-lucide="plus" style="width: 14px; height: 14px;"></i> ADICIONAR
                             </button>
                         ` : ''}
                     </div>
