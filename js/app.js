@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -544,7 +544,7 @@ window.removeClient = function(e, client) {
     e.stopPropagation();
     if (state.clients.length <= 1) return;
     
-    if (confirm(`Minesof\n\n¿Eliminar al cliente ${client} y todos sus productos seleccionados?`)) {
+    window.minesofConfirm(`¿Eliminar al cliente ${client} y todos sus productos seleccionados?`, () => {
         state.clients = state.clients.filter(c => c !== client);
         state.cart = state.cart.filter(item => item.clientName !== client);
         
@@ -555,7 +555,7 @@ window.removeClient = function(e, client) {
             renderSplitUI();
             if (typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
         }
-    }
+    });
 };
 window.switchClient = function(client) {
     state.activeClient = client;
@@ -920,11 +920,17 @@ function renderSplitUI() {
 
     // Expose Cart methods
     // Expose Cart methods to window for inline onclick handlers
-        function clearPosCart(confirmClear = false) {
-        if (confirmClear && !confirm('Minesof\n\n¿Estás seguro de vaciar todo el pedido actual?')) return;
-        state.cart = [];
-        state.orderTotal = 0;
-        renderSplitUI();
+    function clearPosCart(confirmClear = false) {
+        const performClear = () => {
+            state.cart = [];
+            state.orderTotal = 0;
+            renderSplitUI();
+        };
+        if (confirmClear) {
+            window.minesofConfirm('¿Estás seguro de vaciar todo el pedido actual?', performClear);
+        } else {
+            performClear();
+        }
     }
     // Remove the invalid window assignments that throw ReferenceError
 
@@ -1840,13 +1846,13 @@ function renderSplitUI() {
         elements.deleteOrderBtn.addEventListener('click', () => {
             if (!selectedPaymentOrder) return;
 
-            const performDelete = async () => {
-                if (confirm(`Minesof\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`)) {
+            const performDelete = () => {
+                window.minesofConfirm(`¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`, async () => {
                     await StorageManager.deleteOrder(selectedPaymentOrder.id);
                     showNotification(`Pedido ${selectedPaymentOrder.orderNumber} eliminado`);
                     elements.paymentModal.classList.add('hidden');
                     renderCheckoutPage();
-                }
+                });
             };
 
             if (state.isAdminAuthenticated) {
@@ -2597,13 +2603,13 @@ function renderSplitUI() {
         elements.deleteOrderBtnHistory.addEventListener('click', () => {
             if (!selectedHistoryOrder) return;
 
-            const performDelete = async () => {
-                if (confirm(`Minesof\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`)) {
+            const performDelete = () => {
+                window.minesofConfirm(`¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`, async () => {
                     await StorageManager.deleteOrder(selectedHistoryOrder.id);
                     showNotification(`Pedido ${selectedHistoryOrder.orderNumber} eliminado`);
                     elements.historyOrderModal.classList.add('hidden');
                     renderHistoryPage();
-                }
+                });
             };
 
             if (state.isAdminAuthenticated) {
@@ -4207,10 +4213,10 @@ function renderSplitUI() {
     }
 
     if (resetOrderCounterBtn) {
-        resetOrderCounterBtn.addEventListener('click', async () => {
-            if (confirm('Minesof\n\n¿Estás seguro que deseas reiniciar el contador de pedidos a #001?')) {
+        resetOrderCounterBtn.addEventListener('click', () => {
+            window.minesofConfirm('¿Estás seguro que deseas reiniciar el contador de pedidos a #001?', async () => {
                 await resetOrderCounter();
-            }
+            });
         });
     }
 
@@ -4415,17 +4421,16 @@ function renderSplitUI() {
         // ============================================
     // System Data Management
     // ============================================
-    window.clearSystemData = async function() {
-        const msg1 = "Minesof\n\nADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
-        if (!confirm(msg1)) return;
-        
-        const confirmWord = prompt("Escribe BORRAR en mayusculas para confirmar la eliminacion:");
-        if (confirmWord !== "BORRAR") {
-            showNotification("Eliminacion cancelada.", "error");
-            return;
-        }
+    window.clearSystemData = function() {
+        const msg1 = "ADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
+        window.minesofConfirm(msg1, async () => {
+            const confirmWord = prompt("Escribe BORRAR en mayusculas para confirmar la eliminacion:");
+            if (confirmWord !== "BORRAR") {
+                showNotification("Eliminacion cancelada.", "error");
+                return;
+            }
 
-        const overlay = document.createElement('div');
+            const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0'; overlay.style.left = '0'; overlay.style.width = '100vw'; overlay.style.height = '100vh';
         overlay.style.backgroundColor = 'rgba(0,0,0,0.85)';
@@ -4495,6 +4500,7 @@ function renderSplitUI() {
             overlay.remove();
             showNotification("Error al limpiar historial", "error");
         }
+        }); // Close minesofConfirm
     };
 
 
