@@ -529,8 +529,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // --- SPLIT UI LOGIC ---
 function renderPosClientTabs() {
+    const container = document.getElementById('posPeopleTabsContainer');
     const el = document.getElementById('posClientsTabs');
     if (!el) return;
+
+    const config = StorageManager.getConfig();
+    if (config.billingSystem === 'direct') {
+        if (container) container.style.display = 'none';
+        // Enforce only one client in direct mode
+        if (state.clients.length > 1) {
+            state.clients = ['P1'];
+            state.activeClient = 'P1';
+            state.cart = state.cart.filter(item => item.clientName === 'P1');
+        }
+    } else {
+        if (container) container.style.display = 'flex';
+    }
+
     el.innerHTML = state.clients.map(client => `
         <button type="button" class="pos-client-pill ${client === state.activeClient ? 'active' : ''}" style="display: flex; align-items: center; gap: 8px; padding-right: 8px;" onclick="window.switchClient('${client}')">
             <span>${client}</span>
