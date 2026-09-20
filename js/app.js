@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -1873,7 +1873,7 @@ function renderSplitUI() {
             container.innerHTML = `
                 <div class="empty-state">
                     <i data-lucide="clipboard-list"></i>
-                    <h3>No hay comandas activas</h3>
+                    <h3>No hay pedidos activos</h3>
                 </div>
             `;
         } else {
@@ -2341,7 +2341,7 @@ function renderSplitUI() {
                 <thead>
                     <tr>
                         <th>Fecha/Hora</th>
-                        <th>Comanda</th>
+                        <th>Venta</th>
                         <th>Cliente</th>
                         <th style="text-align: right;">Monto</th>
                     </tr>
