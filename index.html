@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 258</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 259</span>
                 </div>
             </div>
         </div>
@@ -144,8 +144,8 @@
                                                                                                     <!-- Top Header: Floating Curved Boxes -->
                     <div style="padding: 15px 10px 0 10px; display: flex; flex-direction: column; gap: 12px; background: transparent;">
                         
-                        <!-- Caja 1: Mesa / Nombre -->
-                        <input type="text" autocomplete="off" id="posLocationInput" placeholder="Mesa o Nombre del Cliente..." style="padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 25px; font-weight: bold; width: 100%; box-sizing: border-box; color: #1e293b; background: white; outline: none; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                        <!-- Caja 1: Cliente -->
+                        <input type="text" autocomplete="off" id="posLocationInput" placeholder="Ingresa cliente" style="padding: 14px 20px; border: 1px solid #cbd5e1; border-radius: 25px; font-weight: bold; width: 100%; box-sizing: border-box; color: #1e293b; background: white; outline: none; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
                         
                         <!-- Caja 2: Pestañas de Personas -->
                         <div class="pos-people-tabs-container" style="display: flex; align-items: center; gap: 12px; width: 100%; box-sizing: border-box; background: white; border: 1px solid #cbd5e1; border-radius: 25px; padding: 6px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
@@ -942,13 +942,13 @@
             <div class="modal-overlay"></div>
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="clientModalTitle">Mesa / Cliente</h3>
+                    <h3 id="clientModalTitle">Cliente</h3>
                     <button class="modal-close" id="closeClientModal">
                         <i data-lucide="x"></i>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" autocomplete="off" id="clientInput" placeholder="Número de mesa o nombre" class="modal-input"
+                    <input type="text" autocomplete="off" id="clientInput" placeholder="Ingresa cliente" class="modal-input"
                         autofocus>
                 </div>
                 <div class="modal-footer">
@@ -1113,11 +1113,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=258"></script>
+    <script src="js/data.js?v=259"></script>
     
-    <script src="js/storage.js?v=258"></script>
-    <script src="js/auth.js?v=258"></script>
-    <script src="js/app.js?v=258"></script>
+    <script src="js/storage.js?v=259"></script>
+    <script src="js/auth.js?v=259"></script>
+    <script src="js/app.js?v=259"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
