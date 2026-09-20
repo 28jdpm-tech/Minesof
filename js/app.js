@@ -58,7 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (billingSys === 'direct') {
                 if (tab.dataset.tab === 'to-print' || tab.dataset.tab === 'pending') {
                     tab.style.display = 'none';
-                    if (tab.classList.contains('active')) needsTabSwitch = true;
+                    if (tab.classList.contains('active')) {
+                        tab.classList.remove('active');
+                        needsTabSwitch = true;
+                    }
                 } else {
                     tab.style.display = 'flex';
                 }
@@ -69,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (needsTabSwitch) {
             const paidTab = document.querySelector('.checkout-tab[data-tab="paid"]');
-            if (paidTab) paidTab.click();
+            if (paidTab) {
+                paidTab.classList.add('active');
+            }
         }
     }
     
@@ -85,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             updateAppBranding();
-            showNotification('Ajustes guardados');
+            showNotification('Ajustes guardados. Actualizando sistema...');
+            setTimeout(() => window.location.reload(), 1500);
         });
     }
 
@@ -1016,8 +1022,21 @@ function renderSplitUI() {
                         checkoutPrinted: false,
                         paid: false
                     };
+                    if (config.billingSystem === 'direct') {
+                        partialOrder.checkoutPrinted = true;
+                    }
                     StorageManager.addOrder(partialOrder);
-                    showNotification(`Adición agregada al pedido ${originalOrder.orderNumber}`);
+                    
+                    if (config.billingSystem === 'direct') {
+                        showNotification(`Adición agregada y lista para cobro`);
+                        setTimeout(() => {
+                            const checkoutDrawerItem = document.querySelector('.drawer-item[data-page="checkout"]');
+                            if (checkoutDrawerItem) checkoutDrawerItem.click();
+                            setTimeout(() => window.openPaymentModal(partialOrder.id), 150);
+                        }, 50);
+                    } else {
+                        showNotification(`Adición agregada al pedido ${originalOrder.orderNumber}`);
+                    }
                 }
                 state.appendingOrderId = null;
                         } else {
@@ -1199,7 +1218,7 @@ function renderSplitUI() {
     // Checkout / Payment
     // ============================================
 
-    let checkoutMode = 'to-print';
+    let checkoutMode = StorageManager.getConfig().billingSystem === 'direct' ? 'paid' : 'to-print';
     let selectedPaymentOrder = null;
 
     function renderCheckoutPage() {
