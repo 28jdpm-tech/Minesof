@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = window.auth ? window.auth.currentUser : null;
             if (user) {
                 user.updatePassword(newPass).then(() => {
-                    showNotification('Contrase\u00f1a de ingreso actualizada exitosamente');
+                    showNotification('Contraseña de ingreso actualizada exitosamente. Reiniciando sistema...');
                     newAccountPassword.value = '';
+                    setTimeout(() => window.location.reload(), 1500);
                 }).catch((error) => {
                     if (error.code === 'auth/requires-recent-login') {
                         showNotification('Por seguridad, debes cerrar sesi\u00f3n y volver a entrar antes de cambiar tu contrase\u00f1a.', 'error');
@@ -4148,11 +4149,19 @@ function renderSplitUI() {
             localStorage.setItem('galeria_order_counter', '0');
             localStorage.setItem('galeria_last_order_date', new Date().toDateString());
 
-            showNotification('âœ… Contador reiniciado a #001');
-            loadCurrentOrderCounter();
+            if (typeof db !== 'undefined') {
+                try {
+                    await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set({
+                        orderCounter: 0
+                    }, { merge: true });
+                } catch(e) {}
+            }
+
+            showNotification('Contador reiniciado a #001. Actualizando sistema...');
+            setTimeout(() => window.location.reload(), 1500);
         } catch (error) {
             console.error('Error resetting counter:', error);
-            showNotification('âš ï¸ Error al reiniciar: ' + error.message, 'error');
+            showNotification('Error al reiniciar: ' + error.message, 'error');
         }
     }
 
