@@ -107,6 +107,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
+    // Custom Confirm logic
+    window.minesofConfirm = function(message, onAccept) {
+        const modal = document.getElementById('customConfirmModal');
+        const overlay = document.getElementById('customConfirmOverlay');
+        const msgEl = document.getElementById('customConfirmMessage');
+        const cancelBtn = document.getElementById('customConfirmCancelBtn');
+        const acceptBtn = document.getElementById('customConfirmAcceptBtn');
+
+        if (!modal) {
+            // Fallback to native if not found
+            if (confirm('MINESOF\n\n' + message) && typeof onAccept === 'function') {
+                onAccept();
+            }
+            return;
+        }
+
+        // Remove old listeners by cloning
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        const newAcceptBtn = acceptBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        acceptBtn.parentNode.replaceChild(newAcceptBtn, acceptBtn);
+
+        // Update text
+        msgEl.textContent = message.replace('MINESOF\n\n', '').replace('MINESOF\n', '');
+
+        // Show modal
+        modal.classList.remove('hidden');
+
+        // Handlers
+        const close = () => modal.classList.add('hidden');
+
+        newCancelBtn.addEventListener('click', close);
+        overlay.addEventListener('click', close);
+        newAcceptBtn.addEventListener('click', () => {
+            close();
+            if (typeof onAccept === 'function') onAccept();
+        });
+    };
+
     // App State
     window.appState = {
         currentPage: 'new-order',
@@ -3690,30 +3729,31 @@ function renderSplitUI() {
     };
 
     window.deleteAdminItem = function (type, id, pId) {
-        if (!confirm('MINESOF\n\n¿Seguro que quieres eliminar este elemento?')) return;
-        const config = StorageManager.getConfig();
-        if (type === 'category') {
-            config.categories = config.categories.filter(c => c.id !== id);
-            if (config.products) config.products = config.products.filter(p => p.category !== id);
-            if (config.flavors) delete config.flavors[id];
-            if (config.extras) delete config.extras[id];
-            if (config.observations) delete config.observations[id];
-        } else if (type === 'flavor') {
-            if (config.products) config.products = config.products.filter(p => p.id !== id);
-            if (config.flavors && config.flavors[pId]) {
-                config.flavors[pId] = config.flavors[pId].filter(f => f.id !== id);
+        window.minesofConfirm('¿Seguro que quieres eliminar este elemento?', () => {
+            const config = StorageManager.getConfig();
+            if (type === 'category') {
+                config.categories = config.categories.filter(c => c.id !== id);
+                if (config.products) config.products = config.products.filter(p => p.category !== id);
+                if (config.flavors) delete config.flavors[id];
+                if (config.extras) delete config.extras[id];
+                if (config.observations) delete config.observations[id];
+            } else if (type === 'flavor') {
+                if (config.products) config.products = config.products.filter(p => p.id !== id);
+                if (config.flavors && config.flavors[pId]) {
+                    config.flavors[pId] = config.flavors[pId].filter(f => f.id !== id);
+                }
+            } else if (type === 'extra') {
+                if (config.extras && config.extras[pId]) config.extras[pId] = config.extras[pId].filter(e => e.id !== id);
+            } else if (type === 'observation') {
+                if (config.observations && config.observations[pId]) config.observations[pId] = config.observations[pId].filter(o => o.id !== id);
             }
-        } else if (type === 'extra') {
-            if (config.extras && config.extras[pId]) config.extras[pId] = config.extras[pId].filter(e => e.id !== id);
-        } else if (type === 'observation') {
-            if (config.observations && config.observations[pId]) config.observations[pId] = config.observations[pId].filter(o => o.id !== id);
-        }
 
-        StorageManager.saveConfig(config);
-        renderAdminPage();
-        renderPosCategories();
-        renderPosProducts();
-        showNotification('Eliminado correctamente');
+            StorageManager.saveConfig(config);
+            renderAdminPage();
+            renderPosCategories();
+            renderPosProducts();
+            showNotification('Eliminado correctamente');
+        });
     };
 
     if (elements.cancelAdminModal) elements.cancelAdminModal.onclick = () => elements.adminModal.classList.remove('open');
