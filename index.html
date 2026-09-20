@@ -131,7 +131,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 251</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 252</span>
                 </div>
             </div>
         </div>
@@ -1088,12 +1088,15 @@
         <!-- Custom Confirm Modal -->
     <div class="modal" id="customConfirmModal" style="z-index: 9999999;">
         <div class="modal-overlay" id="customConfirmOverlay"></div>
-        <div class="modal-content" style="max-width: 350px; text-align: center; padding: 25px; border-radius: var(--radius-md);">
-            <h3 style="margin-top: 0; color: var(--text-primary); font-size: 1.2rem; font-weight: 800;">MINESOF</h3>
-            <p id="customConfirmMessage" style="color: var(--text-secondary); margin: 15px 0 25px 0; font-size: 1rem; line-height: 1.5;"></p>
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button id="customConfirmCancelBtn" class="btn-outline" style="flex: 1; border-radius: var(--radius-sm);">Cancelar</button>
-                <button id="customConfirmAcceptBtn" class="btn-primary" style="flex: 1; background-color: var(--accent-danger); border-color: var(--accent-danger); border-radius: var(--radius-sm);">Aceptar</button>
+        <div class="modal-content" style="max-width: 340px; text-align: center; padding: 30px 25px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="width: 54px; height: 54px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                <i data-lucide="alert-circle" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 style="margin: 0; color: var(--text-primary); font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px;">MINESOF</h3>
+            <p id="customConfirmMessage" style="color: var(--text-secondary); margin: 12px 0 25px 0; font-size: 1.05rem; line-height: 1.5; font-weight: 500;"></p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="customConfirmCancelBtn" class="btn-cancel" style="height: 46px; font-weight: 700; border: 1px solid var(--border-default); background: var(--bg-primary);">Cancelar</button>
+                <button id="customConfirmAcceptBtn" class="btn-confirm" style="height: 46px; font-weight: 700; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);">Aceptar</button>
             </div>
         </div>
     </div>
@@ -1105,11 +1108,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=251"></script>
+    <script src="js/data.js?v=252"></script>
     
-    <script src="js/storage.js?v=251"></script>
-    <script src="js/auth.js?v=251"></script>
-    <script src="js/app.js?v=251"></script>
+    <script src="js/storage.js?v=252"></script>
+    <script src="js/auth.js?v=252"></script>
+    <script src="js/app.js?v=252"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
