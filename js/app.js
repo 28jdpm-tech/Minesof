@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!modal) {
             // Fallback to native if not found
-            if (confirm('MINESOF\n\n' + message) && typeof onAccept === 'function') {
+            if (confirm('Minesof\n\n' + message) && typeof onAccept === 'function') {
                 onAccept();
             }
             return;
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         acceptBtn.parentNode.replaceChild(newAcceptBtn, acceptBtn);
 
         // Update text
-        msgEl.textContent = message.replace('MINESOF\n\n', '').replace('MINESOF\n', '');
+        msgEl.textContent = message.replace('Minesof\n\n', '').replace('Minesof\n', '');
 
         // Show modal
         modal.classList.add('open');
@@ -544,7 +544,7 @@ window.removeClient = function(e, client) {
     e.stopPropagation();
     if (state.clients.length <= 1) return;
     
-    if (confirm(`MINESOF\n\n¿Eliminar al cliente ${client} y todos sus productos seleccionados?`)) {
+    if (confirm(`Minesof\n\n¿Eliminar al cliente ${client} y todos sus productos seleccionados?`)) {
         state.clients = state.clients.filter(c => c !== client);
         state.cart = state.cart.filter(item => item.clientName !== client);
         
@@ -921,7 +921,7 @@ function renderSplitUI() {
     // Expose Cart methods
     // Expose Cart methods to window for inline onclick handlers
         function clearPosCart(confirmClear = false) {
-        if (confirmClear && !confirm('MINESOF\n\n¿Estás seguro de vaciar todo el pedido actual?')) return;
+        if (confirmClear && !confirm('Minesof\n\n¿Estás seguro de vaciar todo el pedido actual?')) return;
         state.cart = [];
         state.orderTotal = 0;
         renderSplitUI();
@@ -1841,7 +1841,7 @@ function renderSplitUI() {
             if (!selectedPaymentOrder) return;
 
             const performDelete = async () => {
-                if (confirm(`MINESOF\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`)) {
+                if (confirm(`Minesof\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedPaymentOrder.orderNumber}?`)) {
                     await StorageManager.deleteOrder(selectedPaymentOrder.id);
                     showNotification(`Pedido ${selectedPaymentOrder.orderNumber} eliminado`);
                     elements.paymentModal.classList.add('hidden');
@@ -2598,7 +2598,7 @@ function renderSplitUI() {
             if (!selectedHistoryOrder) return;
 
             const performDelete = async () => {
-                if (confirm(`MINESOF\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`)) {
+                if (confirm(`Minesof\n\n¿Estás seguro de que deseas eliminar permanentemente el pedido ${selectedHistoryOrder.orderNumber}?`)) {
                     await StorageManager.deleteOrder(selectedHistoryOrder.id);
                     showNotification(`Pedido ${selectedHistoryOrder.orderNumber} eliminado`);
                     elements.historyOrderModal.classList.add('hidden');
@@ -2739,7 +2739,7 @@ function renderSplitUI() {
 
         let t = '';
         t += doubleLine + '\n';
-        t += center('MINESOF') + '\n';
+        t += center('Minesof') + '\n';
         if (FOODX_DATA.businessName) {
             t += center(FOODX_DATA.businessName.toUpperCase()) + '\n';
         }
@@ -2856,7 +2856,7 @@ function renderSplitUI() {
         let t = '';
         t += doubleLine + '\n';
         t += center('FACTURA DE VENTA') + '\n';
-        t += center('MINESOF') + '\n';
+        t += center('Minesof') + '\n';
         if (FOODX_DATA.businessName) {
             t += center(FOODX_DATA.businessName.toUpperCase()) + '\n';
         }
@@ -4208,7 +4208,7 @@ function renderSplitUI() {
 
     if (resetOrderCounterBtn) {
         resetOrderCounterBtn.addEventListener('click', async () => {
-            if (confirm('MINESOF\n\n¿Estás seguro que deseas reiniciar el contador de pedidos a #001?')) {
+            if (confirm('Minesof\n\n¿Estás seguro que deseas reiniciar el contador de pedidos a #001?')) {
                 await resetOrderCounter();
             }
         });
@@ -4416,7 +4416,7 @@ function renderSplitUI() {
     // System Data Management
     // ============================================
     window.clearSystemData = async function() {
-        const msg1 = "MINESOF\n\nADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
+        const msg1 = "Minesof\n\nADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
         if (!confirm(msg1)) return;
         
         const confirmWord = prompt("Escribe BORRAR en mayusculas para confirmar la eliminacion:");
