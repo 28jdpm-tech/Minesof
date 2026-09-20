@@ -85,20 +85,16 @@
             <div class="drawer-overlay" id="drawerOverlay"></div>
             <div class="drawer-content">
                 <div class="drawer-header">
-                    
-                  <span class="brand-name dynamic-business-name">Minesof</span>
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--accent-primary);">
+                        <i data-lucide="user" style="width: 24px; height: 24px; stroke-width: 2.5;"></i>
+                        <span class="brand-name dynamic-device-user">Caja</span>
+                    </div>
                     <button class="close-drawer" id="closeDrawer">
                         <i data-lucide="x"></i>
                     </button>
                 </div>
                 
-                <!-- Display Device User -->
-                <div style="padding: 20px 20px 5px 20px; display: flex; align-items: center; gap: 8px; color: var(--accent-primary); font-size: 1rem; font-weight: 600;">
-                    <i data-lucide="user" style="width: 20px; height: 20px;"></i>
-                    <span id="drawerDeviceUser" class="dynamic-device-user">Caja</span>
-                </div>
-
-                <nav class="drawer-nav" style="margin-top: 15px;">
+                <nav class="drawer-nav" style="margin-top: 10px;">
                     <a href="#" class="drawer-item active" data-page="new-order">
                         <i data-lucide="plus-circle"></i>
                         <span>Nuevo Pedido</span>
@@ -139,7 +135,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 268</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 269</span>
                 </div>
             </div>
         </div>
@@ -1121,11 +1117,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=268"></script>
+    <script src="js/data.js?v=269"></script>
     
-    <script src="js/storage.js?v=268"></script>
-    <script src="js/auth.js?v=268"></script>
-    <script src="js/app.js?v=268"></script>
+    <script src="js/storage.js?v=269"></script>
+    <script src="js/auth.js?v=269"></script>
+    <script src="js/app.js?v=269"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
