@@ -10,8 +10,8 @@
     --bg-input: #ffffff;
 
     /* Brand Colors */
-    --accent-primary: #1e6b8a;
-    --accent-primary-light: #2a8ab0;
+    --accent-primary: #095ce6;
+    --accent-primary-light: #166dfc;
     --accent-secondary: #4ecdc4;
     --accent-royal: #1a365d; /* Azul oscuro del logo */
     --accent-gold: #f0c040;
@@ -134,7 +134,7 @@ body {
     font-family: var(--font-heading);
     font-size: 1.6rem;
     font-weight: 800;
-    color: var(--accent-royal);
+    color: var(--accent-primary);
     letter-spacing: 0.5px;
 }
 
@@ -4455,7 +4455,7 @@ option {
 .btn-login {
     width: 100%;
     padding: 14px;
-    background: #2563eb;
+    background: var(--accent-primary);
     color: white;
     border: none;
     border-radius: 8px;
@@ -4465,7 +4465,7 @@ option {
     transition: background 0.3s;
 }
 .btn-login:hover {
-    background: #1d4ed8;
+    background: var(--accent-primary-light);
 }
 .login-error {
     background: #fee2e2;
