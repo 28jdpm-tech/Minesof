@@ -4376,21 +4376,40 @@ function renderSplitUI() {
         }
 
         try {
-            const orders = StorageManager.getOrders();
-            for (let o of orders) {
-                StorageManager.deleteOrderFromCloud(o.id);
-            }
-            
-            const expenses = StorageManager.getExpenses();
             if (typeof db !== 'undefined') {
-                for (let e of expenses) {
-                    try { await getDbCollection(STORAGE_KEYS.EXPENSES).doc(e.id).delete(); } catch(err) {}
+                showNotification("Borrando datos en la nube. Por favor espere...", "info");
+                
+                // Retrieve ALL orders and expenses from cloud, not just local limit
+                const deletePromises = [];
+                
+                try {
+                    const ordersSnapshot = await getDbCollection(STORAGE_KEYS.ORDERS).get();
+                    ordersSnapshot.docs.forEach(doc => deletePromises.push(doc.ref.delete()));
+                } catch(e) { console.error('Error fetching orders to delete', e); }
+                
+                try {
+                    const expensesSnapshot = await getDbCollection(STORAGE_KEYS.EXPENSES).get();
+                    expensesSnapshot.docs.forEach(doc => deletePromises.push(doc.ref.delete()));
+                } catch(e) { console.error('Error fetching expenses to delete', e); }
+                
+                // Wait for all deletions to finish
+                if (deletePromises.length > 0) {
+                    await Promise.all(deletePromises);
                 }
             }
 
             localStorage.removeItem(STORAGE_KEYS.ORDERS);
             localStorage.removeItem(STORAGE_KEYS.EXPENSES);
             localStorage.setItem('galeria_order_counter', '0');
+            
+            // Also update counter in cloud if possible
+            if (typeof db !== 'undefined') {
+                try {
+                    await getDbCollection(STORAGE_KEYS.SETTINGS).doc('global_config').set({
+                        orderCounter: 0
+                    }, { merge: true });
+                } catch(e) {}
+            }
 
             showNotification("Todo el historial ha sido borrado.");
             setTimeout(() => {
