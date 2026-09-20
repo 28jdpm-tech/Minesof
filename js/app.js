@@ -3227,11 +3227,12 @@ function renderSplitUI() {
 
     window.deleteExpenseCategory = function (catId) {
         const performDelete = () => {
-            if (!confirm('¿Eliminar esta categoría de Gasto?')) return;
-            const cats = StorageManager.getExpenseCategories().filter(c => c.id !== catId);
-            StorageManager.saveExpenseCategories(cats);
-            showNotification('Categoría eliminada');
-            renderExpenseCategoriesManager();
+            window.minesofConfirm('¿Eliminar esta categoría de Gasto?', () => {
+                const cats = StorageManager.getExpenseCategories().filter(c => c.id !== catId);
+                StorageManager.saveExpenseCategories(cats);
+                showNotification('Categoría eliminada');
+                renderExpenseCategoriesManager();
+            });
         };
 
         if (state.isAdminAuthenticated) {
@@ -3331,12 +3332,12 @@ function renderSplitUI() {
 
     // Delete expense (global handler)
     window.deleteExpense = function (expenseId) {
-        const performDelete = async () => {
-            if (confirm('MINESOF\n\n¿Eliminar este Gasto?')) {
+        const performDelete = () => {
+            window.minesofConfirm('¿Eliminar este Gasto?', async () => {
                 await StorageManager.deleteExpense(expenseId);
                 showNotification('Gasto eliminado');
                 renderExpensesPage();
-            }
+            });
         };
 
         if (state.isAdminAuthenticated) {
