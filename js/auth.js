@@ -51,6 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('galeria_observations');
                 localStorage.setItem('minesof_last_tenant', user.uid);
                 
+                const pendingBilling = localStorage.getItem('minesof_pending_registration_billing');
+                if (pendingBilling && typeof db !== 'undefined') {
+                    localStorage.removeItem('minesof_pending_registration_billing');
+                    db.collection('tenants').doc(user.uid).collection('minesof_settings').doc('global_config').set({
+                        billingSystem: pendingBilling
+                    }, { merge: true }).then(() => {
+                        window.location.reload();
+                    }).catch(e => {
+                        console.error(e);
+                        window.location.reload();
+                    });
+                    return;
+                }
+
                 // Force a reload so memory state starts perfectly clean
                 window.location.reload();
                 return;
@@ -120,11 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
             isLoginMode = !isLoginMode;
             if (isLoginMode) {
                 authTitle.textContent = 'Bienvenido a Minesof';
-                if (authSubtitle) authSubtitle.textContent = 'Inicia sesión para acceder a tu sistema';
+                if (authSubtitle) authSubtitle.textContent = 'Inicia sesi\u00F3n para acceder a tu sistema';
                 btn.textContent = 'Ingresar';
                 authToggleLink.innerHTML = '&iquest;No tienes cuenta? Reg&iacute;strate aqu&iacute;';
                 if (forgotPasswordLink && forgotPasswordLink.parentElement) forgotPasswordLink.parentElement.style.display = 'block';
                 if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                const registerBillingGroup = document.getElementById('registerBillingGroup');
+                if (registerBillingGroup) registerBillingGroup.style.display = 'none';
                 if (loginConfirmPassword) loginConfirmPassword.value = '';
             } else {
                 authTitle.textContent = 'Crear Nueva Cuenta';
@@ -133,6 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 authToggleLink.innerHTML = '&iquest;Ya tienes cuenta? Inicia Sesi&oacute;n';
                 if (forgotPasswordLink && forgotPasswordLink.parentElement) forgotPasswordLink.parentElement.style.display = 'none';
                 if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                const registerBillingGroup = document.getElementById('registerBillingGroup');
+                if (registerBillingGroup) registerBillingGroup.style.display = 'block';
             }
         });
     }
@@ -203,6 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                 });
         } else {
+            const regBillingSystem = document.getElementById('registerBillingSystem');
+            if (regBillingSystem) {
+                localStorage.setItem('minesof_pending_registration_billing', regBillingSystem.value);
+            }
             window.auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     btn.textContent = 'Registrarse';
@@ -210,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     loginForm.reset();
                 })
                 .catch((error) => {
+                    localStorage.removeItem('minesof_pending_registration_billing');
                     loginError.textContent = mapAuthError(error.code);
                     loginError.style.display = 'block';
                     btn.textContent = 'Registrarse';
