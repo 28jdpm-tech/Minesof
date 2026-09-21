@@ -106,19 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saveBillingSystemBtn) {
         saveBillingSystemBtn.addEventListener('click', () => {
             window.minesofConfirm("ATENCIÓN: Cambiar el sistema de cobro modificará el flujo de tu negocio.\n\n¿Estás seguro de querer guardar este cambio?", () => {
-                const confirmWord = prompt("Escribe CAMBIAR en mayúsculas para confirmar:");
-                if (confirmWord !== "CAMBIAR") {
-                    showNotification("Cambio cancelado.", "error");
-                    return;
-                }
-                
-                const config = StorageManager.getConfig();
-                if (billingSystemInput) config.billingSystem = billingSystemInput.value;
-                StorageManager.saveConfig(config);
-                
-                updateAppBranding();
-                showNotification('Sistema de cobro actualizado...');
-                setTimeout(() => window.location.reload(), 1500);
+                window.minesofPrompt("Escribe CAMBIAR en mayúsculas para confirmar:", (confirmWord) => {
+                    if (confirmWord !== "CAMBIAR") {
+                        showNotification("Cambio cancelado.", "error");
+                        return;
+                    }
+                    
+                    const config = StorageManager.getConfig();
+                    if (billingSystemInput) config.billingSystem = billingSystemInput.value;
+                    StorageManager.saveConfig(config);
+                    
+                    updateAppBranding();
+                    showNotification('Sistema de cobro actualizado...');
+                    setTimeout(() => window.location.reload(), 1500);
+                });
             });
         });
     }
@@ -130,6 +131,55 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAppBranding();
     // Initialize Lucide icons
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Custom Prompt logic
+    window.minesofPrompt = function(message, onAccept, defaultValue = '') {
+        const modal = document.getElementById('customPromptModal');
+        const input = document.getElementById('customPromptInput');
+        const msgEl = document.getElementById('customPromptMessage');
+        const cancelBtn = document.getElementById('customPromptCancelBtn');
+        const acceptBtn = document.getElementById('customPromptAcceptBtn');
+
+        if (!modal) {
+            // Fallback to native
+            const val = prompt(message, defaultValue);
+            if (typeof onAccept === 'function') onAccept(val);
+            return;
+        }
+
+        // Remove old listeners
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        const newAcceptBtn = acceptBtn.cloneNode(true);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        acceptBtn.parentNode.replaceChild(newAcceptBtn, acceptBtn);
+
+        msgEl.textContent = message;
+        input.value = defaultValue;
+
+        modal.classList.add('open');
+        input.focus();
+
+        const close = () => modal.classList.remove('open');
+
+        newCancelBtn.addEventListener('click', () => {
+            close();
+            if (typeof onAccept === 'function') onAccept(null);
+        });
+
+        newAcceptBtn.addEventListener('click', () => {
+            const val = document.getElementById('customPromptInput').value;
+            close();
+            if (typeof onAccept === 'function') onAccept(val);
+        });
+
+        const newInput = document.getElementById('customPromptInput');
+        newInput.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                newAcceptBtn.click();
+            }
+        };
+    };
 
     // Custom Confirm logic
     window.minesofConfirm = function(message, onAccept) {
@@ -3286,13 +3336,13 @@ function renderSplitUI() {
         const cat = cats.find(c => c.id === catId);
         if (!cat) return;
 
-        const newLabel = prompt('Nombre de la categoría:', cat.label);
-        if (newLabel === null) return;
-
-        cat.label = newLabel.trim() || cat.label;
-        StorageManager.saveExpenseCategories(cats);
-        showNotification(`Categoría actualizada: ${cat.label}`);
-        renderExpenseCategoriesManager();
+        window.minesofPrompt('Nombre de la categoría:', (newLabel) => {
+            if (newLabel === null) return;
+            cat.label = newLabel.trim() || cat.label;
+            StorageManager.saveExpenseCategories(cats);
+            showNotification(`Categoría actualizada: ${cat.label}`);
+            renderExpenseCategoriesManager();
+        }, cat.label);
     };
 
     window.deleteExpenseCategory = function (catId) {
@@ -4545,11 +4595,11 @@ window.moveAdminItem = function(type, id, direction) {
     window.clearSystemData = function() {
         const msg1 = "ADVERTENCIA CRÍTICA \n\n¿Estás seguro de querer BORRAR TODO el historial de pedidos y gastos?\n\n- Esta acción es irreversible.\n- Tu catálogo (productos, categorías) NO se borrará.\n- Tu contador de pedidos volverá a cero.";
         window.minesofConfirm(msg1, async () => {
-            const confirmWord = prompt("Escribe BORRAR en mayusculas para confirmar la eliminacion:");
-            if (confirmWord !== "BORRAR") {
-                showNotification("Eliminacion cancelada.", "error");
-                return;
-            }
+            window.minesofPrompt("Escribe BORRAR en mayúsculas para confirmar la eliminación:", async (confirmWord) => {
+                if (confirmWord !== "BORRAR") {
+                    showNotification("Eliminación cancelada.", "error");
+                    return;
+                }
 
             const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
@@ -4621,6 +4671,7 @@ window.moveAdminItem = function(type, id, direction) {
             overlay.remove();
             showNotification("Error al limpiar historial", "error");
         }
+        }); // Close minesofPrompt
         }); // Close minesofConfirm
     };
 
