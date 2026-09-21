@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (billingSystemInput.value === 'direct') {
                 titleEl.textContent = 'Cobro Directo:';
-                textEl.innerHTML = 'Ideal para tiendas, comidas rápidas, panaderías o negocios de mostrador donde el cliente paga inmediatamente al realizar su pedido.';
+                textEl.innerHTML = 'Ideal para tiendas, carnicerías, avícolas, expendedoras de carne, panaderías, peluquerías, barberías o negocios donde el cliente paga inmediatamente al realizar o recibir su pedido o servicio.';
             } else {
                 titleEl.textContent = 'Cobro Dinámico:';
                 textEl.innerHTML = 'Ideal para restaurantes, cafés, bares, panaderías o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparación y después se entrega.';
