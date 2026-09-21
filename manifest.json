@@ -1,11 +1,11 @@
-﻿{
+{
     "name": "Minesof",
     "short_name": "Minesof",
     "description": "Sistema de Gestión y Punto de Venta",
     "start_url": "./index.html",
     "display": "standalone",
-    "background_color": "#0f172a",
-    "theme_color": "#2563eb",
+    "background_color": "#095ce6",
+    "theme_color": "#095ce6",
     "orientation": "portrait",
     "icons": [
         {
