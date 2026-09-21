@@ -135,7 +135,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 275</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 276</span>
                 </div>
             </div>
         </div>
@@ -823,11 +823,10 @@
                             </div>
                             
                             <div style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-secondary); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-primary);">
-                                <p style="margin-bottom: 8px;"><strong>Recomendaciones:</strong></p>
-                                <ul style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-                                    <li><strong>Flujo Normal:</strong> Recomendado para restaurantes de mesa, bares o negocios donde el cliente consume primero y paga al final.</li>
-                                    <li><strong>Cobro Directo:</strong> Recomendado para tiendas, comidas r&aacute;pidas, panader&iacute;as o mostradores donde el cliente paga antes de consumir.</li>
-                                </ul>
+                                <p style="margin-bottom: 4px;"><strong id="billingRecommendationTitle">Recomendación:</strong></p>
+                                <p id="billingRecommendationText" style="line-height: 1.4; margin-top: 4px;">
+                                    Ideal para restaurantes, cafeter&iacute;as, bares o negocios donde el cliente consume primero y paga al final. Tambi&eacute;n es muy &uacute;til cuando el pedido requiere un tiempo de preparaci&oacute;n antes de ser entregado y cobrado.
+                                </p>
                             </div>
 
                             <button class="btn-primary" id="saveBillingSystemBtn" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 8px; background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer;">Guardar Ajuste de Cobro</button>
@@ -1156,11 +1155,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=275"></script>
+    <script src="js/data.js?v=276"></script>
     
-    <script src="js/storage.js?v=275"></script>
-    <script src="js/auth.js?v=275"></script>
-    <script src="js/app.js?v=275"></script>
+    <script src="js/storage.js?v=276"></script>
+    <script src="js/auth.js?v=276"></script>
+    <script src="js/app.js?v=276"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {

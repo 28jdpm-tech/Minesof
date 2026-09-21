@@ -124,6 +124,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Dynamic billing recommendation text
+    if (billingSystemInput) {
+        const updateBillingRecommendation = () => {
+            const titleEl = document.getElementById('billingRecommendationTitle');
+            const textEl = document.getElementById('billingRecommendationText');
+            if (!titleEl || !textEl) return;
+            
+            if (billingSystemInput.value === 'direct') {
+                titleEl.textContent = 'Cobro Directo (Recomendado):';
+                textEl.innerHTML = 'Ideal para tiendas, comidas rápidas, panaderías o negocios de mostrador donde el cliente paga inmediatamente al realizar su pedido.';
+            } else {
+                titleEl.textContent = 'Flujo Normal (Recomendado):';
+                textEl.innerHTML = 'Ideal para restaurantes, cafés, bares, panaderías o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparación y después se entrega.';
+            }
+        };
+        
+        billingSystemInput.addEventListener('change', updateBillingRecommendation);
+        // Initial setup
+        setTimeout(updateBillingRecommendation, 100);
+    }
+
     // Escuchar cambios de configuracion para actualizar logo
     window.addEventListener('configLoadedFromCloud', updateAppBranding);
     
