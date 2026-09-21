@@ -37,10 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auth State Listener
     window.auth.onAuthStateChanged((user) => {
         if (user) {
-            // User is signed in
-            loginOverlay.style.display = 'none';
-            if (appContainer) appContainer.style.display = 'flex';
-
             const emailDisplay = document.getElementById('currentUserEmailDisplay');
             if (emailDisplay) emailDisplay.textContent = user.email || 'Usuario';
 
@@ -55,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.removeItem('galeria_observations');
                 localStorage.setItem('minesof_last_tenant', user.uid);
                 
-                // Force a reload so memory state (FOODX_DATA) starts perfectly clean for the new user
+                // Force a reload so memory state starts perfectly clean
                 window.location.reload();
                 return;
             }
@@ -64,6 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reload the configuration for this specific tenant
             const config = StorageManager.getConfig();
             Object.assign(FOODX_DATA, config);
+
+            // PREVENT UI FLASH: Only show the app immediately if we have cached config
+            if (localStorage.getItem('minesof_billingSystem')) {
+                loginOverlay.style.display = 'none';
+                if (appContainer) appContainer.style.display = 'flex';
+            } else {
+                // Fresh login without cache: show loading state on the login overlay
+                const loginBox = loginOverlay.querySelector('.login-box');
+                if (loginBox) {
+                    loginBox.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px;"><style>@keyframes spinLoader{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style><div style="border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent-primary); border-radius: 50%; width: 40px; height: 40px; animation: spinLoader 1s linear infinite;"></div><h3 style="color:var(--text-primary); margin:0;">Sincronizando...</h3><p style="color:var(--text-muted); font-size:0.85rem; margin:0;">Preparando el sistema</p></div>';
+                }
+                
+                window.addEventListener('cloudConfigSynced', () => {
+                    loginOverlay.style.display = 'none';
+                    if (appContainer) appContainer.style.display = 'flex';
+                }, { once: true });
+            }
         } else {
             // User is signed out
             loginOverlay.style.display = 'flex';

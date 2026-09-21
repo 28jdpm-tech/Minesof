@@ -4527,6 +4527,7 @@ window.moveAdminItem = function(type, id, direction) {
                         renderPosProducts();
                         updateAppBranding();
                         console.log('Config synced from cloud');
+                        window.dispatchEvent(new CustomEvent('cloudConfigSynced'));
                     },
                     // Print callback (Remote print from other devices) - DISABLED
                     null
