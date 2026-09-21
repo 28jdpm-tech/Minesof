@@ -3541,6 +3541,51 @@ function renderSplitUI() {
         elements.adminModal.classList.add('open');
     };
 
+window.moveAdminItem = function(type, id, direction) {
+    const config = StorageManager.getConfig();
+    let arr = null;
+
+    if (type === 'category') {
+        arr = config.categories;
+    } else if (type === 'flavor') {
+        arr = config.products;
+    }
+    
+    if (!arr) return;
+
+    const index = arr.findIndex(item => item.id === id);
+    if (index === -1) return;
+
+    let targetIndex = -1;
+
+    if (type === 'flavor') {
+        const item = arr[index];
+        const catId = item.category;
+        const catProducts = arr.filter(p => p.category === catId);
+        const catIndex = catProducts.findIndex(p => p.id === id);
+
+        if (direction === -1 && catIndex > 0) {
+            const targetId = catProducts[catIndex - 1].id;
+            targetIndex = arr.findIndex(p => p.id === targetId);
+        } else if (direction === 1 && catIndex < catProducts.length - 1) {
+            const targetId = catProducts[catIndex + 1].id;
+            targetIndex = arr.findIndex(p => p.id === targetId);
+        }
+    } else {
+        if (direction === -1 && index > 0) targetIndex = index - 1;
+        if (direction === 1 && index < arr.length - 1) targetIndex = index + 1;
+    }
+
+    if (targetIndex !== -1) {
+        const temp = arr[index];
+        arr[index] = arr[targetIndex];
+        arr[targetIndex] = temp;
+
+        StorageManager.saveConfig(config);
+        if (typeof renderAdminPage === 'function') renderAdminPage();
+    }
+};
+
     function renderCategoriesList(categories) {
         if (!elements.adminCategoriesList) return;
         const config = StorageManager.getConfig();
@@ -3571,6 +3616,12 @@ function renderSplitUI() {
                             <span style="font-weight: 700; color: var(--accent-gold); font-size: 0.9rem;">${formatPrice(f.price || 0)}</span>
                         </div>
                         <div class="admin-item-actions">
+                            <button class="btn-icon" onclick="window.moveAdminItem('flavor', '${f.id}', -1)" title="Subir">
+                                <i data-lucide="chevron-up" style="width: 16px; height: 16px;"></i>
+                            </button>
+                            <button class="btn-icon" onclick="window.moveAdminItem('flavor', '${f.id}', 1)" title="Bajar">
+                                <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                            </button>
                             <button class="btn-icon" onclick="window.editAdminItem('flavor', '${f.id}', '${cat.id}')">
                                 <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
                             </button>
@@ -3589,6 +3640,12 @@ function renderSplitUI() {
                         <span style="font-size: 1.1rem; font-weight: 800; color: var(--accent-primary);">${cat.name}</span>
                     </div>
                     <div class="admin-item-actions">
+                        <button class="btn-icon" onclick="window.moveAdminItem('category', '${cat.id}', -1)" title="Mover Izquierda">
+                            <i data-lucide="chevron-left" style="width: 18px; height: 18px;"></i>
+                        </button>
+                        <button class="btn-icon" onclick="window.moveAdminItem('category', '${cat.id}', 1)" title="Mover Derecha">
+                            <i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i>
+                        </button>
                         <button class="btn-icon" onclick="window.editAdminItem('category', '${cat.id}')">
                             <i data-lucide="edit-2"></i>
                         </button>
