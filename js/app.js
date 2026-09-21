@@ -3181,7 +3181,13 @@ function renderSplitUI() {
                 <tr style="border-top: 1px solid var(--border-subtle); background: var(--bg-secondary);">
                     <td style="padding: 8px 12px; color: var(--text-primary); font-size: 0.85rem;">${cat.label}</td>
                     <td style="padding: 8px 6px; text-align: center; white-space: nowrap;">
-                                                                        <button onclick="window.editExpenseCategory('${cat.id}')"
+                        <button onclick="window.moveExpenseCategory('${cat.id}', -1)" style="background: none; border: none; color: #64748b; cursor: pointer; padding: 4px;" title="Subir">
+                            <i data-lucide="chevron-up" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button onclick="window.moveExpenseCategory('${cat.id}', 1)" style="background: none; border: none; color: #64748b; cursor: pointer; padding: 4px; margin-right: 4px;" title="Bajar">
+                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button onclick="window.editExpenseCategory('${cat.id}')"
                             style="background: none; border: none; color: var(--accent-primary); cursor: pointer; padding: 4px;" title="Editar">
                             <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
                         </button>
@@ -3213,6 +3219,25 @@ function renderSplitUI() {
     }
 
     // Global handlers for category management
+    window.moveExpenseCategory = function(catId, direction) {
+        const cats = StorageManager.getExpenseCategories();
+        const index = cats.findIndex(c => c.id === catId);
+        if (index === -1) return;
+
+        let targetIndex = -1;
+        if (direction === -1 && index > 0) targetIndex = index - 1;
+        if (direction === 1 && index < cats.length - 1) targetIndex = index + 1;
+
+        if (targetIndex !== -1) {
+            const temp = cats[index];
+            cats[index] = cats[targetIndex];
+            cats[targetIndex] = temp;
+
+            StorageManager.saveExpenseCategories(cats);
+            renderExpenseCategoriesManager();
+        }
+    };
+
     window.addExpenseCategory = function () {
         const label = document.getElementById('newExpenseCatLabel')?.value.trim();
 
