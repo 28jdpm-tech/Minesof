@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 titleEl.textContent = 'Cobro Directo:';
                 textEl.innerHTML = 'Ideal para tiendas, comidas rápidas, panaderías o negocios de mostrador donde el cliente paga inmediatamente al realizar su pedido.';
             } else {
-                titleEl.textContent = 'Flujo Normal:';
+                titleEl.textContent = 'Cobro Dinámico:';
                 textEl.innerHTML = 'Ideal para restaurantes, cafés, bares, panaderías o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparación y después se entrega.';
             }
         };
