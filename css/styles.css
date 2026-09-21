@@ -1041,7 +1041,7 @@ body {
 .send-kitchen-btn {
     flex: 1;
     height: 50px;
-    background: var(--accent-primary);
+    background: #10b981; /* Green */
     border: none;
     border-radius: var(--radius-md);
     color: white;
@@ -1057,7 +1057,7 @@ body {
 }
 
 .send-kitchen-btn:hover {
-    background: var(--accent-primary-light);
+    background: #059669; /* Darker green */
     transform: translateY(-1px);
 }
 
@@ -1076,21 +1076,21 @@ body {
     min-width: 150px;
     flex: 0.6;
     height: 50px;
-    background: #ffffff;
-    border: 1px solid var(--border-subtle);
+    background: var(--accent-primary); /* Blue */
+    border: none;
     border-radius: var(--radius-md);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 0 var(--space-md);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .total-label {
     font-size: 0.65rem;
     font-weight: 700;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 1px;
@@ -1099,7 +1099,7 @@ body {
 .total-amount {
     font-size: 1.2rem;
     font-weight: 800;
-    color: #10b981;
+    color: #ffffff;
 }
 
 /* ============================================
