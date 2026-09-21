@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBusinessBrandBtn.addEventListener('click', () => {
             const config = StorageManager.getConfig();
             config.businessName = businessNameInput.value.trim();
-            if (billingSystemInput) config.billingSystem = billingSystemInput.value;
+            // Removed billingSystemInput from here
             StorageManager.saveConfig(config);
             
             if (deviceUserInput) {
@@ -105,7 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveBillingSystemBtn = document.getElementById('saveBillingSystemBtn');
     if (saveBillingSystemBtn) {
         saveBillingSystemBtn.addEventListener('click', () => {
-            if (saveBusinessBrandBtn) saveBusinessBrandBtn.click();
+            window.minesofConfirm("ATENCIÓN: Cambiar el sistema de cobro modificará el flujo de tu negocio.\n\n¿Estás seguro de querer guardar este cambio?", () => {
+                const confirmWord = prompt("Escribe CAMBIAR en mayúsculas para confirmar:");
+                if (confirmWord !== "CAMBIAR") {
+                    showNotification("Cambio cancelado.", "error");
+                    return;
+                }
+                
+                const config = StorageManager.getConfig();
+                if (billingSystemInput) config.billingSystem = billingSystemInput.value;
+                StorageManager.saveConfig(config);
+                
+                updateAppBranding();
+                showNotification('Sistema de cobro actualizado...');
+                setTimeout(() => window.location.reload(), 1500);
+            });
         });
     }
 
