@@ -132,10 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!titleEl || !textEl) return;
             
             if (billingSystemInput.value === 'direct') {
-                titleEl.textContent = 'Cobro Directo (Recomendado):';
+                titleEl.textContent = 'Cobro Directo:';
                 textEl.innerHTML = 'Ideal para tiendas, comidas rápidas, panaderías o negocios de mostrador donde el cliente paga inmediatamente al realizar su pedido.';
             } else {
-                titleEl.textContent = 'Flujo Normal (Recomendado):';
+                titleEl.textContent = 'Flujo Normal:';
                 textEl.innerHTML = 'Ideal para restaurantes, cafés, bares, panaderías o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparación y después se entrega.';
             }
         };
