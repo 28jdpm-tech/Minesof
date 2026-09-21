@@ -39,14 +39,14 @@
             </div>
             <form id="loginForm">
                   <div class="form-group" id="registerBillingGroup" style="display: none; margin-bottom: 20px;">
-                      <label style="font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">SELECCIONA C&Oacute;MO OPERA TU NEGOCIO</label>
-                      <select id="registerBillingSystem" style="width:100%; min-height: 48px; padding: 10px 40px 10px 14px; border: none; border-radius: 8px; background-color: #10b981 !important; background-image: url(&quot;data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; -webkit-appearance: none; appearance: none; color: white !important; font-weight: bold; font-size: 0.95rem; cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);" onchange="document.getElementById('registerBillingRecTitle').textContent = this.value === 'direct' ? 'Cobro Directo:' : 'Cobro Din&aacute;mico:'; document.getElementById('registerBillingRecText').textContent = this.value === 'direct' ? 'Ideal para tiendas, carnicer&iacute;as, av&iacute;colas, expendedoras de carne, panader&iacute;as, peluquer&iacute;as, barber&iacute;as o negocios donde el cliente paga inmediatamente al realizar o recibir su pedido o servicio.' : 'Ideal para restaurantes, caf&eacute;s, bares, panader&iacute;as o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparaci&oacute;n y despu&eacute;s se entrega.';">
-                          <option value="standard" style="color: #333; background: #fff;">Cobro din&aacute;mico</option>
-                          <option value="direct" style="color: #333; background: #fff;">Cobro Directo</option>
+                      <label>C&Oacute;MO OPERA TU NEGOCIO</label>
+                      <select id="registerBillingSystem" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; box-sizing: border-box; background-color: white; color: #334155; font-family: inherit; outline: none; appearance: none; background-image: url(&quot;data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; cursor: pointer;" onchange="document.getElementById('registerBillingRecTitle').textContent = this.value === 'direct' ? 'Cobro Directo:' : 'Cobro Din&aacute;mico:'; document.getElementById('registerBillingRecText').textContent = this.value === 'direct' ? 'Ideal para tiendas, carnicer&iacute;as, barber&iacute;as o negocios donde se paga inmediatamente.' : 'Ideal para restaurantes o negocios donde se consume primero y se paga al final.';">
+                          <option value="standard">Cobro Din&aacute;mico (Mesas/Pedidos)</option>
+                          <option value="direct">Cobro Directo (Caja R&aacute;pida)</option>
                       </select>
-                      <div style="margin-top: 15px; font-size: 0.85rem; color: #475569; background: #f1f5f9; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981;">
-                          <p style="margin-bottom: 4px;"><strong id="registerBillingRecTitle">Cobro Din&aacute;mico:</strong></p>
-                          <p id="registerBillingRecText" style="line-height: 1.4; margin-top: 4px;">Ideal para restaurantes, caf&eacute;s, bares, panader&iacute;as o negocios donde el cliente consume primero y paga al final, o donde el pedido necesita preparaci&oacute;n y despu&eacute;s se entrega.</p>
+                      <div style="margin-top: 8px; font-size: 0.8rem; color: #64748b; line-height: 1.4; padding: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                          <strong id="registerBillingRecTitle" style="color: var(--accent-primary);">Cobro Din&aacute;mico:</strong> 
+                          <span id="registerBillingRecText">Ideal para restaurantes o negocios donde se consume primero y se paga al final.</span>
                       </div>
                   </div>
                 <div class="form-group">
@@ -146,7 +146,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 300</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 301</span>
                 </div>
             </div>
         </div>
@@ -1166,11 +1166,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=300"></script>
+    <script src="js/data.js?v=301"></script>
     
-    <script src="js/storage.js?v=300"></script>
-    <script src="js/auth.js?v=300"></script>
-    <script src="js/app.js?v=300"></script>
+    <script src="js/storage.js?v=301"></script>
+    <script src="js/auth.js?v=301"></script>
+    <script src="js/app.js?v=301"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
