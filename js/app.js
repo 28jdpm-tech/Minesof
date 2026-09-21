@@ -4519,8 +4519,10 @@ window.moveAdminItem = function(type, id, direction) {
                         if (state.currentPage === 'expenses') renderExpensesPage();
                         if (state.currentPage === 'new-order') {
                             initializeCategories();
+                            renderPosClientTabs();
                             if(typeof updateOrderTotal === "function") updateOrderTotal(); else renderPosCart();
                         }
+                        renderPosClientTabs();
                         renderPosCategories();
                         renderPosProducts();
                         updateAppBranding();
