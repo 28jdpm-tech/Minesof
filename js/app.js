@@ -3583,7 +3583,7 @@ function renderSplitUI() {
             }
 
             return `
-            <div class="admin-category-card" style="background: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px solid var(--border-subtle); margin-bottom: 20px;">
+            <div class="admin-category-card" style="min-width: 320px; flex: 1; background: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px solid var(--border-subtle); margin-bottom: 5px;">
                 <div class="admin-item" style="border: none; padding: 0; background: transparent; margin-bottom: 10px;">
                     <div class="admin-item-info">
                         <span style="font-size: 1.1rem; font-weight: 800; color: var(--accent-primary);">${cat.name}</span>
