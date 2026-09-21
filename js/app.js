@@ -102,6 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const saveBillingSystemBtn = document.getElementById('saveBillingSystemBtn');
+    if (saveBillingSystemBtn) {
+        saveBillingSystemBtn.addEventListener('click', () => {
+            if (saveBusinessBrandBtn) saveBusinessBrandBtn.click();
+        });
+    }
+
     // Escuchar cambios de configuracion para actualizar logo
     window.addEventListener('configLoadedFromCloud', updateAppBranding);
     

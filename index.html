@@ -135,7 +135,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 272</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 273</span>
                 </div>
             </div>
         </div>
@@ -781,8 +781,8 @@
 
                 <div class="admin-tabs">
                     <button class="admin-tab active" data-tab="categories">Cat&aacute;logo</button>
-                    
                     <button class="admin-tab" data-tab="expense-cats">Gastos</button>
+                    <button class="admin-tab" data-tab="billing">Sistema de Cobro</button>
                     <button class="admin-tab" data-tab="security">Ajustes</button>
                 </div>
 
@@ -806,14 +806,50 @@
                         <div id="expenseCatManager"></div>
                     </div>
 
-                    <!-- Security Panel -->
-                    <div class="admin-panel" id="panel-security">
-                                                <div class="panel-header">
-                            <h3>Ajustes del Negocio</h3>
+                    <!-- Billing & Security Panel -->
+                    <div class="admin-panel" id="panel-billing">
+                        <div class="panel-header">
+                            <h3>Sistema de Cobro y Seguridad</h3>
                         </div>
                         
                         <div class="security-card" style="margin-bottom: 20px;">
-                            <h4><i data-lucide="settings"></i> Ajustes Generales</h4>
+                            <h4><i data-lucide="credit-card"></i> Sistema de Cobro</h4>
+                            <div class="form-group" style="margin-top: 12px;">
+                                <label>Selecciona cómo opera tu negocio</label>
+                                <select id="billingSystemInput" class="config-input" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                                    <option value="standard">Flujo Normal (Pendiente &rarr; Por Cobrar &rarr; Pagado)</option>
+                                    <option value="direct">Cobro Directo (El pedido se cobra al generarlo)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="margin-top: 15px; font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-secondary); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent-primary);">
+                                <p style="margin-bottom: 8px;"><strong>Recomendaciones:</strong></p>
+                                <ul style="margin-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                                    <li><strong>Flujo Normal:</strong> Recomendado para restaurantes de mesa, bares o negocios donde el cliente consume primero y paga al final.</li>
+                                    <li><strong>Cobro Directo:</strong> Recomendado para tiendas, comidas r&aacute;pidas, panader&iacute;as o mostradores donde el cliente paga antes de consumir.</li>
+                                </ul>
+                            </div>
+
+                            <button class="btn-primary" id="saveBillingSystemBtn" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 8px; background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer;">Guardar Ajuste de Cobro</button>
+                        </div>
+                        
+                        <div class="security-card" style="margin-top: var(--space-xl); border: 1px solid var(--accent-danger);">
+                            <h4><i data-lucide="alert-triangle" style="color: var(--accent-danger);"></i> Limpiar Datos del Sistema</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: var(--space-md);">Esta acci&oacute;n eliminar&aacute; todos los pedidos, ventas, reportes y gastos registrados en el historial. No afectar&aacute; a la configuraci&oacute;n, categor&iacute;as, productos ni adicionales. &Uacute;til como medida de seguridad secundaria.</p>
+                            <button class="btn-delete" onclick="window.clearSystemData()" style="width: 100%;">
+                                <i data-lucide="trash-2"></i> Borrar Todo el Historial
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Panel -->
+                    <div class="admin-panel" id="panel-security">
+                        <div class="panel-header">
+                            <h3>Ajustes Generales</h3>
+                        </div>
+                        
+                        <div class="security-card" style="margin-bottom: 20px;">
+                            <h4><i data-lucide="settings"></i> Personalizaci&oacute;n</h4>
                             <div class="form-group">
                                 <label>Nombre del Negocio</label>
                                 <input type="text" autocomplete="off" id="businessNameInput" class="config-input" placeholder="Ej: Pizzer&iacute;a Juan" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
@@ -822,14 +858,6 @@
                             <div class="form-group" style="margin-top: 12px;">
                                 <label>Usuario / Caja <small style="font-weight:normal; color:#666;">(Solo este dispositivo)</small></label>
                                 <input type="text" autocomplete="off" id="deviceUserInput" class="config-input" placeholder="Ej: Caja Principal, Pedro, Celular..." style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                            </div>
-                            
-                            <div class="form-group" style="margin-top: 12px;">
-                                <label>Sistema de Cobro</label>
-                                <select id="billingSystemInput" class="config-input" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                                    <option value="standard">Flujo Normal (Pendiente &rarr; Por Cobrar &rarr; Pagado)</option>
-                                    <option value="direct">Cobro Directo (El pedido se cobra al generarlo)</option>
-                                </select>
                             </div>
 
                             <button class="btn-primary" id="saveBusinessBrandBtn" style="margin-top: 15px; width: 100%; padding: 12px; border-radius: 8px; background: #2563eb; color: white; border: none; font-weight: bold; cursor: pointer;">Guardar Ajustes</button>
@@ -879,12 +907,6 @@
                                     style="width: 12px; height: 12px; vertical-align: middle; color: #f59e0b;"></i>
                                 Esta acci&oacute;n se sincroniza en todos los dispositivos.
                             </p>
-                                                <div class="security-card" style="margin-top: var(--space-xl); border: 1px solid var(--accent-danger);">
-                            <h4><i data-lucide="alert-triangle" style="color: var(--accent-danger);"></i> Limpiar Datos del Sistema</h4>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: var(--space-md);">Esta acci&oacute;n eliminar&aacute; todos los pedidos, ventas, reportes y gastos registrados en el historial. No afectar&aacute; a la configuraci&oacute;n, categor&iacute;as, productos ni adicionales.</p>
-                            <button class="btn-delete" onclick="window.clearSystemData()" style="width: 100%;">
-                                <i data-lucide="trash-2"></i> Borrar Todo el Historial
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -1117,11 +1139,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=272"></script>
+    <script src="js/data.js?v=273"></script>
     
-    <script src="js/storage.js?v=272"></script>
-    <script src="js/auth.js?v=272"></script>
-    <script src="js/app.js?v=272"></script>
+    <script src="js/storage.js?v=273"></script>
+    <script src="js/auth.js?v=273"></script>
+    <script src="js/app.js?v=273"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
