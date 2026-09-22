@@ -35,13 +35,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Auth State Listener
-    window.auth.onAuthStateChanged((user) => {
+    window.auth.onAuthStateChanged(async (user) => {
         if (user) {
             const emailDisplay = document.getElementById('currentUserEmailDisplay');
             if (emailDisplay) emailDisplay.textContent = user.email || 'Usuario';
 
             // MULTI-TENANT: Detect user change and clear old data
             window.currentUserTenant = user.uid;
+
+            // CHECK ACCOUNT STATUS & REGISTER ROOT DOC
+            try {
+                if (typeof db !== 'undefined') {
+                    const tenantDocRef = db.collection('tenants').doc(user.uid);
+                    const tenantDoc = await tenantDocRef.get();
+                    if (tenantDoc.exists) {
+                        if (tenantDoc.data().status === 'suspended') {
+                            await window.auth.signOut();
+                            if (loginError) {
+                                loginError.style.display = 'block';
+                                loginError.textContent = 'Tu cuenta ha sido suspendida. Comunícate con soporte.';
+                            }
+                            return;
+                        }
+                    } else {
+                        // First login: register tenant metadata for the Super Admin panel
+                        await tenantDocRef.set({
+                            email: user.email,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: 'active'
+                        }, { merge: true });
+                    }
+                }
+            } catch(e) {
+                console.error("Error validando cuenta:", e);
+            }
 
             const lastTenant = localStorage.getItem('minesof_last_tenant');
             if (lastTenant && lastTenant !== user.uid) {
