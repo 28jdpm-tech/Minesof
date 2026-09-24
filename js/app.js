@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 StorageManager.saveOrders(orders);
-                showNotification(Éxito:  ventas importadas);
+                showNotification('Éxito: ' + importedCount + ' ventas importadas');
                 if (state.currentPage === 'history') renderHistoryPage();
             } catch (err) {
                 console.error(err);
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 
                 StorageManager.saveExpenses(expenses);
-                showNotification(Éxito:  gastos importados);
+                showNotification('Éxito: ' + importedCount + ' gastos importados');
                 if (state.currentPage === 'expenses') renderExpensesPage();
             } catch (err) {
                 console.error(err);
