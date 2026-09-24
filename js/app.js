@@ -2740,7 +2740,7 @@ function renderSplitUI() {
 
         if (orders.length === 0) {
             container.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
+            <div style="grid-column: 1 / -1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
                 <i data-lucide="receipt" style="width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5;"></i>
                 <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Aún no hay ventas</h3>
                 <p style="font-size: 0.9rem; max-width: 250px;">Las ventas pagadas aparecerán aquí para que lleves tu historial.</p>
@@ -3710,7 +3710,7 @@ window.moveAdminItem = function(type, id, direction) {
 
         if (categories.length === 0) {
             elements.adminCategoriesList.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
+            <div style="grid-column: 1 / -1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
                 <i data-lucide="layers" style="width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5;"></i>
                 <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Aún no hay menú</h3>
                 <p style="font-size: 0.9rem; max-width: 250px;">Comienza creando tu primera categoría con el botón "+ Nueva Categoría".</p>
