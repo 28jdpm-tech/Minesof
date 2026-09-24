@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -124,26 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Dynamic billing recommendation text
-    if (billingSystemInput) {
-        const updateBillingRecommendation = () => {
-            const titleEl = document.getElementById('billingRecommendationTitle');
-            const textEl = document.getElementById('billingRecommendationText');
-            if (!titleEl || !textEl) return;
-            
-            if (billingSystemInput.value === 'direct') {
-                if (titleEl) titleEl.style.display = 'none';
-                textEl.innerHTML = 'Ideal para negocios en donde se paga inmediatamente.';
-            } else {
-                if (titleEl) titleEl.style.display = 'none';
-                textEl.innerHTML = 'Ideal para negocios donde se prepara o consume primero y se paga al final.';
-            }
-        };
-        
-        billingSystemInput.addEventListener('change', updateBillingRecommendation);
-        // Initial setup
-        setTimeout(updateBillingRecommendation, 100);
-    }
+    
 
     // Escuchar cambios de configuracion para actualizar logo
     window.addEventListener('configLoadedFromCloud', updateAppBranding);
