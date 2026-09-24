@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -1395,12 +1395,12 @@ function renderSplitUI() {
         if (elements.pendingPaymentCount) elements.pendingPaymentCount.textContent = pending.length;
         if (elements.paidOrdersCount) elements.paidOrdersCount.textContent = paid.length;
 
-                const emptyStateHTML = (msg, submsg) => 
+        const emptyStateHTML = (msg, submsg) => `
             <div style="grid-column: 1 / -1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
                 <i data-lucide="inbox" style="width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5;"></i>
-                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;"> + msg + </h3>
-                <p style="font-size: 0.9rem; max-width: 250px; margin: 0;"> + submsg + </p>
-            </div>;
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">${msg}</h3>
+                <p style="font-size: 0.9rem; max-width: 250px; margin: 0;">${submsg}</p>
+            </div>`;
 
         if (elements.toPrintList) {
             elements.toPrintList.innerHTML = toPrint.length > 0 
