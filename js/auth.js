@@ -57,11 +57,13 @@
                             }
                             return;
                         }
+                        tenantDocRef.set({ lastLogin: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }).catch(e => console.error(e));
                     } else {
                         // First login: register tenant metadata for the Super Admin panel
                         await tenantDocRef.set({
                             email: user.email,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
                             status: 'active'
                         }, { merge: true });
                     }
