@@ -1411,7 +1411,7 @@ function renderSplitUI() {
         if (elements.pendingPaymentList) {
             elements.pendingPaymentList.innerHTML = pending.length > 0 
                 ? pending.reverse().map(o => createCheckoutCard(o)).join('') 
-                : emptyStateHTML('No hay cobros pendientes', 'No hay tickets esperando pago en caja.');
+                : emptyStateHTML('No hay pedidos por cobrar', 'No hay pedidos esperando por cobrar en caja.');
         }
         
         if (elements.paidOrdersList) {
