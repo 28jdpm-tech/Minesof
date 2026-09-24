@@ -225,9 +225,8 @@
         if (isLoginMode) {
             window.auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    btn.textContent = 'Ingresar';
-                    btn.disabled = false;
-                    loginForm.reset();
+                    // La pantalla se oculta automticamente por onAuthStateChanged
+                    // No limpiamos el formulario para evitar parpadeos visuales
                 })
                 .catch((error) => {
                     loginError.textContent = mapAuthError(error.code);
@@ -242,9 +241,8 @@
             }
             window.auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    btn.textContent = 'Registrarse';
-                    btn.disabled = false;
-                    loginForm.reset();
+                    // La pantalla se oculta automticamente por onAuthStateChanged
+                    // No limpiamos el formulario para evitar parpadeos visuales
                 })
                 .catch((error) => {
                     localStorage.removeItem('minesof_pending_registration_billing');
