@@ -74,7 +74,6 @@
             const isNewUserLocal = (!lastTenant || lastTenant !== user.uid);
             
             if (isNewUserLocal) {
-                // Different user logging in - clear all cached data
                 StorageManager.clearAll();
                 localStorage.removeItem('galeria_admin_password');
                 localStorage.removeItem('galeria_observations');
@@ -85,18 +84,9 @@
                     localStorage.removeItem('minesof_pending_registration_billing');
                     db.collection('tenants').doc(user.uid).collection('minesof_settings').doc('global_config').set({
                         billingSystem: pendingBilling
-                    }, { merge: true }).then(() => {
-                        window.location.reload();
-                    }).catch(e => {
-                        console.error(e);
-                        window.location.reload();
-                    });
-                    return;
+                    }, { merge: true });
+                    localStorage.setItem('minesof_billingSystem', pendingBilling);
                 }
-
-                // Force a reload so memory state starts perfectly clean
-                window.location.reload();
-                return;
             }
 
             // Reload the configuration for this specific tenant
