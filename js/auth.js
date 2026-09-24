@@ -103,22 +103,9 @@
             const config = StorageManager.getConfig();
             Object.assign(FOODX_DATA, config);
 
-            // Resolve the race condition with cloudConfigSynced
-            const hideOverlay = () => {
-                loginOverlay.style.display = 'none';
-                if (appContainer) appContainer.style.display = 'flex';
-            };
-
-            if (localStorage.getItem('minesof_billingSystem') || window.isCloudConfigSynced) {
-                hideOverlay();
-            } else {
-                const loginCard = loginOverlay.querySelector('.login-card');
-                if (loginCard) {
-                    loginCard.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px;"><style>@keyframes spinLoader{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style><div style="border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent-primary); border-radius: 50%; width: 40px; height: 40px; animation: spinLoader 1s linear infinite;"></div><h3 style="color:var(--text-primary); margin:0;">Sincronizando...</h3><p style="color:var(--text-muted); font-size:0.85rem; margin:0;">Preparando el sistema</p></div>';
-                }
-                
-                window.addEventListener('cloudConfigSynced', hideOverlay, { once: true });
-            }
+            // Mostrar la app inmediatamente, sin pantalla de "Sincronizando..."
+            loginOverlay.style.display = 'none';
+            if (appContainer) appContainer.style.display = 'flex';
         } else {
             // User is signed out
             loginOverlay.style.display = 'flex';
