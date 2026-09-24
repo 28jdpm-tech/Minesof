@@ -1421,8 +1421,6 @@ function renderSplitUI() {
         }
         
         if (typeof lucide !== 'undefined') lucide.createIcons();
-        if (elements.pendingPaymentList) elements.pendingPaymentList.innerHTML = pending.reverse().map(o => createCheckoutCard(o)).join('');
-        if (elements.paidOrdersList) elements.paidOrdersList.innerHTML = paid.reverse().map(o => createCheckoutCard(o)).join('');
 
         // Visibility toggle
         const lists = {
