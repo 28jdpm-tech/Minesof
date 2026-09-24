@@ -1395,7 +1395,32 @@ function renderSplitUI() {
         if (elements.pendingPaymentCount) elements.pendingPaymentCount.textContent = pending.length;
         if (elements.paidOrdersCount) elements.paidOrdersCount.textContent = paid.length;
 
-        if (elements.toPrintList) elements.toPrintList.innerHTML = toPrint.reverse().map(o => createCheckoutCard(o)).join('');
+                const emptyStateHTML = (msg, submsg) => 
+            <div style="grid-column: 1 / -1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; color: #94a3b8; text-align: center;">
+                <i data-lucide="inbox" style="width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5;"></i>
+                <h3 style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;"> + msg + </h3>
+                <p style="font-size: 0.9rem; max-width: 250px; margin: 0;"> + submsg + </p>
+            </div>;
+
+        if (elements.toPrintList) {
+            elements.toPrintList.innerHTML = toPrint.length > 0 
+                ? toPrint.reverse().map(o => createCheckoutCard(o)).join('') 
+                : emptyStateHTML('No hay pedidos pendientes', 'Los pedidos activos aparecerán aquí.');
+        }
+        
+        if (elements.pendingPaymentList) {
+            elements.pendingPaymentList.innerHTML = pending.length > 0 
+                ? pending.reverse().map(o => createCheckoutCard(o)).join('') 
+                : emptyStateHTML('No hay cobros pendientes', 'No hay tickets esperando pago en caja.');
+        }
+        
+        if (elements.paidOrdersList) {
+            elements.paidOrdersList.innerHTML = paid.length > 0 
+                ? paid.reverse().map(o => createCheckoutCard(o)).join('') 
+                : emptyStateHTML('No hay ventas cobradas hoy', 'Los pedidos pagados aparecerán aquí.');
+        }
+        
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         if (elements.pendingPaymentList) elements.pendingPaymentList.innerHTML = pending.reverse().map(o => createCheckoutCard(o)).join('');
         if (elements.paidOrdersList) elements.paidOrdersList.innerHTML = paid.reverse().map(o => createCheckoutCard(o)).join('');
 
