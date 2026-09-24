@@ -148,7 +148,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 331</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 332</span>
                 </div>
             </div>
         </div>
@@ -1150,8 +1150,8 @@
             <p id="customPromptMessage" style="color: var(--text-secondary); margin: 12px 0 15px 0; font-size: 1.05rem; line-height: 1.5; font-weight: 500;"></p>
             <input type="text" id="customPromptInput" style="width: 100%; padding: 12px; margin-bottom: 25px; border-radius: 8px; border: 2px solid var(--border-default); font-size: 1.1rem; text-align: center; font-weight: 700; color: var(--text-primary);" autocomplete="off">
             <div style="display: flex; gap: 12px; justify-content: center;">
-                <button id="customPromptCancelBtn" class="btn-cancel" style="height: 46px; font-weight: 700; border: 1px solid var(--border-default); background: var(--bg-primary);">Cancelar</button>
-                <button id="customPromptAcceptBtn" class="btn-primary" style="height: 46px; font-weight: 700; background: var(--accent-primary); color: white;">Aceptar</button>
+                <button id="customPromptCancelBtn" style="flex: 1; height: 46px; font-weight: 700; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; border-radius: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">Cancelar</button>
+                <button id="customPromptAcceptBtn" style="flex: 1; height: 46px; font-weight: 700; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Aceptar</button>
             </div>
         </div>
     </div>
@@ -1163,11 +1163,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=331"></script>
+    <script src="js/data.js?v=332"></script>
     
-    <script src="js/storage.js?v=331"></script>
-    <script src="js/auth.js?v=331"></script>
-    <script src="js/app.js?v=331"></script>
+    <script src="js/storage.js?v=332"></script>
+    <script src="js/auth.js?v=332"></script>
+    <script src="js/app.js?v=332"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
