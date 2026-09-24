@@ -49,9 +49,13 @@
                       </div>
                   </div>
                 <div class="form-group">
-                    <label>Correo Electr&oacute;nico</label>
-                    <input type="email" id="loginEmail" placeholder="usuario@correo.com" required>
-                </div>
+                      <label>Correo Electr&oacute;nico</label>
+                      <input type="email" id="loginEmail" placeholder="usuario@correo.com" required>
+                  </div>
+                  <div class="form-group" id="confirmEmailGroup" style="display: none;">
+                      <label>Confirmar Correo Electr&oacute;nico</label>
+                      <input type="email" id="loginConfirmEmail" placeholder="Vuelve a escribir tu correo">
+                  </div>
                 <div class="form-group">
                     <label>Contrase&ntilde;a</label>
                     <div style="position: relative; width: 100%;">
@@ -145,7 +149,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 312</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 313</span>
                 </div>
             </div>
         </div>
@@ -1165,11 +1169,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=312"></script>
+    <script src="js/data.js?v=313"></script>
     
-    <script src="js/storage.js?v=312"></script>
-    <script src="js/auth.js?v=312"></script>
-    <script src="js/app.js?v=312"></script>
+    <script src="js/storage.js?v=313"></script>
+    <script src="js/auth.js?v=313"></script>
+    <script src="js/app.js?v=313"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {

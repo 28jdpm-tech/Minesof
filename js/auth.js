@@ -146,6 +146,10 @@
                 authToggleLink.innerHTML = '&iquest;No tienes cuenta? Reg&iacute;strate aqu&iacute;';
                 if (forgotPasswordLink && forgotPasswordLink.parentElement) forgotPasswordLink.parentElement.style.display = 'block';
                 if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'none';
+                const confirmEmailGroup = document.getElementById('confirmEmailGroup');
+                if (confirmEmailGroup) confirmEmailGroup.style.display = 'none';
+                const loginConfirmEmail = document.getElementById('loginConfirmEmail');
+                if (loginConfirmEmail) loginConfirmEmail.value = '';
                 const registerBillingGroup = document.getElementById('registerBillingGroup');
                 if (registerBillingGroup) registerBillingGroup.style.display = 'none';
                 if (loginConfirmPassword) loginConfirmPassword.value = '';
@@ -156,6 +160,8 @@
                 authToggleLink.innerHTML = '&iquest;Ya tienes cuenta? Inicia Sesi&oacute;n';
                 if (forgotPasswordLink && forgotPasswordLink.parentElement) forgotPasswordLink.parentElement.style.display = 'none';
                 if (confirmPasswordGroup) confirmPasswordGroup.style.display = 'block';
+                const confirmEmailGroup = document.getElementById('confirmEmailGroup');
+                if (confirmEmailGroup) confirmEmailGroup.style.display = 'block';
                 const registerBillingGroup = document.getElementById('registerBillingGroup');
                 if (registerBillingGroup) registerBillingGroup.style.display = 'block';
             }
@@ -204,6 +210,26 @@
         btn.disabled = true;
 
         if (!isLoginMode) {
+            const domain = email.split('@')[1];
+            const allowedDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'yahoo.es', 'hotmail.es', 'outlook.es'];
+            
+            if (!domain || !allowedDomains.includes(domain.toLowerCase())) {
+                loginError.textContent = 'Por seguridad, solo aceptamos correos oficiales (@gmail.com, @hotmail.com, @outlook.com o @yahoo.com). Verifica que esté bien escrito.';
+                loginError.style.display = 'block';
+                btn.textContent = 'Registrarse';
+                btn.disabled = false;
+                return;
+            }
+
+            const confirmEmailInput = document.getElementById('loginConfirmEmail');
+            if (confirmEmailInput && confirmEmailInput.value.trim() !== email) {
+                loginError.textContent = 'Los correos electrónicos no coinciden.';
+                loginError.style.display = 'block';
+                btn.textContent = 'Registrarse';
+                btn.disabled = false;
+                return;
+            }
+
             const confirmPass = loginConfirmPassword ? loginConfirmPassword.value : '';
             if (password !== confirmPass) {
                 loginError.textContent = 'Las contraseñas no coinciden.';
