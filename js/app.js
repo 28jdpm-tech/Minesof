@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -4527,6 +4527,7 @@ window.moveAdminItem = function(type, id, direction) {
                         renderPosProducts();
                         updateAppBranding();
                         console.log('Config synced from cloud');
+                        window.isCloudConfigSynced = true;
                         window.dispatchEvent(new CustomEvent('cloudConfigSynced'));
                     },
                     // Print callback (Remote print from other devices) - DISABLED

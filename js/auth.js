@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     const mapAuthError = (code) => {
         switch (code) {
             case 'auth/user-not-found':
@@ -71,7 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const lastTenant = localStorage.getItem('minesof_last_tenant');
-            if (lastTenant && lastTenant !== user.uid) {
+            const isNewUserLocal = (!lastTenant || lastTenant !== user.uid);
+            
+            if (isNewUserLocal) {
                 // Different user logging in - clear all cached data
                 StorageManager.clearAll();
                 localStorage.removeItem('galeria_admin_password');
@@ -96,27 +98,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.reload();
                 return;
             }
-            localStorage.setItem('minesof_last_tenant', user.uid);
 
             // Reload the configuration for this specific tenant
             const config = StorageManager.getConfig();
             Object.assign(FOODX_DATA, config);
 
-            // PREVENT UI FLASH: Only show the app immediately if we have cached config
-            if (localStorage.getItem('minesof_billingSystem')) {
+            // Resolve the race condition with cloudConfigSynced
+            const hideOverlay = () => {
                 loginOverlay.style.display = 'none';
                 if (appContainer) appContainer.style.display = 'flex';
+            };
+
+            if (localStorage.getItem('minesof_billingSystem') || window.isCloudConfigSynced) {
+                hideOverlay();
             } else {
-                // Fresh login without cache: show loading state on the login overlay
-                const loginBox = loginOverlay.querySelector('.login-box');
-                if (loginBox) {
-                    loginBox.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px;"><style>@keyframes spinLoader{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style><div style="border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent-primary); border-radius: 50%; width: 40px; height: 40px; animation: spinLoader 1s linear infinite;"></div><h3 style="color:var(--text-primary); margin:0;">Sincronizando...</h3><p style="color:var(--text-muted); font-size:0.85rem; margin:0;">Preparando el sistema</p></div>';
+                const loginCard = loginOverlay.querySelector('.login-card');
+                if (loginCard) {
+                    loginCard.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding:40px;"><style>@keyframes spinLoader{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style><div style="border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid var(--accent-primary); border-radius: 50%; width: 40px; height: 40px; animation: spinLoader 1s linear infinite;"></div><h3 style="color:var(--text-primary); margin:0;">Sincronizando...</h3><p style="color:var(--text-muted); font-size:0.85rem; margin:0;">Preparando el sistema</p></div>';
                 }
                 
-                window.addEventListener('cloudConfigSynced', () => {
-                    loginOverlay.style.display = 'none';
-                    if (appContainer) appContainer.style.display = 'flex';
-                }, { once: true });
+                window.addEventListener('cloudConfigSynced', hideOverlay, { once: true });
             }
         } else {
             // User is signed out
