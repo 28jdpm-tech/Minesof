@@ -40,13 +40,37 @@
             <form id="loginForm">
                   <div class="form-group" id="registerBillingGroup" style="display: none; margin-bottom: 20px;">
                       <label>C&Oacute;MO OPERA TU NEGOCIO</label>
-                      <select id="registerBillingSystem" style="width:100%; min-height: 48px; padding: 10px 40px 10px 14px; border: none; border-radius: 8px; background-color: #10b981 !important; background-image: url(&quot;data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; -webkit-appearance: none; appearance: none; color: white !important; font-weight: bold; font-size: 0.95rem; cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);" onchange="document.getElementById('registerBillingRecText').innerHTML = this.value === 'direct' ? 'Ideal para negocios en donde se paga inmediatamente. <br><b style='color:#0ea5e9;'>(Puedes cambiarlo en tu administrador)</b>' : 'Ideal para negocios donde se prepara o consume primero y se paga al final. <br><b style='color:#0ea5e9;'>(Puedes cambiarlo en tu administrador)</b>';">
-                          <option value="standard" style="color: #333; background: #fff;">Cobro Din&aacute;mico (Mesas-Pedidos)</option>
-                          <option value="direct" style="color: #333; background: #fff;">Cobro Directo</option>
-                      </select>
-                      <div style="margin-top: 12px; font-size: 0.85rem; color: #475569; background: #f1f5f9; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981;">
-                          <span id="registerBillingRecText" style="line-height: 1.4;">Ideal para negocios donde se prepara o consume primero y se paga al final. <br><b style="color:#0ea5e9;">(Puedes cambiarlo en tu administrador)</b></span>
-                      </div>
+                                              <select id="registerBillingSystem" style="width:100%; min-height: 48px; padding: 10px 40px 10px 14px; border: none; border-radius: 8px; background-color: #10b981; background-image: url(&quot;data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e&quot;); background-repeat: no-repeat; background-position: right 14px center; background-size: 16px; -webkit-appearance: none; appearance: none; color: white; font-weight: bold; font-size: 0.95rem; cursor: pointer; outline: none; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); transition: all 0.3s;" onchange="updateBillingUI(this.value)">
+                            <option value="standard" style="color: #333; background: #fff;">Cobro Din&aacute;mico (Mesas-Pedidos)</option>
+                            <option value="direct" style="color: #333; background: #fff;">Cobro Directo</option>
+                        </select>
+                        <div id="registerBillingRecContainer" style="margin-top: 12px; font-size: 0.85rem; color: #065f46; background: #d1fae5; padding: 12px; border-radius: 8px; border-left: 4px solid #10b981; transition: all 0.3s;">
+                            <span id="registerBillingRecText" style="line-height: 1.4;">Ideal para negocios donde se prepara o consume primero y se paga al final. <br><b style="color:#047857; margin-top:4px; display:inline-block;">(Puedes cambiarlo en tu administrador)</b></span>
+                        </div>
+
+                        <script>
+                            function updateBillingUI(val) {
+                                const sel = document.getElementById('registerBillingSystem');
+                                const cont = document.getElementById('registerBillingRecContainer');
+                                const txt = document.getElementById('registerBillingRecText');
+
+                                if (val === 'standard') {
+                                    sel.style.backgroundColor = '#10b981';
+                                    sel.style.boxShadow = '0 4px 10px rgba(16, 185, 129, 0.2)';
+                                    cont.style.backgroundColor = '#d1fae5';
+                                    cont.style.borderLeftColor = '#10b981';
+                                    cont.style.color = '#065f46';
+                                    txt.innerHTML = 'Ideal para negocios donde se prepara o consume primero y se paga al final. <br><b style="color:#047857; margin-top:4px; display:inline-block;">(Puedes cambiarlo en tu administrador)</b>';
+                                } else {
+                                    sel.style.backgroundColor = '#3b82f6';
+                                    sel.style.boxShadow = '0 4px 10px rgba(59, 130, 246, 0.2)';
+                                    cont.style.backgroundColor = '#dbeafe';
+                                    cont.style.borderLeftColor = '#3b82f6';
+                                    cont.style.color = '#1e3a8a';
+                                    txt.innerHTML = 'Ideal para negocios en donde se paga inmediatamente en caja. <br><b style="color:#1d4ed8; margin-top:4px; display:inline-block;">(Puedes cambiarlo en tu administrador)</b>';
+                                }
+                            }
+                        </script>
                   </div>
                 <div class="form-group">
                       <label>Correo Electr&oacute;nico</label>
@@ -149,7 +173,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 316</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 317</span>
                 </div>
             </div>
         </div>
@@ -1169,11 +1193,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=316"></script>
+    <script src="js/data.js?v=317"></script>
     
-    <script src="js/storage.js?v=316"></script>
-    <script src="js/auth.js?v=316"></script>
-    <script src="js/app.js?v=316"></script>
+    <script src="js/storage.js?v=317"></script>
+    <script src="js/auth.js?v=317"></script>
+    <script src="js/app.js?v=317"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
