@@ -3,6 +3,160 @@
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ==========================================
+    // DATA MIGRATION (EXCEL IMPORT)
+    // ==========================================
+    const importSalesFile = document.getElementById('importSalesFile');
+    if (importSalesFile) {
+        importSalesFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            handleImportSales(file);
+            e.target.value = '';
+        });
+    }
+
+    const importExpensesFile = document.getElementById('importExpensesFile');
+    if (importExpensesFile) {
+        importExpensesFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            handleImportExpenses(file);
+            e.target.value = '';
+        });
+    }
+
+    function handleImportSales(file) {
+        if (typeof XLSX === 'undefined') {
+            showNotification('Error: Librería Excel no cargada', 'error');
+            return;
+        }
+        showNotification('Procesando ventas...', 'info');
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
+                
+                if (jsonData.length === 0) {
+                    showNotification('El Excel está vacío', 'error');
+                    return;
+                }
+                
+                const orders = StorageManager.getOrders();
+                let importedCount = 0;
+                
+                jsonData.forEach(row => {
+                    const getCol = (keyParts) => {
+                        const key = Object.keys(row).find(k => keyParts.some(p => k.toLowerCase().includes(p)));
+                        return key ? row[key] : null;
+                    };
+                    
+                    const rawDate = getCol(['fecha', 'date', 'dia']);
+                    const rawTotal = getCol(['total', 'valor', 'monto', 'precio']);
+                    const rawNumber = getCol(['numero', 'num', 'pedido', 'order', 'factura']);
+                    
+                    if (!rawTotal) return;
+                    
+                    let dateStr = new Date().toISOString();
+                    if (rawDate) {
+                        const pd = new Date(rawDate);
+                        if (!isNaN(pd)) dateStr = pd.toISOString();
+                    }
+                    
+                    const price = parseFloat(rawTotal.toString().replace(/[^0-9.-]+/g,""));
+                    if (isNaN(price)) return;
+                    
+                    const orderNum = rawNumber || ('MIG-' + Math.floor(Math.random() * 10000));
+                    
+                    const newOrder = {
+                        id: 'mig_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        orderNumber: orderNum.toString(),
+                        createdAt: dateStr,
+                        paid: true,
+                        totalPrice: price,
+                        paymentMethod: 'Efectivo',
+                        checkoutPrinted: true,
+                        createdBy: 'Migracion',
+                        items: [{ name: 'Venta Histórica Migrada', price: price, quantity: 1, total: price }]
+                    };
+                    orders.push(newOrder);
+                    importedCount++;
+                });
+                
+                StorageManager.saveOrders(orders);
+                showNotification(Éxito:  ventas importadas);
+                if (state.currentPage === 'history') renderHistoryPage();
+            } catch (err) {
+                console.error(err);
+                showNotification('Error procesando Excel', 'error');
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function handleImportExpenses(file) {
+        if (typeof XLSX === 'undefined') return;
+        showNotification('Procesando gastos...', 'info');
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
+                
+                if (jsonData.length === 0) return;
+                
+                const expenses = StorageManager.getExpenses();
+                let importedCount = 0;
+                
+                jsonData.forEach(row => {
+                    const getCol = (keyParts) => {
+                        const key = Object.keys(row).find(k => keyParts.some(p => k.toLowerCase().includes(p)));
+                        return key ? row[key] : null;
+                    };
+                    
+                    const rawDate = getCol(['fecha', 'date']);
+                    const rawAmount = getCol(['valor', 'monto', 'total', 'precio']);
+                    const rawDesc = getCol(['desc', 'concepto', 'detalle']);
+                    const rawCat = getCol(['cat', 'rubro']);
+                    
+                    if (!rawAmount) return;
+                    
+                    let dateStr = new Date().toISOString();
+                    if (rawDate) {
+                        const pd = new Date(rawDate);
+                        if (!isNaN(pd)) dateStr = pd.toISOString();
+                    }
+                    
+                    const amount = parseFloat(rawAmount.toString().replace(/[^0-9.-]+/g,""));
+                    if (isNaN(amount)) return;
+                    
+                    const newExpense = {
+                        id: 'mig_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        description: rawDesc ? rawDesc.toString() : 'Gasto Migrado',
+                        amount: amount,
+                        category: rawCat ? rawCat.toString() : 'Gastos Generales',
+                        date: dateStr.split('T')[0],
+                        createdAt: dateStr
+                    };
+                    expenses.push(newExpense);
+                    importedCount++;
+                });
+                
+                StorageManager.saveExpenses(expenses);
+                showNotification(Éxito:  gastos importados);
+                if (state.currentPage === 'expenses') renderExpensesPage();
+            } catch (err) {
+                console.error(err);
+                showNotification('Error procesando Excel', 'error');
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    }
         // --- Account (Login) Password Change Logic ---
     const saveAccountPasswordBtn = document.getElementById('saveAccountPasswordBtn');
     const newAccountPassword = document.getElementById('newAccountPassword');
