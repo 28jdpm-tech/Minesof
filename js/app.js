@@ -5,16 +5,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // DATA MIGRATION (EXCEL IMPORT)
-    window.downloadSalesTemplate = function() {
+        window.downloadSalesTemplate = function() {
         if (typeof XLSX === 'undefined') {
             showNotification('Error: Librería Excel no cargada', 'error');
             return;
         }
         const data = [
-            { "NUMERO": "V-001", "FECHA": "2026-01-15", "TOTAL": 15000 },
-            { "NUMERO": "V-002", "FECHA": "2026-01-16", "TOTAL": 25500 }
+            { "FECHA": "2026-01-15", "TOTAL": 15000 },
+            { "FECHA": "2026-01-16", "TOTAL": 25500 }
         ];
         const ws = XLSX.utils.json_to_sheet(data);
+        
+        // Ajustar el ancho de las columnas
+        ws['!cols'] = [ { wch: 15 }, { wch: 15 } ];
+        
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Plantilla_Ventas");
         XLSX.writeFile(wb, "Plantilla_Importar_Ventas_Minesof.xlsx");
