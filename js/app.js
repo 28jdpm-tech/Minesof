@@ -1746,7 +1746,7 @@ function renderSplitUI() {
                                     ${cItems.map(item => `
                                         <div class="k-item">
                                             <strong>${item.qty}x</strong> ${item.name || item.categoryName} ${item.size ? item.size : ''}
-                                            ${item.notes ? `<div style="font-size:0.8rem; color:#f0c040; margin-left:14px;">* ${item.notes}</div>` : ''}
+                                            ${item.notes && item.notes !== item.name ? `<div style="font-size:0.8rem; color:#f0c040; margin-left:14px;">* ${item.notes}</div>` : '}
                                             ${item.extras && item.extras.length > 0 ? `<div style="font-size:0.8rem; color:#4ecdc4; margin-left:14px;">+ ${(Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras)}</div>` : ''}
                                         </div>
                                     `).join('')}
@@ -1805,7 +1805,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">${item.name || item.categoryName} ${item.notes ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price || (item.unitPrice * item.qty))}</span>
                         </div>
@@ -2298,7 +2298,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">${item.name || item.categoryName || ''} ${item.notes ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price / item.qty)}</span>
                         </div>
@@ -3051,7 +3051,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">${item.name || item.categoryName || ''} ${item.notes ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price / item.qty)}</span>
                         </div>
