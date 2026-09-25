@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -148,7 +148,7 @@
                         <i data-lucide="user" style="width:14px; height:14px; flex-shrink:0;"></i>
                         <span id="currentUserEmailDisplay" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">...</span>
                     </div>
-                    <span style="font-size:0.7rem; opacity:0.7;">Versión 338</span>
+                    <span style="font-size:0.7rem; opacity:0.7;">Versión 339</span>
                 </div>
             </div>
         </div>
@@ -865,24 +865,38 @@
                                         <!-- Migration Panel -->
                     <div class="admin-panel" id="panel-migration">
                         <div class="panel-header">
-                            <h3>Migraci&oacute;n de Historial (Data Onboarding)</h3>
+                            <h3>Migración de Historial (Data Onboarding)</h3>
                         </div>
                         <div class="security-card">
                             <h4><i data-lucide="database"></i> Importar Ventas Antiguas</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Sube un archivo Excel (.xlsx) con tu historial de ventas pasadas. <b>Columnas detectadas automáticamente: Numero, Fecha, Total.</b></p>
-                            <input type="file" id="importSalesFile" accept=".xlsx, .xls" style="display: none;">
-                            <button class="btn-primary" onclick="document.getElementById('importSalesFile').click()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #059669; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
-                                <i data-lucide="upload" style="width: 18px;"></i> Cargar Excel de Ventas
-                            </button>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Para importar, primero descarga la plantilla oficial, pega ahí tus datos y luego súbela.</p>
+                            
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <button class="btn-primary" onclick="downloadSalesTemplate()" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                                    <i data-lucide="download" style="width: 18px;"></i> 1. Descargar Plantilla
+                                </button>
+                                
+                                <input type="file" id="importSalesFile" accept=".xlsx, .xls" style="display: none;">
+                                <button class="btn-primary" onclick="document.getElementById('importSalesFile').click()" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #059669; padding: 10px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
+                                    <i data-lucide="upload" style="width: 18px;"></i> 2. Subir Plantilla Llena
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="security-card" style="margin-top: 20px;">
                             <h4><i data-lucide="wallet"></i> Importar Gastos Antiguos</h4>
-                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Sube un archivo Excel (.xlsx) con tu historial de egresos. <b>Columnas detectadas automáticamente: Categoria, Descripcion, Valor, Fecha.</b></p>
-                            <input type="file" id="importExpensesFile" accept=".xlsx, .xls" style="display: none;">
-                            <button class="btn-primary" onclick="document.getElementById('importExpensesFile').click()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #e11d48; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
-                                <i data-lucide="upload" style="width: 18px;"></i> Cargar Excel de Gastos
-                            </button>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">Descarga la plantilla de gastos, pega tu historial contable y súbelo al sistema.</p>
+                            
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn-primary" onclick="downloadExpensesTemplate()" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s;">
+                                    <i data-lucide="download" style="width: 18px;"></i> 1. Descargar Plantilla
+                                </button>
+                                
+                                <input type="file" id="importExpensesFile" accept=".xlsx, .xls" style="display: none;">
+                                <button class="btn-primary" onclick="document.getElementById('importExpensesFile').click()" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; background-color: #e11d48; padding: 10px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer;">
+                                    <i data-lucide="upload" style="width: 18px;"></i> 2. Subir Plantilla Llena
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -1200,11 +1214,11 @@
     <script src="js/firebase-config.js"></script>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=338"></script>
+    <script src="js/data.js?v=339"></script>
     
-    <script src="js/storage.js?v=338"></script>
-    <script src="js/auth.js?v=338"></script>
-    <script src="js/app.js?v=338"></script>
+    <script src="js/storage.js?v=339"></script>
+    <script src="js/auth.js?v=339"></script>
+    <script src="js/app.js?v=339"></script>
     <script>
         // Disable Service Worker and clear cache to force internet-only mode
         if ('serviceWorker' in navigator) {
