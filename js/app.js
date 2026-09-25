@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -36,9 +36,33 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.onload = (e) => {
             try {
                 const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
+                const workbook = XLSX.read(data, {type: 'array', cellDates: true});
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
+                
+                const jsonDataRaw = XLSX.utils.sheet_to_json(worksheet, {raw: true, defval: null});
+                let jsonData = jsonDataRaw;
+                
+                const hasValidKeys = (row) => {
+                    const keys = Object.keys(row).map(k => k.toLowerCase());
+                    return keys.some(k => k.includes('total') || k.includes('valor') || k.includes('fecha'));
+                };
+                
+                if (jsonData.length > 0 && !hasValidKeys(jsonData[0])) {
+                    const aoa = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                    let headerRowIndex = 0;
+                    for (let i = 0; i < aoa.length; i++) {
+                        if (aoa[i] && aoa[i].some(cell => typeof cell === 'string' && (cell.toLowerCase().includes('total') || cell.toLowerCase().includes('valor') || cell.toLowerCase().includes('fecha')))) {
+                            headerRowIndex = i;
+                            break;
+                        }
+                    }
+                    if (headerRowIndex > 0) {
+                        const range = XLSX.utils.decode_range(worksheet['!ref']);
+                        range.s.r = headerRowIndex;
+                        worksheet['!ref'] = XLSX.utils.encode_range(range);
+                        jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: true, defval: null});
+                    }
+                }
                 
                 if (jsonData.length === 0) {
                     showNotification('El Excel está vacío', 'error');
@@ -58,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rawTotal = getCol(['total', 'valor', 'monto', 'precio']);
                     const rawNumber = getCol(['numero', 'num', 'pedido', 'order', 'factura']);
                     
-                    if (!rawTotal) return;
+                    if (rawTotal === null || rawTotal === undefined) return;
                     
                     let dateStr = new Date().toISOString();
                     if (rawDate) {
@@ -66,7 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!isNaN(pd)) dateStr = pd.toISOString();
                     }
                     
-                    const price = parseFloat(rawTotal.toString().replace(/[^0-9.-]+/g,""));
+                    let price = 0;
+                    if (typeof rawTotal === 'number') {
+                        price = rawTotal;
+                    } else {
+                        let s = rawTotal.toString().toLowerCase().replace(/[^0-9,-]/g, '');
+                        s = s.replace(',', '.');
+                        price = parseFloat(s);
+                    }
+                    
                     if (isNaN(price)) return;
                     
                     const orderNum = rawNumber || ('MIG-' + Math.floor(Math.random() * 10000));
@@ -104,9 +136,33 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.onload = (e) => {
             try {
                 const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
+                const workbook = XLSX.read(data, {type: 'array', cellDates: true});
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: false});
+                
+                const jsonDataRaw = XLSX.utils.sheet_to_json(worksheet, {raw: true, defval: null});
+                let jsonData = jsonDataRaw;
+                
+                const hasValidKeys = (row) => {
+                    const keys = Object.keys(row).map(k => k.toLowerCase());
+                    return keys.some(k => k.includes('valor') || k.includes('monto') || k.includes('fecha'));
+                };
+                
+                if (jsonData.length > 0 && !hasValidKeys(jsonData[0])) {
+                    const aoa = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                    let headerRowIndex = 0;
+                    for (let i = 0; i < aoa.length; i++) {
+                        if (aoa[i] && aoa[i].some(cell => typeof cell === 'string' && (cell.toLowerCase().includes('valor') || cell.toLowerCase().includes('monto') || cell.toLowerCase().includes('fecha')))) {
+                            headerRowIndex = i;
+                            break;
+                        }
+                    }
+                    if (headerRowIndex > 0) {
+                        const range = XLSX.utils.decode_range(worksheet['!ref']);
+                        range.s.r = headerRowIndex;
+                        worksheet['!ref'] = XLSX.utils.encode_range(range);
+                        jsonData = XLSX.utils.sheet_to_json(worksheet, {raw: true, defval: null});
+                    }
+                }
                 
                 if (jsonData.length === 0) return;
                 
@@ -124,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rawDesc = getCol(['desc', 'concepto', 'detalle']);
                     const rawCat = getCol(['cat', 'rubro']);
                     
-                    if (!rawAmount) return;
+                    if (rawAmount === null || rawAmount === undefined) return;
                     
                     let dateStr = new Date().toISOString();
                     if (rawDate) {
@@ -132,7 +188,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!isNaN(pd)) dateStr = pd.toISOString();
                     }
                     
-                    const amount = parseFloat(rawAmount.toString().replace(/[^0-9.-]+/g,""));
+                    let amount = 0;
+                    if (typeof rawAmount === 'number') {
+                        amount = rawAmount;
+                    } else {
+                        let s = rawAmount.toString().toLowerCase().replace(/[^0-9,-]/g, '');
+                        s = s.replace(',', '.');
+                        amount = parseFloat(s);
+                    }
+                    
                     if (isNaN(amount)) return;
                     
                     const newExpense = {
