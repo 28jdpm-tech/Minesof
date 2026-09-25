@@ -1871,7 +1871,16 @@ function renderSplitUI() {
                 return numA - numB;
             });
             state.clients = uniqueClients;
-            state.activeClient = state.clients[0];
+            
+            // AUTOMATICALLY ADD A NEW CLIENT TAB WHEN APPENDING
+            let maxNum = 0;
+            state.clients.forEach(c => {
+                const num = parseInt(c.replace('P', '')) || 0;
+                if (num > maxNum) maxNum = num;
+            });
+            const newClient = 'P' + (maxNum + 1);
+            state.clients.push(newClient);
+            state.activeClient = newClient;
             if (typeof renderPosClientTabs === 'function') renderPosClientTabs();
         }
 
