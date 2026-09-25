@@ -766,6 +766,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function refreshOrderPageUI() {
+        const locIn = document.getElementById('posLocationInput');
+        if (locIn) {
+            locIn.disabled = false;
+            locIn.style.opacity = '1';
+        }
         renderPosCategories();
         renderPosProducts();
         renderPosCart();
@@ -1513,7 +1518,11 @@ function renderSplitUI() {
             }
 
             clearPosCart(false);
-            if (locationInput) locationInput.value = '';
+            if (locationInput) {
+                locationInput.value = '';
+                locationInput.disabled = false;
+                locationInput.style.opacity = '1';
+            }
             state.clients = ['P1'];
             state.activeClient = 'P1';
             renderPosClientTabs();
@@ -1882,6 +1891,13 @@ function renderSplitUI() {
         elements.serviceTabs.forEach(tab => {
             tab.classList.toggle('active', tab.dataset.service === order.serviceType);
         });
+
+        const locIn = document.getElementById('posLocationInput');
+        if (locIn) {
+            locIn.value = order.customerInfo || '';
+            locIn.disabled = true;
+            locIn.style.opacity = '0.6';
+        }
 
         // Show Footer
         const appFooter = document.getElementById('appFooter');
