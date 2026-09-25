@@ -936,7 +936,12 @@ window.switchClient = function(client) {
     const btn = document.getElementById('btnAddClient');
     if (btn) {
         btn.addEventListener('click', () => {
-            const newClient = 'P' + (state.clients.length + 1);
+                        let maxNum = 0;
+            state.clients.forEach(c => {
+                const num = parseInt(c.replace('P', '')) || 0;
+                if (num > maxNum) maxNum = num;
+            });
+            const newClient = 'P' + (maxNum + 1);
             state.clients.push(newClient);
             window.switchClient(newClient);
         });
