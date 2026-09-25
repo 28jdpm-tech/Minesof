@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -1805,7 +1805,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">${item.name || item.categoryName || ''} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price || (item.unitPrice * item.qty))}</span>
                         </div>
@@ -2298,7 +2298,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">${item.name || item.categoryName || ''} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price / item.qty)}</span>
                         </div>
@@ -3051,7 +3051,7 @@ function renderSplitUI() {
                         <div class="preview-item">
                             <div class="item-main">
                                 <span class="preview-qty">${item.clientName || item.qty}</span>
-                                <span class="preview-name">`${item.name || item.categoryName || '} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : '}` ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
+                                <span class="preview-name">${item.name || item.categoryName || ''} ${item.notes && item.notes !== item.name ? '(' + item.notes + ')' : ''} ${item.extras && item.extras.length > 0 ? '+ ' + (Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras) : ''}</span>
                             </div>
                             <span class="item-price">${formatPrice(item.price / item.qty)}</span>
                         </div>
