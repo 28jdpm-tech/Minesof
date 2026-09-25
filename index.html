@@ -638,16 +638,28 @@
                     <h2>Balance General</h2>
                 </div>
                 <div>
-                    <!-- Balance Filter -->
+                                        <!-- Balance Filter -->
                     <div class="reports-filter" style="margin-bottom: 20px;">
                         <div class="filter-group">
                             <label><i data-lucide="calendar" style="width: 16px; height: 16px; margin-right: 4px; display: inline-block; vertical-align: middle;"></i> Periodo de Balance:</label>
                             <select id="balancePeriodSelect" class="date-picker-input" style="width: 100%; max-width: 300px;">
                                 <option value="today">Hoy</option>
-                                <option value="month">Este Mes</option>
-                                <option value="total">Histórico Total</option>
+                                <option value="date">D&iacute;a Espec&iacute;fico</option>
+                                <option value="month">Mes Actual</option>
+                                <option value="specific-month">Mes Espec&iacute;fico</option>
+                                <option value="total">Hist&oacute;rico Total</option>
                             </select>
                         </div>
+                        <div class="filter-group hidden" id="balanceDatePickerGroup">
+                            <input type="date" id="balanceDatePicker" class="date-picker-input">
+                        </div>
+                        <div class="filter-group hidden" id="balanceMonthPickerGroup">
+                            <input type="month" id="balanceMonthPicker" class="date-picker-input">
+                        </div>
+                        <button class="search-date-btn" id="searchBalanceBtn">
+                            <i data-lucide="search"></i>
+                            Consultar
+                        </button>
                     </div>
 
                     <div style="overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-card);">

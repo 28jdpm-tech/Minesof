@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -4873,7 +4873,7 @@ window.moveAdminItem = function(type, id, direction) {
     // Balance
     // ============================================
     
-    function renderBalancePage() {
+        function renderBalancePage() {
         const periodSelect = document.getElementById('balancePeriodSelect');
         const period = periodSelect ? periodSelect.value : 'today';
         const tbody = document.getElementById('balanceTableBody');
@@ -4887,9 +4887,21 @@ window.moveAdminItem = function(type, id, direction) {
                 orders = StorageManager.getTodayOrders();
                 expenses = StorageManager.getTodayExpenses();
                 break;
+            case 'date':
+                const datePicker = document.getElementById('balanceDatePicker');
+                const filterDate = datePicker ? datePicker.value : null;
+                orders = filterDate ? StorageManager.getOrdersByDate(filterDate) : StorageManager.getTodayOrders();
+                expenses = filterDate ? StorageManager.getExpensesByDate(filterDate) : StorageManager.getTodayExpenses();
+                break;
             case 'month':
                 orders = StorageManager.getCurrentMonthOrders();
                 expenses = StorageManager.getCurrentMonthExpenses();
+                break;
+            case 'specific-month':
+                const monthPicker = document.getElementById('balanceMonthPicker');
+                const filterMonth = monthPicker ? monthPicker.value : null;
+                orders = filterMonth ? StorageManager.getOrdersByMonth(filterMonth) : StorageManager.getCurrentMonthOrders();
+                expenses = filterMonth ? StorageManager.getExpensesByMonth(filterMonth) : StorageManager.getCurrentMonthExpenses();
                 break;
             case 'total':
                 orders = StorageManager.getOrders();
@@ -4970,10 +4982,39 @@ window.moveAdminItem = function(type, id, direction) {
         tbody.innerHTML = html;
     }
 
-    // Attach event listener when DOM is ready
+        // Event listeners for Balance
     const balSelect = document.getElementById('balancePeriodSelect');
-    if(balSelect) {
-        balSelect.addEventListener('change', renderBalancePage);
+    const balDatePickerGroup = document.getElementById('balanceDatePickerGroup');
+    const balMonthPickerGroup = document.getElementById('balanceMonthPickerGroup');
+    const searchBalanceBtn = document.getElementById('searchBalanceBtn');
+    
+    if (balSelect) {
+        balSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            
+            if (balDatePickerGroup) balDatePickerGroup.classList.add('hidden');
+            if (balMonthPickerGroup) balMonthPickerGroup.classList.add('hidden');
+            if (searchBalanceBtn) searchBalanceBtn.classList.add('hidden');
+            
+            if (val === 'date') {
+                if (balDatePickerGroup) balDatePickerGroup.classList.remove('hidden');
+                if (searchBalanceBtn) searchBalanceBtn.classList.remove('hidden');
+            } else if (val === 'specific-month') {
+                if (balMonthPickerGroup) balMonthPickerGroup.classList.remove('hidden');
+                if (searchBalanceBtn) searchBalanceBtn.classList.remove('hidden');
+            } else {
+                renderBalancePage();
+            }
+        });
+        
+        // Setup initial visibility
+        if (balSelect.value !== 'date' && balSelect.value !== 'specific-month') {
+            if (searchBalanceBtn) searchBalanceBtn.classList.add('hidden');
+        }
+    }
+    
+    if (searchBalanceBtn) {
+        searchBalanceBtn.addEventListener('click', renderBalancePage);
     }
 
 
