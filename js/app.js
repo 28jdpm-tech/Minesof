@@ -1,10 +1,41 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // DATA MIGRATION (EXCEL IMPORT)
+    window.downloadSalesTemplate = function() {
+        if (typeof XLSX === 'undefined') {
+            showNotification('Error: Librería Excel no cargada', 'error');
+            return;
+        }
+        const data = [
+            { "NUMERO": "V-001", "FECHA": "2026-01-15", "TOTAL": 15000 },
+            { "NUMERO": "V-002", "FECHA": "2026-01-16", "TOTAL": 25500 }
+        ];
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Plantilla_Ventas");
+        XLSX.writeFile(wb, "Plantilla_Importar_Ventas_Minesof.xlsx");
+        showNotification('Plantilla de Ventas descargada');
+    };
+
+    window.downloadExpensesTemplate = function() {
+        if (typeof XLSX === 'undefined') {
+            showNotification('Error: Librería Excel no cargada', 'error');
+            return;
+        }
+        const data = [
+            { "CATEGORIA": "Servicios", "DESCRIPCION": "Pago de Luz", "VALOR": 80000, "FECHA": "2026-01-15" },
+            { "CATEGORIA": "Suministros", "DESCRIPCION": "Compra de bolsas", "VALOR": 12000, "FECHA": "2026-01-16" }
+        ];
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Plantilla_Gastos");
+        XLSX.writeFile(wb, "Plantilla_Importar_Gastos_Minesof.xlsx");
+        showNotification('Plantilla de Gastos descargada');
+    };
     // ==========================================
     const importSalesFile = document.getElementById('importSalesFile');
     if (importSalesFile) {
