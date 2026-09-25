@@ -118,10 +118,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (rawTotal === null || rawTotal === undefined) return;
                     
-                    let dateStr = new Date().toISOString();
+                                        let dateStr = new Date().toISOString();
                     if (rawDate) {
-                        const pd = new Date(rawDate);
-                        if (!isNaN(pd)) dateStr = pd.toISOString();
+                        if (typeof rawDate === 'string' && rawDate.includes('/')) {
+                            // Si viene como string 'DD/MM/YYYY' o 'DD/MM/YY'
+                            const parts = rawDate.split('/');
+                            if (parts.length >= 3) {
+                                // Asumir DD/MM/YYYY
+                                const day = parseInt(parts[0], 10);
+                                const month = parseInt(parts[1], 10) - 1;
+                                let year = parseInt(parts[2], 10);
+                                if (year < 100) year += 2000;
+                                const pd = new Date(year, month, day);
+                                if (!isNaN(pd)) dateStr = pd.toISOString();
+                            }
+                        } else {
+                            const pd = new Date(rawDate);
+                            if (!isNaN(pd)) dateStr = pd.toISOString();
+                        }
                     }
                     
                     let price = 0;
@@ -216,10 +230,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (rawAmount === null || rawAmount === undefined) return;
                     
-                    let dateStr = new Date().toISOString();
+                                        let dateStr = new Date().toISOString();
                     if (rawDate) {
-                        const pd = new Date(rawDate);
-                        if (!isNaN(pd)) dateStr = pd.toISOString();
+                        if (typeof rawDate === 'string' && rawDate.includes('/')) {
+                            // Si viene como string 'DD/MM/YYYY' o 'DD/MM/YY'
+                            const parts = rawDate.split('/');
+                            if (parts.length >= 3) {
+                                // Asumir DD/MM/YYYY
+                                const day = parseInt(parts[0], 10);
+                                const month = parseInt(parts[1], 10) - 1;
+                                let year = parseInt(parts[2], 10);
+                                if (year < 100) year += 2000;
+                                const pd = new Date(year, month, day);
+                                if (!isNaN(pd)) dateStr = pd.toISOString();
+                            }
+                        } else {
+                            const pd = new Date(rawDate);
+                            if (!isNaN(pd)) dateStr = pd.toISOString();
+                        }
                     }
                     
                     let amount = 0;
