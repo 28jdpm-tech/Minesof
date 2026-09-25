@@ -1853,8 +1853,22 @@ function renderSplitUI() {
         if (newOrderTab) newOrderTab.classList.add('active');
 
         // Initialize/Clear category rows
-        resetAllCategories(); // Ensure we start with a clean UI
+                resetAllCategories(); // Ensure we start with a clean UI
         initializeCategories();
+        
+        // Populate clients based on existing order items
+        if (order.items && order.items.length > 0) {
+            const uniqueClients = [...new Set(order.items.map(i => i.clientName || 'P1'))];
+            // Sort them so P1, P2, P3 are in order
+            uniqueClients.sort((a, b) => {
+                const numA = parseInt(a.replace('P', '')) || 0;
+                const numB = parseInt(b.replace('P', '')) || 0;
+                return numA - numB;
+            });
+            state.clients = uniqueClients;
+            state.activeClient = state.clients[0];
+            if (typeof renderPosClientTabs === 'function') renderPosClientTabs();
+        }
 
         state.serviceType = order.serviceType;
 
