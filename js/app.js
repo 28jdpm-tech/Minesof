@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // FoodX POS PRO - Multiple Client Rows System
 // ============================================
 
@@ -3197,7 +3197,7 @@ function renderSplitUI() {
                 
                 t += justify(prefix + name, priceStr) + '\n';
 
-                if (item.notes && item.notes.trim() !== '') {
+                                if (item.notes && item.notes.trim() !== '' && item.notes !== item.name) {
                     t += '  * ' + item.notes.toUpperCase() + '\n';
                 }
                 if (item.extras && item.extras.length > 0) {
