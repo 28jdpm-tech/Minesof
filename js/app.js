@@ -4627,13 +4627,13 @@ window.moveAdminItem = function(type, id, direction) {
                 if (existingIndex !== -1) {
                     // Update existing
                     state.cart[existingIndex].notes = text;
-                    state.cart[existingIndex].name = product.name + ' (' + text + ')';
+                    state.cart[existingIndex].name = text;
                 } else {
                     // Add new
                     state.cart.push({
                         id: 'cart_' + Date.now(),
                         productId: product.id,
-                        name: product.name + ' (' + text + ')',
+                        name: text,
                         unitPrice: 0,
                         qty: 1,
                         subtotal: 0,
