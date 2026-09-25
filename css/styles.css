@@ -1,4 +1,4 @@
-/* ============================================
+﻿/* ============================================
    FoodX POS PRO - Inline Selection Interface
    ============================================ */
 
@@ -4400,6 +4400,9 @@ option {
     background: #fff !important;
     border: 1px solid #d1d5db !important;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05) !important;
+    margin: 0 auto !important;
+    width: fit-content !important;
+    padding: 15px !important;
 }
 
 /* ============================================
