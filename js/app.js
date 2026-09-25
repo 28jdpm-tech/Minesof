@@ -1746,7 +1746,7 @@ function renderSplitUI() {
                                     ${cItems.map(item => `
                                         <div class="k-item">
                                             <strong>${item.qty}x</strong> ${item.name || item.categoryName} ${item.size ? item.size : ''}
-                                            ${item.notes && item.notes !== item.name ? `<div style="font-size:0.8rem; color:#f0c040; margin-left:14px;">* ${item.notes}</div>` : '}
+                                            ${item.notes && item.notes !== item.name ? `<div style="font-size:0.8rem; color:#f0c040; margin-left:14px;">* ${item.notes}</div>` : ''}
                                             ${item.extras && item.extras.length > 0 ? `<div style="font-size:0.8rem; color:#4ecdc4; margin-left:14px;">+ ${(Array.isArray(item.extras) ? item.extras.map(e => typeof e === 'object' ? e.name : e).join(', ') : item.extras)}</div>` : ''}
                                         </div>
                                     `).join('')}
